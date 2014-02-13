@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CrashPad</string>
+    <string name="name_activity_property">PropertyActivity</string>
+    <string name="property_name_hint">Enter a name for the property</string>
+    <string name="property_name_label">Title</string>
+    <string name="property_details_label">Details</string>
+    
+</resources>
