@@ -27,10 +27,11 @@ public final class R {
         public static final int close_locations_count=0x7f050003;
         public static final int current_location=0x7f050002;
         public static final int fragmentContainer=0x7f050001;
+        public static final int goto_property_fragment=0x7f050005;
         public static final int home_find=0x7f050004;
-        public static final int property_rent=0x7f050006;
-        public static final int property_state=0x7f050007;
-        public static final int property_title=0x7f050005;
+        public static final int property_rent=0x7f050007;
+        public static final int property_state=0x7f050008;
+        public static final int property_title=0x7f050006;
         public static final int viewPager=0x7f050000;
     }
     public static final class layout {
