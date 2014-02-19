@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 public class CrashPadPagerActivity extends FragmentActivity
 {
     ViewPager mViewPager;
+    //DELETE THIS FILE
 
     @Override
     public void onCreate(Bundle savedInstanceState)

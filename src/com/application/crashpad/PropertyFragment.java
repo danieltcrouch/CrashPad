@@ -5,14 +5,17 @@ import java.util.UUID;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 public class PropertyFragment extends Fragment
 {
@@ -43,6 +46,26 @@ public class PropertyFragment extends Fragment
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
+		
+		Button rentButton = (Button)v.findViewById(R.id.property_rent);
+		rentButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v){
+				String targetUrl = "https://www.paypal.com/home";
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(targetUrl));
+				startActivity(i);				
+			}
+		});
+		
+		Button contactRenteeButton = (Button)v.findViewById(R.id.contact_renter);
+		contactRenteeButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v){
+				Intent send = new Intent(Intent.ACTION_SEND);
+				send.setType("text/plain");
+				final Intent i = Intent.createChooser(send, "Select method of contact");
+				startActivity(i);
+			}
+		});
 		
 		return v;
 	}
