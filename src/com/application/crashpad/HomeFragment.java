@@ -79,7 +79,6 @@ public class HomeFragment extends Fragment
 		{
 		    public void onLocationChanged(Location location)
 		    {
-				Log.d("LOOK!", "Test 1");
 		    	mCurrentLocation = location;
 		    }
 
