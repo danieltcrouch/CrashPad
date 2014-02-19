@@ -25,12 +25,14 @@ public final class R {
     }
     public static final class id {
         public static final int close_locations_count=0x7f050003;
-        public static final int contact_renter=0x7f050007;
+        public static final int contact_renter=0x7f050008;
         public static final int current_location=0x7f050002;
         public static final int fragmentContainer=0x7f050001;
         public static final int goto_property_fragment=0x7f050005;
         public static final int home_find=0x7f050004;
-        public static final int property_rent=0x7f050006;
+        public static final int property_list_item_name=0x7f050009;
+        public static final int property_name=0x7f050006;
+        public static final int property_rent=0x7f050007;
         public static final int viewPager=0x7f050000;
     }
     public static final class layout {
@@ -45,15 +47,16 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f060000;
-        public static final int contact_renter=0x7f060008;
-        public static final int gps_disabled=0x7f060007;
-        public static final int gps_enabled=0x7f060006;
+        public static final int contact_renter=0x7f060009;
+        public static final int gps_disabled=0x7f060008;
+        public static final int gps_enabled=0x7f060007;
         public static final int name_activity_property=0x7f060001;
-        public static final int paypal_url=0x7f060009;
-        public static final int property_details_label=0x7f060004;
-        public static final int property_name_hint=0x7f060002;
-        public static final int property_name_label=0x7f060003;
-        public static final int property_rent=0x7f060005;
+        public static final int paypal_url=0x7f06000a;
+        public static final int properties=0x7f060002;
+        public static final int property_details_label=0x7f060005;
+        public static final int property_name_hint=0x7f060003;
+        public static final int property_name_label=0x7f060004;
+        public static final int property_rent=0x7f060006;
     }
     public static final class style {
         /** 

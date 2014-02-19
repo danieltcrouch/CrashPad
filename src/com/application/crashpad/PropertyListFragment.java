@@ -4,77 +4,71 @@ import java.util.ArrayList;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.v4.app.NavUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class PropertyListFragment extends ListFragment
 {
-    private ArrayList<Property> mProperties;
-    private boolean mSubtitleVisible;
-    private Button addPropertyButton;
+	private ArrayList<Property> mProperties;
 
+    @TargetApi(11)
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+		{
+			if (NavUtils.getParentActivityName(getActivity()) != null)
+			{
+				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+			}
+        }
         
         mProperties = PropertyList.get(getActivity()).getProperties();
-        PropertyAdapter adapter = new PropertyAdapter(mProperties);
+        propertyAdapter adapter = new propertyAdapter(mProperties);
         setListAdapter(adapter);
-        setRetainInstance(true);
-        mSubtitleVisible = false;        
-    }
-    
-    @TargetApi(11)
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
-    {
-    	View v = super.onCreateView(inflater, parent, savedInstanceState);
-    	
-        return v;
     }
 
+    @Override
     public void onListItemClick(ListView l, View v, int position, long id)
-    {
-        Property c = ((PropertyAdapter)getListAdapter()).getItem(position);
+    { 
+        Property p = ((propertyAdapter)getListAdapter()).getItem(position);
+        Intent i = new Intent(getActivity(), PropertyActivity.class);
+        i.putExtra(PropertyFragment.EXTRA_PROP_ID, p.getId());
+        startActivity(i);
+    }
 
-        Intent i = new Intent(getActivity(), CrashPadPagerActivity.class);
-        i.putExtra(PropertyFragment.EXTRA_PROP_ID, c.getId());
-        startActivityForResult(i, 0);
-    }
-    
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    private class propertyAdapter extends ArrayAdapter<Property>
     {
-        ((PropertyAdapter)getListAdapter()).notifyDataSetChanged();
-    }
-    
-    private class PropertyAdapter extends ArrayAdapter<Property>
-    {
-        public PropertyAdapter(ArrayList<Property> Properties)
+        public propertyAdapter(ArrayList<Property> properties)
         {
-            super(getActivity(), android.R.layout.simple_list_item_1, Properties);
+            super(getActivity(), 0, properties);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent)
         {
-            if (convertView == null)
+            if (null == convertView)
             {
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_property, null);
             }
-            
+
             Property p = getItem(position);
+
+            TextView propertyName = (TextView)convertView.findViewById(R.id.property_list_item_name);
+            propertyName.setText(p.getName());
 
             return convertView;
         }
     }
+    
 }
+

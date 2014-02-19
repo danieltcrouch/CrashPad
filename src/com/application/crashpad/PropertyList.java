@@ -7,7 +7,7 @@ import android.content.Context;
 
 public class PropertyList
 {
-	private ArrayList<Property> mProperty;
+	private ArrayList<Property> mProperties;
 	
 	private static PropertyList sPropertyList;
 	private Context mAppContext;
@@ -15,7 +15,15 @@ public class PropertyList
 	private PropertyList(Context appContext)
 	{
 		mAppContext = appContext;
-		mProperty = new ArrayList<Property>();
+		mProperties = new ArrayList<Property>();
+		
+		//TEMP
+		for (int i = 0; i < 10; i++)
+		{
+			Property p = new Property();
+			p.setName("Property #" + i);
+			mProperties.add(p);
+		}
 	}
 	
 	public static PropertyList get(Context c)
@@ -30,17 +38,17 @@ public class PropertyList
 	
 	public void addProperty(Property p)
 	{
-		mProperty.add(p);
+		mProperties.add(p);
 	}
 	
 	public ArrayList<Property> getProperties()
 	{
-		return mProperty;
+		return mProperties;
 	}
 	
 	public Property getProperty(UUID id)
 	{
-		for (Property p : mProperty)
+		for (Property p : mProperties)
 		{
 			if (p.getId().equals(id))
 			{
