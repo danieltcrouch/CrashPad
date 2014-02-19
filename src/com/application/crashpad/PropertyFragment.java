@@ -2,8 +2,6 @@ package com.application.crashpad;
 
 import java.util.UUID;
 
-import com.example.crashpad.R;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -16,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 public class PropertyFragment extends Fragment
 {
 	public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
@@ -27,8 +24,8 @@ public class PropertyFragment extends Fragment
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		UUID crimeId = (UUID)getArguments().getSerializable(EXTRA_PROP_ID);
-		mProperty = PropertyList.get(getActivity()).getProperty(crimeId);
+		UUID propId = (UUID)getArguments().getSerializable(EXTRA_PROP_ID);
+		mProperty = PropertyList.get(getActivity()).getProperty(propId);
 		
 		setHasOptionsMenu(true);
 	}
@@ -59,10 +56,10 @@ public class PropertyFragment extends Fragment
 		}
 	}
 	
-	public static PropertyFragment newInstance(UUID crimeId)
+	public static PropertyFragment newInstance(UUID propId)
 	{
 		Bundle args = new Bundle();
-		args.putSerializable(EXTRA_PROP_ID, crimeId);
+		args.putSerializable(EXTRA_PROP_ID, propId);
 		
 		PropertyFragment fragment = new PropertyFragment();
 		fragment.setArguments(args);

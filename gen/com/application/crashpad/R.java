@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.example.crashpad;
+package com.application.crashpad;
 
 public final class R {
     public static final class attr {
@@ -24,24 +24,29 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int crime_date=0x7f050003;
-        public static final int crime_solved=0x7f050005;
-        public static final int crime_time=0x7f050004;
-        public static final int crime_title=0x7f050002;
+        public static final int close_locations_count=0x7f050003;
+        public static final int current_location=0x7f050002;
         public static final int fragmentContainer=0x7f050001;
+        public static final int home_find=0x7f050004;
+        public static final int property_rent=0x7f050006;
+        public static final int property_state=0x7f050007;
+        public static final int property_title=0x7f050005;
         public static final int viewPager=0x7f050000;
     }
     public static final class layout {
         public static final int activity_fragment=0x7f030000;
         public static final int activity_home=0x7f030001;
-        public static final int fragment_property=0x7f030002;
-        public static final int list_item_property=0x7f030003;
+        public static final int fragment_home=0x7f030002;
+        public static final int fragment_property=0x7f030003;
+        public static final int list_item_property=0x7f030004;
     }
     public static final class menu {
         public static final int home=0x7f080000;
     }
     public static final class string {
         public static final int app_name=0x7f060000;
+        public static final int gps_disabled=0x7f060006;
+        public static final int gps_enabled=0x7f060005;
         public static final int name_activity_property=0x7f060001;
         public static final int property_details_label=0x7f060004;
         public static final int property_name_hint=0x7f060002;

@@ -9,7 +9,6 @@ public class Property
 	
 	public Property()
 	{
-		//Generate Unique Identifier
 		mId = UUID.randomUUID();
 	}
 	

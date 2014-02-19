@@ -9,8 +9,8 @@ public class PropertyActivity extends SingleFragmentActivity
 	@Override
 	protected Fragment createFragment()
 	{
-		UUID crimeId = (UUID)getIntent().getSerializableExtra(PropertyFragment.EXTRA_PROP_ID);
+		UUID propId = (UUID)getIntent().getSerializableExtra(PropertyFragment.EXTRA_PROP_ID);
 		
-		return PropertyFragment.newInstance(crimeId);
+		return PropertyFragment.newInstance(propId);
 	}
 }

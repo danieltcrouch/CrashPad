@@ -1,7 +1,5 @@
 package com.application.crashpad;
 
-import com.example.crashpad.R;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;

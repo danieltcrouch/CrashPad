@@ -3,8 +3,6 @@ package com.application.crashpad;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import com.example.crashpad.R;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
