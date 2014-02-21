@@ -19,7 +19,8 @@ import android.widget.TextView;
 
 public class HomeFragment extends Fragment
 {
-	public static final String EXTRA_HOME_ID = "com.application.crashpad.home_id";
+	public static final String EXTRA_CRIME_ID = "com.application.crashpad.home_id";
+	//NOTE
 	
 	private Button mFindButton;
 	private Button mPropFragButton;
