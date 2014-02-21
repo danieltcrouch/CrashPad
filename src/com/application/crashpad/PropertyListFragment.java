@@ -34,7 +34,8 @@ public class PropertyListFragment extends ListFragment
         
         mProperties = PropertyList.get(getActivity()).getProperties();
         propertyAdapter adapter = new propertyAdapter(mProperties);
-        setListAdapter(adapter);
+        setListAdapter(Adapter);
+        //NOTE
     }
 
     @Override
