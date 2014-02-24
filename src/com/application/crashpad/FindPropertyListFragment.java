@@ -41,8 +41,8 @@ public class FindPropertyListFragment extends ListFragment
     public void onListItemClick(ListView l, View v, int position, long id)
     { 
         Property p = ((propertyAdapter)getListAdapter()).getItem(position);
-        Intent i = new Intent(getActivity(), PropertyActivity.class);
-        i.putExtra(PropertyFragment.EXTRA_PROP_ID, p.getId());
+        Intent i = new Intent(getActivity(), FindPropertyActivity.class);
+        i.putExtra(FindPropertyFragment.EXTRA_PROP_ID, p.getId());
         startActivity(i);
     }
 

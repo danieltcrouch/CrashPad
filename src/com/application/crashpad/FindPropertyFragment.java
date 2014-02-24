@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class PropertyFragment extends Fragment
+public class FindPropertyFragment extends Fragment
 {
 	public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
 	
@@ -86,12 +86,12 @@ public class PropertyFragment extends Fragment
 		}
 	}
 	
-	public static PropertyFragment newInstance(UUID propId)
+	public static FindPropertyFragment newInstance(UUID propId)
 	{
 		Bundle args = new Bundle();
 		args.putSerializable(EXTRA_PROP_ID, propId);
 		
-		PropertyFragment fragment = new PropertyFragment();
+		FindPropertyFragment fragment = new FindPropertyFragment();
 		fragment.setArguments(args);
 		
 		return fragment;
