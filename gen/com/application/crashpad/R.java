@@ -28,7 +28,7 @@ public final class R {
         public static final int contact_renter=0x7f050008;
         public static final int current_location=0x7f050002;
         public static final int fragmentContainer=0x7f050001;
-        public static final int goto_property_fragment=0x7f050005;
+        public static final int goto_property_list_fragment=0x7f050005;
         public static final int home_find=0x7f050004;
         public static final int property_list_item_name=0x7f050009;
         public static final int property_name=0x7f050006;

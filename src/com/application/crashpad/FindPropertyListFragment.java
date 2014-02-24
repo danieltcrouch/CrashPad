@@ -14,7 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class PropertyListFragment extends ListFragment
+public class FindPropertyListFragment extends ListFragment
 {
 	private ArrayList<Property> mProperties;
 

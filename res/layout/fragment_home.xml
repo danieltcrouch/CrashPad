@@ -23,7 +23,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp" />
     
-    <Button android:id="@+id/goto_property_fragment"
+    <Button android:id="@+id/goto_property_list_fragment"
         android:text="View Property List"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

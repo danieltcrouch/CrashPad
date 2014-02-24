@@ -63,13 +63,13 @@ public class HomeFragment extends Fragment
 			}
 		});
 
-		mPropFragButton = (Button)view.findViewById(R.id.goto_property_fragment);
+		mPropFragButton = (Button)view.findViewById(R.id.goto_property_list_fragment);
 		mPropFragButton.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				Intent i = new Intent(getActivity(), PropertyListActivity.class);
+				Intent i = new Intent(getActivity(), FindPropertyListActivity.class);
                 startActivity(i);
 			}
 		});
