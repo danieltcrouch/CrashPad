@@ -51,8 +51,10 @@ public class PropertyFragment extends Fragment
 		propertyName.setText(mProperty.getName());
 		
 		Button rentButton = (Button)v.findViewById(R.id.property_rent);
-		rentButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v){
+		rentButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
 				String targetUrl = "https://www.paypal.com/home";
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setData(Uri.parse(targetUrl));
@@ -61,8 +63,10 @@ public class PropertyFragment extends Fragment
 		});
 		
 		Button contactRenteeButton = (Button)v.findViewById(R.id.contact_renter);
-		contactRenteeButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v){
+		contactRenteeButton.setOnClickListener(new View.OnClickListener()
+		{
+			public void onClick(View v)
+			{
 				Intent send = new Intent(Intent.ACTION_SEND);
 				send.setType("text/plain");
 				final Intent i = Intent.createChooser(send, "Select method of contact");

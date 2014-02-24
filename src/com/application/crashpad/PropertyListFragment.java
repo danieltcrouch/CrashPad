@@ -69,6 +69,5 @@ public class PropertyListFragment extends ListFragment
             return convertView;
         }
     }
-    
 }
 
