@@ -4,27 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <TextView
-        android:id="@+id/current_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="24dp" />
-    
-    <TextView
-        android:id="@+id/close_locations_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="24dp" />
-    
-    <Button android:id="@+id/home_find"
-        android:text="Find Present Location"
+    <Button android:id="@+id/goto_find_property_list_activity"
+        android:text="Find Property to Rent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp" />
     
-    <Button android:id="@+id/goto_property_list_fragment"
-        android:text="View Property List"
+    <Button android:id="@+id/goto_review_property_list_activity"
+        android:text="Review Properties"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp" />
+    
+    <Button android:id="@+id/goto_settings_activity"
+        android:text="Settings (Inactive)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"

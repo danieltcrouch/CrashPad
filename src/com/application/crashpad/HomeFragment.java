@@ -21,12 +21,9 @@ public class HomeFragment extends Fragment
 {
 	public static final String EXTRA_HOME_ID = "com.application.crashpad.home_id";
 	
-	private Button mFindButton;
-	private Button mPropFragButton;
-	private TextView mCurrentLocationText;
-	private Location mCurrentLocation;
-	private LocationManager mLocationManager;
-	private LocationListener mLocationListener;
+	private Button mFindPropButton;
+	private Button mReviewPropButton;
+	private Button mSettingsButton;
     
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -48,23 +45,9 @@ public class HomeFragment extends Fragment
 			}
         }
 		
-		mFindButton = (Button)view.findViewById(R.id.home_find);
-		mCurrentLocationText = (TextView)view.findViewById(R.id.current_location);
-		mFindButton.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				if (mCurrentLocation != null)
-				{
-					mCurrentLocationText.setText("latitude: " + Double.toString(mCurrentLocation.getLatitude()) +
-							"\nlongitude: " + Double.toString(mCurrentLocation.getLongitude()));
-				}
-			}
-		});
-
-		mPropFragButton = (Button)view.findViewById(R.id.goto_property_list_fragment);
-		mPropFragButton.setOnClickListener(new View.OnClickListener()
+		
+		mFindPropButton = (Button)view.findViewById(R.id.goto_find_property_list_activity);
+		mFindPropButton.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
@@ -74,21 +57,26 @@ public class HomeFragment extends Fragment
 			}
 		});
 		
-		mLocationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-		mLocationListener = new LocationListener()
+		mReviewPropButton = (Button)view.findViewById(R.id.goto_review_property_list_activity);
+		mReviewPropButton.setOnClickListener(new View.OnClickListener()
 		{
-		    public void onLocationChanged(Location location)
-		    {
-		    	mCurrentLocation = location;
-		    }
-
-		    public void onStatusChanged(String provider, int status, Bundle extras) {}
-		    public void onProviderEnabled(String provider) {}
-		    public void onProviderDisabled(String provider) {}
-		  };
-
-		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100000, 10, mLocationListener);
-		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 10, mLocationListener);
+			@Override
+			public void onClick(View v)
+			{
+				Intent i = new Intent(getActivity(), ReviewPropertyListActivity.class);
+                startActivity(i);
+			}
+		});
+		
+		mSettingsButton = (Button)view.findViewById(R.id.goto_review_property_list_activity);
+		mSettingsButton.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				//
+			}
+		});
 		
 		return view;
 	}
