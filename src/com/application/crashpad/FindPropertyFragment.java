@@ -55,6 +55,9 @@ public class FindPropertyFragment extends Fragment
 		{
 			public void onClick(View v)
 			{
+				//Load our own webpage with special data
+				//	which sends OK or CANCEL back
+				
 				String targetUrl = "https://www.paypal.com/home";
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setData(Uri.parse(targetUrl));

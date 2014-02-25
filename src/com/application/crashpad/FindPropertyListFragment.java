@@ -35,6 +35,8 @@ public class FindPropertyListFragment extends ListFragment
         mProperties = PropertyList.get(getActivity()).getProperties();
         propertyAdapter adapter = new propertyAdapter(mProperties);
         setListAdapter(adapter);
+        
+        //Use MySQL DB
     }
 
     @Override
