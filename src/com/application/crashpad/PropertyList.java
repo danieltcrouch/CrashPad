@@ -18,6 +18,8 @@ public class PropertyList
 		mProperties = new ArrayList<Property>();
 		
 		//TEMP
+		//http://www.harding.edu/fmccown/classes/comp250-s14/notes/notes24.html
+		//MySQL, H-Number for password
 		for (int i = 0; i < 10; i++)
 		{
 			Property p = new Property();
