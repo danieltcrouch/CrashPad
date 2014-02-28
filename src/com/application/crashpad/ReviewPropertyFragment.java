@@ -48,32 +48,14 @@ public class ReviewPropertyFragment extends Fragment
         }
 		
 		TextView propertyName = (TextView)v.findViewById(R.id.property_name);
-		propertyName.setText(mProperty.getName());
+		propertyName.setText("Your " + mProperty.getName());
 		
-		Button rentButton = (Button)v.findViewById(R.id.property_rent);
-		rentButton.setOnClickListener(new View.OnClickListener()
+		Button editButton = (Button)v.findViewById(R.id.property_rent);
+		editButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				//Load our own webpage with special data
-				//	which sends OK or CANCEL back
-				
-				String targetUrl = "https://www.paypal.com/home";
-				Intent i = new Intent(Intent.ACTION_VIEW);
-				i.setData(Uri.parse(targetUrl));
-				startActivity(i);				
-			}
-		});
-		
-		Button contactRenteeButton = (Button)v.findViewById(R.id.contact_renter);
-		contactRenteeButton.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				Intent send = new Intent(Intent.ACTION_SEND);
-				send.setType("text/plain");
-				final Intent i = Intent.createChooser(send, "Select method of contact");
-				startActivity(i);
+				//			
 			}
 		});
 		

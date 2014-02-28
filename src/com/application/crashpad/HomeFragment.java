@@ -23,7 +23,8 @@ public class HomeFragment extends Fragment
 	
 	private Button mFindPropButton;
 	private Button mReviewPropButton;
-	private Button mSettingsButton;
+	private Button mCheckBookingsButton;
+	private Button mEditAccountButton;
     
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -68,8 +69,18 @@ public class HomeFragment extends Fragment
 			}
 		});
 		
-		mSettingsButton = (Button)view.findViewById(R.id.goto_settings_activity);
-		mSettingsButton.setOnClickListener(new View.OnClickListener()
+		mCheckBookingsButton = (Button)view.findViewById(R.id.goto_bookings_activity);
+		mCheckBookingsButton.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				//
+			}
+		});
+		
+		mEditAccountButton = (Button)view.findViewById(R.id.goto_account_activity);
+		mEditAccountButton.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)

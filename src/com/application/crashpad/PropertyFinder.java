@@ -12,7 +12,7 @@ public class PropertyFinder
 {
     private static final String TAG = "PropertyFinder";
 
-    public static final String ACTION_LOCATION = "com.bignerdranch.android.runtracker.ACTION_LOCATION";
+    public static final String ACTION_LOCATION = "com.application.crashpad.ACTION_LOCATION";
     
     private static final String TEST_PROVIDER = "TEST_PROVIDER";
     

@@ -58,7 +58,7 @@ public class FindPropertyListFragment extends ListFragment
         @Override
         public View getView(int position, View convertView, ViewGroup parent)
         {
-            if (null == convertView)
+            if (convertView == null)
             {
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_property, null);
             }

@@ -3,6 +3,7 @@ package com.application.crashpad;
 import java.util.ArrayList;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,7 +34,7 @@ public class ReviewPropertyListFragment extends ListFragment
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
-        
+		
         mProperties = PropertyList.get(getActivity()).getProperties();
         propertyAdapter adapter = new propertyAdapter(mProperties);
         setListAdapter(adapter);
@@ -59,7 +60,7 @@ public class ReviewPropertyListFragment extends ListFragment
         @Override
         public View getView(int position, View convertView, ViewGroup parent)
         {
-            if (null == convertView)
+            if (convertView == null)
             {
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_property, null);
             }

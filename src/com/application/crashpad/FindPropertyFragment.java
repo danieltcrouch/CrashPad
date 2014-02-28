@@ -4,12 +4,16 @@ import java.util.UUID;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +26,9 @@ public class FindPropertyFragment extends Fragment
 	public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
 	
 	private Property mProperty;
+	private NotificationCompat.Builder mBuilder;
+	private NotificationManager mNotificationManager;
+	private int mId;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -55,18 +62,40 @@ public class FindPropertyFragment extends Fragment
 		{
 			public void onClick(View v)
 			{
-				//Load our own webpage with special data
-				//	which sends OK or CANCEL back
+				/*Load our own webpage with special data
+					which sends OK or CANCEL back
+				Pushes Notification*/
 				
-				String targetUrl = "https://www.paypal.com/home";
+				/*String targetUrl = "https://www.paypal.com/home";
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setData(Uri.parse(targetUrl));
-				startActivity(i);				
+				startActivity(i);*/
+				
+				mId = 0;
+				mBuilder = new NotificationCompat.Builder(getActivity())
+				        .setSmallIcon(R.drawable.ic_launcher)
+				        .setContentTitle("Rental Notification")
+				        .setContentText("A property has been rented...")
+				        .setAutoCancel(true);
+				
+		        Intent resultIntent = new Intent(getActivity(), ReviewPropertyActivity.class);
+		        resultIntent.putExtra(FindPropertyFragment.EXTRA_PROP_ID, mProperty.getId());
+
+				TaskStackBuilder stackBuilder = TaskStackBuilder.create(getActivity());
+				stackBuilder.addParentStack(ReviewPropertyActivity.class);
+				stackBuilder.addNextIntent(resultIntent);
+				PendingIntent resultPendingIntent =
+				        stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+				
+				mBuilder.setContentIntent(resultPendingIntent);
+				mNotificationManager = (NotificationManager)getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+				mNotificationManager.notify(mId, mBuilder.build());
 			}
 		});
 		
-		Button contactRenteeButton = (Button)v.findViewById(R.id.contact_renter);
-		contactRenteeButton.setOnClickListener(new View.OnClickListener()
+		//Move this to Account Page
+		/*Button contactLeaserButton = (Button)v.findViewById(R.id.contact_renter);
+		contactLeaserButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
@@ -75,7 +104,7 @@ public class FindPropertyFragment extends Fragment
 				final Intent i = Intent.createChooser(send, "Select method of contact");
 				startActivity(i);
 			}
-		});
+		});*/
 		
 		return v;
 	}
