@@ -58,13 +58,21 @@ public class FindPropertyParametersFragment extends Fragment
 					.addToBackStack(null).commit();
 			}
 		});
-		
+
+		mCurrentLocationText = (TextView)view.findViewById(R.id.current_location);
 		mLocationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
 		mLocationListener = new LocationListener()
 		{
 		    public void onLocationChanged(Location location)
 		    {
 		    	mCurrentLocation = location;
+
+				//TEMP
+				if (mCurrentLocation != null)
+				{
+					mCurrentLocationText.setText("latitude: " + Double.toString(mCurrentLocation.getLatitude()) +
+							"\nlongitude: " + Double.toString(mCurrentLocation.getLongitude()));
+				}
 		    }
 
 		    public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -74,14 +82,6 @@ public class FindPropertyParametersFragment extends Fragment
 
 		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100000, 10, mLocationListener);
 		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 10, mLocationListener);
-
-		//TEMP
-		mCurrentLocationText = (TextView)view.findViewById(R.id.current_location);
-		if (mCurrentLocation != null)
-		{
-			mCurrentLocationText.setText("latitude: " + Double.toString(mCurrentLocation.getLatitude()) +
-					"\nlongitude: " + Double.toString(mCurrentLocation.getLongitude()));
-		}
 		
 		return view;
 	}

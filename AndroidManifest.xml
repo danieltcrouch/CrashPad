@@ -40,6 +40,14 @@
             android:name="com.application.crashpad.FindPropertyListActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="com.application.crashpad.ReviewPropertyListActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.application.crashpad.ReviewPropertyActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
     
     <!-- Debug: AIzaSyD2rZZS68wqm9MgbJJKaeE1zcp5YwIbe00 -->

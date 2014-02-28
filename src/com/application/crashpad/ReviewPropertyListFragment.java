@@ -8,6 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -23,7 +25,7 @@ public class ReviewPropertyListFragment extends ListFragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-		
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
@@ -35,13 +37,14 @@ public class ReviewPropertyListFragment extends ListFragment
         mProperties = PropertyList.get(getActivity()).getProperties();
         propertyAdapter adapter = new propertyAdapter(mProperties);
         setListAdapter(adapter);
+        setRetainInstance(true);
     }
-
+    
     @Override
     public void onListItemClick(ListView l, View v, int position, long id)
     { 
         Property p = ((propertyAdapter)getListAdapter()).getItem(position);
-        Intent i = new Intent(getActivity(), FindPropertyActivity.class);
+        Intent i = new Intent(getActivity(), ReviewPropertyActivity.class);
         i.putExtra(FindPropertyFragment.EXTRA_PROP_ID, p.getId());
         startActivity(i);
     }

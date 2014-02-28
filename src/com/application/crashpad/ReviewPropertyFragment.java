@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class FindPropertyFragment extends Fragment
+public class ReviewPropertyFragment extends Fragment
 {
 	public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
 	
@@ -37,7 +37,7 @@ public class FindPropertyFragment extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
-		View v = inflater.inflate(R.layout.fragment_property_find, parent, false);
+		View v = inflater.inflate(R.layout.fragment_property_review, parent, false);
 		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
@@ -89,12 +89,12 @@ public class FindPropertyFragment extends Fragment
 		}
 	}
 	
-	public static FindPropertyFragment newInstance(UUID propId)
+	public static ReviewPropertyFragment newInstance(UUID propId)
 	{
 		Bundle args = new Bundle();
 		args.putSerializable(EXTRA_PROP_ID, propId);
 		
-		FindPropertyFragment fragment = new FindPropertyFragment();
+		ReviewPropertyFragment fragment = new ReviewPropertyFragment();
 		fragment.setArguments(args);
 		
 		return fragment;

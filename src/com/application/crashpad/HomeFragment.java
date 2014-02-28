@@ -59,7 +59,7 @@ public class HomeFragment extends Fragment
 		
 		mReviewPropButton = (Button)view.findViewById(R.id.goto_review_property_list_activity);
 		mReviewPropButton.setOnClickListener(new View.OnClickListener()
-		{
+		{			
 			@Override
 			public void onClick(View v)
 			{
@@ -68,7 +68,7 @@ public class HomeFragment extends Fragment
 			}
 		});
 		
-		mSettingsButton = (Button)view.findViewById(R.id.goto_review_property_list_activity);
+		mSettingsButton = (Button)view.findViewById(R.id.goto_settings_activity);
 		mSettingsButton.setOnClickListener(new View.OnClickListener()
 		{
 			@Override

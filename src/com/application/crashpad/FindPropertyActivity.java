@@ -10,7 +10,6 @@ public class FindPropertyActivity extends SingleFragmentActivity
 	protected Fragment createFragment()
 	{
 		UUID propId = (UUID)getIntent().getSerializableExtra(FindPropertyFragment.EXTRA_PROP_ID);
-		
 		return FindPropertyFragment.newInstance(propId);
 	}
 }

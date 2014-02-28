@@ -10,11 +10,37 @@
         android:layout_height="wrap_content"
         android:padding="24dp" />
     
-    <Button android:id="@+id/search"
-        android:text="Search Properties"
+    <TextView
+        android:id="@+id/prompt_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location to search:" />
+    
+    <EditText android:id="@+id/location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Use Present Location (inactive)" />
+
+    <TextView
+        android:id="@+id/prompt_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distance to search for property rentals:" />
+    
+    <EditText
+        android:id="@+id/distance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="10 (miles)" />
+
+    <Button
+        android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="16dp"
+        android:text="Search Properties" />
 
 </LinearLayout>
