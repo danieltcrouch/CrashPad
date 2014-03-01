@@ -66,11 +66,6 @@ public class FindPropertyFragment extends Fragment
 					which sends OK or CANCEL back
 				Pushes Notification*/
 				
-				/*String targetUrl = "https://www.paypal.com/home";
-				Intent i = new Intent(Intent.ACTION_VIEW);
-				i.setData(Uri.parse(targetUrl));
-				startActivity(i);*/
-				
 				mId = 0;
 				mBuilder = new NotificationCompat.Builder(getActivity())
 				        .setSmallIcon(R.drawable.ic_launcher)

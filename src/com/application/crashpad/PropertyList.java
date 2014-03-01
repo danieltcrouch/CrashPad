@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
 
 public class PropertyList
 {
@@ -24,6 +26,8 @@ public class PropertyList
 		{
 			Property p = new Property();
 			p.setName("Property #" + i);
+			p.setDescription("This is a really pleasant property, just off the coast of Location " + i);
+			p.setLocation(new Location(LocationManager.NETWORK_PROVIDER));
 			mProperties.add(p);
 		}
 	}

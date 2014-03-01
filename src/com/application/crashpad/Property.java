@@ -21,6 +21,16 @@ public class Property
 	{
 		return mName;
 	}
+
+	public UUID getId()
+	{
+		return mId;
+	}	
+
+	public void setId(UUID id)
+	{
+		mId = id;
+	}
 	
 	public String getName()
 	{
@@ -32,13 +42,35 @@ public class Property
 		mName = name;
 	}
 
-	public void setId(UUID id)
+	public String getDescription()
 	{
-		mId = id;
+		return mDescription;
+	}	
+
+	public void setDescription(String des)
+	{
+		mDescription = des;
 	}
 
-	public UUID getId()
+	public Location getLocation()
 	{
-		return mId;
+		return mLocation;
 	}	
+
+	public void setLocation(Location loc)
+	{
+		mLocation = loc;
+	}
+	
+	public double getProximityToLocation(Location otherLoc)
+	{
+		double result = 0;
+		
+		//Distance Formula
+		result = (mLocation.getLongitude() - otherLoc.getLongitude())*(mLocation.getLongitude() - otherLoc.getLongitude());
+		result += (mLocation.getLatitude() - otherLoc.getLatitude())*(mLocation.getLatitude() - otherLoc.getLatitude());
+		result = Math.sqrt(result); 
+		
+		return result;
+	}
 }

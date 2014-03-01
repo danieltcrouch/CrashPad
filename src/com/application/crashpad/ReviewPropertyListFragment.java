@@ -3,14 +3,15 @@ package com.application.crashpad;
 import java.util.ArrayList;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -38,7 +39,32 @@ public class ReviewPropertyListFragment extends ListFragment
         mProperties = PropertyList.get(getActivity()).getProperties();
         propertyAdapter adapter = new propertyAdapter(mProperties);
         setListAdapter(adapter);
+        setHasOptionsMenu(true);
         setRetainInstance(true);
+    }
+    
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.find_prop_list, menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.menu_item_new_prop:
+            	//TEMP
+            	String targetUrl = "https://www.google.com";
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(targetUrl));
+				startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        } 
     }
     
     @Override
@@ -72,5 +98,13 @@ public class ReviewPropertyListFragment extends ListFragment
 
             return convertView;
         }
+    }
+    
+    @Override
+    public void onResume()
+    {
+    	super.onResume();
+    	//Maybe Poll DB Here
+    	((propertyAdapter)getListAdapter()).notifyDataSetChanged();
     }
 }

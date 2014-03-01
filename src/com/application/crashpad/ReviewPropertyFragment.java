@@ -29,8 +29,7 @@ public class ReviewPropertyFragment extends Fragment
 		super.onCreate(savedInstanceState);
 		UUID propId = (UUID)getArguments().getSerializable(EXTRA_PROP_ID);
 		mProperty = PropertyList.get(getActivity()).getProperty(propId);
-		
-		setHasOptionsMenu(true);
+		//setHasOptionsMenu(true);
 	}
 	
 	@TargetApi(11)
@@ -50,7 +49,7 @@ public class ReviewPropertyFragment extends Fragment
 		TextView propertyName = (TextView)v.findViewById(R.id.property_name);
 		propertyName.setText("Your " + mProperty.getName());
 		
-		Button editButton = (Button)v.findViewById(R.id.property_rent);
+		Button editButton = (Button)v.findViewById(R.id.property_edit);
 		editButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
@@ -58,6 +57,12 @@ public class ReviewPropertyFragment extends Fragment
 				//			
 			}
 		});
+		
+		//TEMP
+		TextView propertyInfo = (TextView)v.findViewById(R.id.property_info);
+		propertyInfo.setText("Name: " + mProperty.getName() +
+				"\nDescription: " + mProperty.getDescription() +
+				"\nLocation: " + mProperty.getLocation().getLongitude() + ", " + mProperty.getLocation().getLatitude());
 		
 		return v;
 	}
