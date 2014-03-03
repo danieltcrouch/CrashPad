@@ -54,7 +54,11 @@ public class ReviewPropertyFragment extends Fragment
 		{
 			public void onClick(View v)
 			{
-				//			
+				//TEMP
+				String targetUrl = "https://www.google.com";
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(targetUrl));
+				startActivity(i);		
 			}
 		});
 		

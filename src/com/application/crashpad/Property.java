@@ -16,6 +16,14 @@ public class Property
 		mId = UUID.randomUUID();
 	}
 	
+	public Property(String name, String des, Location loc)
+	{
+		mId = UUID.randomUUID();
+		mName = name;
+		mDescription = des;
+		mLocation = loc;
+	}
+	
 	@Override
 	public String toString()
 	{
@@ -64,13 +72,24 @@ public class Property
 	
 	public double getProximityToLocation(Location otherLoc)
 	{
+		final double EARTH_RADIUS = 3963.1676;
+		
 		double result = 0;
+
+		//Haversine Formula
+		double lat2 = Math.toRadians(mLocation.getLatitude());
+		double lat1 = Math.toRadians(otherLoc.getLatitude());
+		double long2 = Math.toRadians(mLocation.getLongitude());
+		double long1 = Math.toRadians(otherLoc.getLongitude());
 		
-		//Distance Formula
-		result = (mLocation.getLongitude() - otherLoc.getLongitude())*(mLocation.getLongitude() - otherLoc.getLongitude());
-		result += (mLocation.getLatitude() - otherLoc.getLatitude())*(mLocation.getLatitude() - otherLoc.getLatitude());
-		result = Math.sqrt(result); 
-		
+		double dLon = long2 - long1;
+		double dLat = lat2 - lat1;
+		double temp = Math.pow(Math.sin(dLat/2),2) +
+				Math.cos(lat2) * Math.cos(lat1) *
+				Math.pow(Math.sin(dLon/2),2);
+		result  = 2 * Math.atan2(Math.sqrt(temp),Math.sqrt(1-temp));
+		result *= EARTH_RADIUS;
+
 		return result;
 	}
 }

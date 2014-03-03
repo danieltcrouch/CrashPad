@@ -5,12 +5,6 @@
     android:orientation="vertical" >
     
     <TextView
-        android:id="@+id/current_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="24dp" />
-    
-    <TextView
         android:id="@+id/prompt_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,13 +13,13 @@
     <EditText android:id="@+id/location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Use Present Location (inactive)" />
+        android:hint="My Location (inactive)" />
 
     <TextView
         android:id="@+id/prompt_distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Distance to search for property rentals:" />
+        android:text="Distance (in miles) to search for property rentals:" />
     
     <EditText
         android:id="@+id/distance"
@@ -33,7 +27,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="number"
-        android:hint="10 (miles)" />
+        android:hint="10" />
 
     <Button
         android:id="@+id/search"

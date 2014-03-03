@@ -24,23 +24,22 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int current_location=0x7f050006;
-        public static final int distance=0x7f05000a;
+        public static final int distance=0x7f050009;
         public static final int fragmentContainer=0x7f050001;
         public static final int goto_account_activity=0x7f050005;
         public static final int goto_bookings_activity=0x7f050004;
         public static final int goto_find_property_list_activity=0x7f050002;
         public static final int goto_review_property_list_activity=0x7f050003;
-        public static final int location=0x7f050008;
-        public static final int menu_item_new_prop=0x7f050011;
-        public static final int prompt_distance=0x7f050009;
-        public static final int prompt_location=0x7f050007;
-        public static final int property_edit=0x7f05000f;
-        public static final int property_info=0x7f05000e;
-        public static final int property_list_item_name=0x7f050010;
-        public static final int property_name=0x7f05000c;
-        public static final int property_rent=0x7f05000d;
-        public static final int search=0x7f05000b;
+        public static final int location=0x7f050007;
+        public static final int menu_item_new_prop=0x7f050010;
+        public static final int prompt_distance=0x7f050008;
+        public static final int prompt_location=0x7f050006;
+        public static final int property_edit=0x7f05000e;
+        public static final int property_info=0x7f05000d;
+        public static final int property_list_item_name=0x7f05000f;
+        public static final int property_name=0x7f05000b;
+        public static final int property_rent=0x7f05000c;
+        public static final int search=0x7f05000a;
         public static final int viewPager=0x7f050000;
     }
     public static final class layout {

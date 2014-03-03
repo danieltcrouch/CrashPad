@@ -12,22 +12,24 @@ public class PropertyList
 	private ArrayList<Property> mProperties;
 	
 	private static PropertyList sPropertyList;
-	private Context mAppContext;
 	
 	private PropertyList(Context appContext)
 	{
-		mAppContext = appContext;
 		mProperties = new ArrayList<Property>();
 		
 		//TEMP
 		//http://www.harding.edu/fmccown/classes/comp250-s14/notes/notes24.html
 		//MySQL, H-Number for password
-		for (int i = 0; i < 10; i++)
+		
+		for (double i = 0; i < 10; i++)
 		{
 			Property p = new Property();
-			p.setName("Property #" + i);
-			p.setDescription("This is a really pleasant property, just off the coast of Location " + i);
-			p.setLocation(new Location(LocationManager.NETWORK_PROVIDER));
+			p.setName("Property #" + (int)i);
+			p.setDescription("This is a really pleasant property, just off the coast of Location " + (int)i);
+			Location temp = new Location(LocationManager.NETWORK_PROVIDER);
+			temp.setLongitude(-91.724623 + (i * 0.05));
+			temp.setLatitude(35.248738 - (i * 0.05));
+			p.setLocation(temp);
 			mProperties.add(p);
 		}
 	}
@@ -47,11 +49,6 @@ public class PropertyList
 		mProperties.add(p);
 	}
 	
-	public ArrayList<Property> getProperties()
-	{
-		return mProperties;
-	}
-	
 	public Property getProperty(UUID id)
 	{
 		for (Property p : mProperties)
@@ -63,5 +60,25 @@ public class PropertyList
 		}
 		
 		return null;
+	}
+	
+	public ArrayList<Property> getProperties()
+	{
+		return mProperties;
+	}
+	
+	public ArrayList<Property> getProperties(Location loc, int distance)
+	{
+		ArrayList<Property> result = new ArrayList<Property>();
+		
+		for (Property prop : mProperties)
+		{
+			if (prop.getProximityToLocation(loc) <= distance)
+			{
+				result.add(prop);
+			}
+		}
+		
+		return result;
 	}
 }

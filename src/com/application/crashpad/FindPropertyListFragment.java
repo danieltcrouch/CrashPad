@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -16,6 +18,10 @@ import android.widget.TextView;
 
 public class FindPropertyListFragment extends ListFragment
 {
+	public static final String EXTRA_PARAMETER_LONG = "com.application.crashpad.parameter_loc";
+	public static final String EXTRA_PARAMETER_LAT = "com.application.crashpad.parameter_lat";
+	public static final String EXTRA_PARAMETER_DIS = "com.application.crashpad.parameter_dis";
+	
 	private ArrayList<Property> mProperties;
 
     @TargetApi(11)
@@ -31,10 +37,17 @@ public class FindPropertyListFragment extends ListFragment
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
-        
-        mProperties = PropertyList.get(getActivity()).getProperties();
-        propertyAdapter adapter = new propertyAdapter(mProperties);
-        setListAdapter(adapter);
+
+		double longitude = Double.parseDouble(getActivity().getIntent().getStringExtra(EXTRA_PARAMETER_LONG));
+		double latitude = Double.parseDouble(getActivity().getIntent().getStringExtra(EXTRA_PARAMETER_LAT));
+		int distance = Integer.parseInt(getActivity().getIntent().getStringExtra(EXTRA_PARAMETER_DIS));
+		Location loc = new Location(LocationManager.NETWORK_PROVIDER);
+		loc.setLatitude(latitude);
+		loc.setLongitude(longitude);
+
+		mProperties = PropertyList.get(getActivity()).getProperties(loc, distance);
+		propertyAdapter adapter = new propertyAdapter(mProperties);
+		setListAdapter(adapter);
         
         //Use MySQL DB
     }

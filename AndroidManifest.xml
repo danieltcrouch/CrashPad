@@ -33,11 +33,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.application.crashpad.FindPropertyActivity"
+            android:name="com.application.crashpad.FindPropertyParametersActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.application.crashpad.FindPropertyListActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.application.crashpad.FindPropertyActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
