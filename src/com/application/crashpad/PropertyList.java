@@ -1,11 +1,14 @@
 package com.application.crashpad;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
 
 public class PropertyList
 {
@@ -26,10 +29,17 @@ public class PropertyList
 			Property p = new Property();
 			p.setName("Property #" + (int)i);
 			p.setDescription("This is a really pleasant property, just off the coast of Location " + (int)i);
+			
 			Location temp = new Location(LocationManager.NETWORK_PROVIDER);
 			temp.setLongitude(-91.724623 + (i * 0.05));
 			temp.setLatitude(35.248738 - (i * 0.05));
 			p.setLocation(temp);
+			
+			if (i == 2)
+			{
+				p.setDateTaken((new GregorianCalendar()).getTime());
+			}
+			
 			mProperties.add(p);
 		}
 	}
@@ -67,13 +77,14 @@ public class PropertyList
 		return mProperties;
 	}
 	
-	public ArrayList<Property> getProperties(Location loc, int distance)
+	public ArrayList<Property> getProperties(Location loc, int distance, Date date)
 	{
 		ArrayList<Property> result = new ArrayList<Property>();
 		
 		for (Property prop : mProperties)
 		{
-			if (prop.getProximityToLocation(loc) <= distance)
+			if (prop.getProximityToLocation(loc) <= distance &&
+					prop.openAtDate(date))
 			{
 				result.add(prop);
 			}

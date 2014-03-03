@@ -1,5 +1,8 @@
 package com.application.crashpad;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 import android.location.Location;
@@ -10,10 +13,12 @@ public class Property
 	private String mName;
 	private String mDescription;
 	private Location mLocation;
+	private ArrayList<Date> mDatesTaken;
 	
 	public Property()
 	{
 		mId = UUID.randomUUID();
+		mDatesTaken = new ArrayList<Date>();
 	}
 	
 	public Property(String name, String des, Location loc)
@@ -22,6 +27,7 @@ public class Property
 		mName = name;
 		mDescription = des;
 		mLocation = loc;
+		mDatesTaken = new ArrayList<Date>();
 	}
 	
 	@Override
@@ -69,6 +75,16 @@ public class Property
 	{
 		mLocation = loc;
 	}
+
+	public ArrayList<Date> getDatesTaken()
+	{
+		return mDatesTaken;
+	}	
+
+	public void setDateTaken(Date date)
+	{
+		mDatesTaken.add(date);
+	}
 	
 	public double getProximityToLocation(Location otherLoc)
 	{
@@ -90,6 +106,28 @@ public class Property
 		result  = 2 * Math.atan2(Math.sqrt(temp),Math.sqrt(1-temp));
 		result *= EARTH_RADIUS;
 
+		return result;
+	}
+	
+	public boolean openAtDate(Date date)
+	{
+		boolean result = true;
+
+		Calendar calendar1 = Calendar.getInstance();
+		Calendar calendar2 = Calendar.getInstance();
+		calendar1.setTime(date);
+		for (Date dateTaken : mDatesTaken)
+		{
+			calendar2.setTime(dateTaken);
+			if (calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH) &&
+				calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH) &&
+				calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR))
+			{
+				result = false;
+				break;
+			}
+		}
+		
 		return result;
 	}
 }

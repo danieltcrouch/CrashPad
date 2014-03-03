@@ -12,5 +12,6 @@
     <string name="gps_disabled">GPS Disabled</string>
     <string name="contact_renter">Contact Proprietor</string>
     <string name="paypal_url">https://www.paypal.com/home</string>
+    <string name="date_picker_title">Pick a Date</string>
     
 </resources>

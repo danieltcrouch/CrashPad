@@ -1,6 +1,8 @@
 package com.application.crashpad;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -10,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -21,6 +24,9 @@ public class FindPropertyListFragment extends ListFragment
 	public static final String EXTRA_PARAMETER_LONG = "com.application.crashpad.parameter_loc";
 	public static final String EXTRA_PARAMETER_LAT = "com.application.crashpad.parameter_lat";
 	public static final String EXTRA_PARAMETER_DIS = "com.application.crashpad.parameter_dis";
+	public static final String EXTRA_PARAMETER_DAY = "com.application.crashpad.parameter_day";
+	public static final String EXTRA_PARAMETER_MON = "com.application.crashpad.parameter_mon";
+	public static final String EXTRA_PARAMETER_YEAR = "com.application.crashpad.parameter_year";
 	
 	private ArrayList<Property> mProperties;
 
@@ -41,11 +47,16 @@ public class FindPropertyListFragment extends ListFragment
 		double longitude = Double.parseDouble(getActivity().getIntent().getStringExtra(EXTRA_PARAMETER_LONG));
 		double latitude = Double.parseDouble(getActivity().getIntent().getStringExtra(EXTRA_PARAMETER_LAT));
 		int distance = Integer.parseInt(getActivity().getIntent().getStringExtra(EXTRA_PARAMETER_DIS));
+		int day = Integer.parseInt(getActivity().getIntent().getStringExtra(EXTRA_PARAMETER_DAY));
+		int month = Integer.parseInt(getActivity().getIntent().getStringExtra(EXTRA_PARAMETER_MON));
+		int year = Integer.parseInt(getActivity().getIntent().getStringExtra(EXTRA_PARAMETER_YEAR));
+		
+		Calendar date = new GregorianCalendar(year, month, day);
 		Location loc = new Location(LocationManager.NETWORK_PROVIDER);
 		loc.setLatitude(latitude);
 		loc.setLongitude(longitude);
 
-		mProperties = PropertyList.get(getActivity()).getProperties(loc, distance);
+		mProperties = PropertyList.get(getActivity()).getProperties(loc, distance, date.getTime());
 		propertyAdapter adapter = new propertyAdapter(mProperties);
 		setListAdapter(adapter);
         
