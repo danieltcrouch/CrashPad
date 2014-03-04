@@ -8,7 +8,6 @@ import java.util.UUID;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
-import android.util.Log;
 
 public class PropertyList
 {
@@ -38,6 +37,12 @@ public class PropertyList
 			if (i == 2)
 			{
 				p.setDateTaken((new GregorianCalendar()).getTime());
+			}
+			else if (i == 4)
+			{
+				temp.setLatitude(34.0731);
+				temp.setLongitude(-118.3994);
+				p.setLocation(temp);
 			}
 			
 			mProperties.add(p);

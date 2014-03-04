@@ -1,13 +1,17 @@
 package com.application.crashpad;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -24,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FindPropertyParametersFragment extends Fragment
 {
@@ -86,8 +91,28 @@ public class FindPropertyParametersFragment extends Fragment
 		{
 			public void afterTextChanged(Editable s)
 			{
-				//
 				mLocChanged = true;
+				Geocoder geocoder = new Geocoder(getActivity());
+				String location = mLocationEditText.getText().toString();
+				
+				try
+				{
+				  List<Address> addresses = geocoder.getFromLocationName(location, 1);
+				  if (addresses != null && !addresses.isEmpty())
+				  {
+				    Address address = addresses.get(0);
+				    mCurrentLocation.setLatitude(address.getLatitude());
+				    mCurrentLocation.setLongitude(address.getLongitude());
+				  }
+				  else
+				  {
+					  Toast.makeText(getActivity(), "Unable to find location.", Toast.LENGTH_LONG).show();
+				  }
+				}
+				catch (IOException e)
+				{
+					Toast.makeText(getActivity(), "Having trouble finding location...", Toast.LENGTH_LONG).show(); 
+				}
 			}
 			
 			public void beforeTextChanged(CharSequence s, int start, int count, int after){}
