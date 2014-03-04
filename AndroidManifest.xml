@@ -26,11 +26,8 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <activity android:name="com.application.crashpad.HomeActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name="com.application.crashpad.HomeActivity"
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.application.crashpad.FindPropertyParametersActivity"
@@ -51,6 +48,17 @@
         <activity
             android:name="com.application.crashpad.ReviewPropertyActivity"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.application.crashpad.LoginActivity" >   
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>         
+        </activity>
+        <activity
+            android:name="com.application.crashpad.CreateNewAccountActivity"
+            android:label="@string/app_name">
         </activity>
     </application>
     
