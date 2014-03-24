@@ -20,6 +20,9 @@ public class PropertyList
 		mProperties = new ArrayList<Property>();
 		
 		//TEMP
+		//http://developer.android.com/training/basics/data-storage/databases.html
+		//https://dev.mysql.com/doc/refman/5.0/en/mysql-batch-commands.html
+		
 		//http://www.harding.edu/fmccown/classes/comp250-s14/notes/notes24.html
 		//MySQL, H-Number for password
 		

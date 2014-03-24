@@ -11,11 +11,9 @@ import android.util.Log;
 public class PropertyFinder
 {
     private static final String TAG = "PropertyFinder";
-
-    public static final String ACTION_LOCATION = "com.application.crashpad.ACTION_LOCATION";
-    
     private static final String TEST_PROVIDER = "TEST_PROVIDER";
-    
+    public static final String ACTION_LOCATION = "com.application.crashpad.ACTION_LOCATION";
+        
     private static PropertyFinder sRunManager;
     private Context mAppContext;
     private LocationManager mLocationManager;
@@ -45,7 +43,6 @@ public class PropertyFinder
     public void startLocationUpdates()
     {
         String provider = LocationManager.GPS_PROVIDER;
-        // if we have the test provider and it's enabled, use it
         if (mLocationManager.getProvider(TEST_PROVIDER) != null && 
                 mLocationManager.isProviderEnabled(TEST_PROVIDER))
         {
@@ -53,11 +50,9 @@ public class PropertyFinder
         }
         Log.d(TAG, "Using provider " + provider);
 
-        // get the last known location and broadcast it if we have one
         Location lastKnown = mLocationManager.getLastKnownLocation(provider);
         if (lastKnown != null)
         {
-            // reset the time to now
             lastKnown.setTime(System.currentTimeMillis());
             broadcastLocation(lastKnown);
         }

@@ -22,7 +22,7 @@
     <string name="new_account_confirm_password">Confirm Password</string>
     <string name="new_account_email_suggestion">john@email.com</string>
     <string name="new_account_name_suggestion">John Doe</string>
-    <string name="new_account_phone_number_suggestion">(555)123-4567</string>
+    <string name="new_account_phone_number_suggestion">(000)000-0000</string>
     <string name="new_account_creation">Account Creation</string>
     <string name="new_account_information">Account Information</string>
     <string name="new_account_create_button">Create Account</string>

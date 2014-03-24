@@ -1,23 +1,45 @@
 package com.application.crashpad;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.application.crashpad.LoginFragment.AttemptLogin;
+
 import android.annotation.TargetApi;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class CreateNewAccountFragment extends Fragment
 {
-	
+	private static final String REGISTER_URL = "http://taz.harding.edu/~dcrouch1/crashpad/register.php";
+	private static final String TAG_SUCCESS = "success";
+    private static final String TAG_MESSAGE = "message";
+
+	private EditText usernameEditText;
+	private EditText passwordEditText;
+	private EditText emailEditText;
 	private Button mConfirmAccountCreate;
 
+	private ProgressDialog pDialog;
+	JSONParser jsonParser = new JSONParser();
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -29,7 +51,7 @@ public class CreateNewAccountFragment extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
-		View view = inflater.inflate(R.layout.create_new_account_fragment, parent, false);
+		View view = inflater.inflate(R.layout.fragment_create_new_account, parent, false);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
@@ -37,19 +59,84 @@ public class CreateNewAccountFragment extends Fragment
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
+
+		usernameEditText = (EditText)view.findViewById(R.id.new_user_username);
+		passwordEditText = (EditText)view.findViewById(R.id.new_user_password);
+		emailEditText = (EditText)view.findViewById(R.id.new_user_email);
+		
 		mConfirmAccountCreate = (Button)view.findViewById(R.id.confirm_create_account_button);
-		mConfirmAccountCreate.setOnClickListener(new View.OnClickListener() {
-			
+		mConfirmAccountCreate.setOnClickListener(new View.OnClickListener()
+		{
 			@Override
-			public void onClick(View v) {
-				Intent i = new Intent(getActivity(), HomeActivity.class);
-				startActivity(i);
-				
+			public void onClick(View v)
+			{
+				new CreateUser().execute();
 			}
 		});
 		
-		
 		return view;
 	}
+	
+	class CreateUser extends AsyncTask<String, String, String>
+	{
+		boolean failure = false;
 
+        @Override
+        protected void onPreExecute()
+        {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(getActivity());
+            pDialog.setMessage("Creating Account...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+		@Override
+		protected String doInBackground(String... args)
+		{
+            int success;
+            String username = usernameEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
+            String email = emailEditText.getText().toString();
+            
+            try
+            {
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("username", username));
+                params.add(new BasicNameValuePair("password", password));
+                params.add(new BasicNameValuePair("email", email));
+
+                JSONObject json = jsonParser.makeHttpRequest(
+                		REGISTER_URL, "POST", params);
+                
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1)
+                {
+    				Intent i = new Intent(getActivity(), HomeActivity.class);
+    				startActivity(i);
+                	return json.getString(TAG_MESSAGE);
+                }
+                else
+                {
+                	return json.getString(TAG_MESSAGE);
+                }
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+
+            return null;
+		}
+		
+        protected void onPostExecute(String file_url)
+        {
+            pDialog.dismiss();
+            if (file_url != null)
+            {
+            	Toast.makeText(getActivity(), file_url, Toast.LENGTH_LONG).show();
+            }
+        }
+	}
 }

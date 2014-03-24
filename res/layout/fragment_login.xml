@@ -18,8 +18,8 @@
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/login_username_suggestion" >
-
+        android:inputType="text"
+        android:hint="@string/login_username_suggestion" >
         <requestFocus />
     </EditText>
 
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:text="@string/login_password_suggestion" />
+        android:hint="@string/login_password_suggestion" />
 
     <Button
         android:id="@+id/login_button"
