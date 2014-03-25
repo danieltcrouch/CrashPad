@@ -33,7 +33,8 @@ public class CreateNewAccountFragment extends Fragment
     private static final String TAG_MESSAGE = "message";
 
 	private EditText usernameEditText;
-	private EditText passwordEditText;
+	private EditText nPasswordEditText;
+	private EditText cPasswordEditText;
 	private EditText emailEditText;
 	private Button mConfirmAccountCreate;
 
@@ -61,7 +62,8 @@ public class CreateNewAccountFragment extends Fragment
         }
 
 		usernameEditText = (EditText)view.findViewById(R.id.new_user_username);
-		passwordEditText = (EditText)view.findViewById(R.id.new_user_password);
+		nPasswordEditText = (EditText)view.findViewById(R.id.new_user_password);
+		cPasswordEditText = (EditText)view.findViewById(R.id.confirm_user_password);
 		emailEditText = (EditText)view.findViewById(R.id.new_user_email);
 		
 		mConfirmAccountCreate = (Button)view.findViewById(R.id.confirm_create_account_button);
@@ -70,7 +72,16 @@ public class CreateNewAccountFragment extends Fragment
 			@Override
 			public void onClick(View v)
 			{
-				new CreateUser().execute();
+				String pass1 = nPasswordEditText.getText().toString();
+				String pass2 = cPasswordEditText.getText().toString();
+				if (pass1.equals(pass2))
+				{
+					new CreateUser().execute();
+				}
+				else
+				{
+					Toast.makeText(getActivity(), "Passwords do not match.", Toast.LENGTH_LONG).show();
+				}
 			}
 		});
 		
@@ -97,7 +108,7 @@ public class CreateNewAccountFragment extends Fragment
 		{
             int success;
             String username = usernameEditText.getText().toString();
-            String password = passwordEditText.getText().toString();
+            String password = nPasswordEditText.getText().toString();
             String email = emailEditText.getText().toString();
             
             try
@@ -113,6 +124,7 @@ public class CreateNewAccountFragment extends Fragment
                 success = json.getInt(TAG_SUCCESS);
                 if (success == 1)
                 {
+                	PresentAccount.get(getActivity()).setPresentAccount(new Account(username, password, email));
     				Intent i = new Intent(getActivity(), HomeActivity.class);
     				startActivity(i);
                 	return json.getString(TAG_MESSAGE);

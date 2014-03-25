@@ -56,7 +56,7 @@ public class FindPropertyListFragment extends ListFragment
 		loc.setLatitude(latitude);
 		loc.setLongitude(longitude);
 
-		mProperties = PropertyList.get(getActivity()).getProperties(loc, distance, date.getTime());
+		mProperties = PropertyListTester.get(getActivity()).getProperties(loc, distance, date.getTime());
 		propertyAdapter adapter = new propertyAdapter(mProperties);
 		setListAdapter(adapter);
         

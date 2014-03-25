@@ -35,7 +35,7 @@ public class FindPropertyFragment extends Fragment
 	{
 		super.onCreate(savedInstanceState);
 		UUID propId = (UUID)getArguments().getSerializable(EXTRA_PROP_ID);
-		mProperty = PropertyList.get(getActivity()).getProperty(propId);
+		mProperty = PropertyListTester.get(getActivity()).getProperty(propId);
 		
 		setHasOptionsMenu(true);
 	}

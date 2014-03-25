@@ -28,14 +28,15 @@ public final class R {
     }
     public static final class id {
         public static final int account_creation=0x7f050003;
-        public static final int account_information=0x7f050007;
+        public static final int account_information=0x7f050009;
         public static final int change_date=0x7f05001d;
-        public static final int confirm_create_account_button=0x7f05000e;
+        public static final int confirm_create_account_button=0x7f050008;
+        public static final int confirm_user_password=0x7f050007;
         public static final int crashpad_plane=0x7f050013;
         public static final int create_account_button=0x7f050017;
         public static final int dialog_date_picker=0x7f050002;
         public static final int distance=0x7f05001b;
-        public static final int email_input=0x7f05000a;
+        public static final int email_input=0x7f05000c;
         public static final int fragmentContainer=0x7f050001;
         public static final int goto_account_activity=0x7f050012;
         public static final int goto_bookings_activity=0x7f050011;
@@ -44,15 +45,14 @@ public final class R {
         public static final int location=0x7f050019;
         public static final int login_button=0x7f050016;
         public static final int menu_item_new_prop=0x7f050024;
-        public static final int name_input=0x7f050008;
-        public static final int new_user_confirm_password=0x7f050006;
-        public static final int new_user_email=0x7f05000b;
-        public static final int new_user_fullname=0x7f050009;
-        public static final int new_user_password=0x7f050005;
-        public static final int new_user_phone_number=0x7f05000d;
+        public static final int name_input=0x7f05000a;
+        public static final int new_user_email=0x7f050005;
+        public static final int new_user_fullname=0x7f05000b;
+        public static final int new_user_password=0x7f050006;
+        public static final int new_user_phone_number=0x7f05000e;
         public static final int new_user_username=0x7f050004;
         public static final int password=0x7f050015;
-        public static final int phone_input=0x7f05000c;
+        public static final int phone_input=0x7f05000d;
         public static final int prompt_date=0x7f05001c;
         public static final int prompt_distance=0x7f05001a;
         public static final int prompt_location=0x7f050018;
@@ -70,12 +70,13 @@ public final class R {
         public static final int activity_home=0x7f030001;
         public static final int dialog_date=0x7f030002;
         public static final int fragment_create_new_account=0x7f030003;
-        public static final int fragment_home=0x7f030004;
-        public static final int fragment_login=0x7f030005;
-        public static final int fragment_parameters=0x7f030006;
-        public static final int fragment_property_find=0x7f030007;
-        public static final int fragment_property_review=0x7f030008;
-        public static final int list_item_property=0x7f030009;
+        public static final int fragment_create_new_account_extended=0x7f030004;
+        public static final int fragment_home=0x7f030005;
+        public static final int fragment_login=0x7f030006;
+        public static final int fragment_parameters=0x7f030007;
+        public static final int fragment_property_find=0x7f030008;
+        public static final int fragment_property_review=0x7f030009;
+        public static final int list_item_property=0x7f03000a;
     }
     public static final class menu {
         public static final int find_prop_list=0x7f080000;

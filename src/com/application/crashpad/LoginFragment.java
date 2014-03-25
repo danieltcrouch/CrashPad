@@ -115,6 +115,7 @@ public class LoginFragment extends Fragment
 
                 if (success == 1)
                 {
+                	PresentAccount.get(getActivity()).setPresentAccount(new Account(username, password, ""));
     				Intent i = new Intent(getActivity(), HomeActivity.class);
                     startActivity(i);
                 	return json.getString(TAG_MESSAGE);

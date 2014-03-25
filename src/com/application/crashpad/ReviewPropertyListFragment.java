@@ -2,14 +2,21 @@ package com.application.crashpad;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +28,17 @@ import android.widget.TextView;
 
 public class ReviewPropertyListFragment extends ListFragment
 {
-	private ArrayList<Property> mProperties;
+	private static final String GET_PROPS_URL = "http://taz.harding.edu/~dcrouch1/crashpad/get_props.php";
+    private static final String TAG_PROPS = "props";
+    private static final String TAG_USERNAME = "username";
+    private static final String TAG_NAME = "name";
+    private static final String TAG_ADDRESS = "address";
+    private static final String TAG_LONG = "longitude";
+    private static final String TAG_LAT = "latitude";
+
+	private ArrayList<Property> mPropertyList;
+	private JSONArray mProperties;
+	private ProgressDialog pDialog;
 
     @TargetApi(11)
     @Override
@@ -37,11 +54,7 @@ public class ReviewPropertyListFragment extends ListFragment
 			}
         }
 		
-        mProperties = PropertyList.get(getActivity()).getProperties();
-        propertyAdapter adapter = new propertyAdapter(mProperties);
-        setListAdapter(adapter);
-        setHasOptionsMenu(true);
-        setRetainInstance(true);
+		new LoadProperties().execute();
     }
     
     @Override
@@ -65,7 +78,7 @@ public class ReviewPropertyListFragment extends ListFragment
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        } 
+        }
     }
     
     @Override
@@ -93,7 +106,6 @@ public class ReviewPropertyListFragment extends ListFragment
             }
 
             Property p = getItem(position);
-
             TextView propertyName = (TextView)convertView.findViewById(R.id.property_list_item_name);
             propertyName.setText(p.getName());
 
@@ -101,11 +113,82 @@ public class ReviewPropertyListFragment extends ListFragment
         }
     }
     
+    public class LoadProperties extends AsyncTask<Void, Void, Boolean>
+    {
+    	@Override
+		protected void onPreExecute()
+    	{
+			super.onPreExecute();
+			pDialog = new ProgressDialog(getActivity());
+			pDialog.setMessage("Loading Properties...");
+			pDialog.setIndeterminate(false);
+			pDialog.setCancelable(true);
+			pDialog.show();
+		}
+    	
+        @Override
+        protected Boolean doInBackground(Void... arg0)
+        {            
+            updateJSONdata();           
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result)
+        {
+            super.onPostExecute(result);
+            
+            propertyAdapter adapter = new propertyAdapter(mPropertyList);
+            setListAdapter(adapter);
+            setHasOptionsMenu(true);
+            setRetainInstance(true);
+            
+            pDialog.dismiss();
+        }
+    }
+    
+    public void updateJSONdata()
+    {
+        mPropertyList = new ArrayList<Property>();
+        JSONParser jParser = new JSONParser();
+        JSONObject json = jParser.getJSONFromUrl(GET_PROPS_URL);
+
+        try
+        {
+            mProperties = json.getJSONArray(TAG_PROPS);
+            for (int i = 0; i < mProperties.length(); i++)
+            {
+                JSONObject c = mProperties.getJSONObject(i);
+
+                String username = c.getString(TAG_USERNAME);
+                String name = c.getString(TAG_NAME);
+                String address = c.getString(TAG_ADDRESS);
+                String longitude = c.getString(TAG_LONG);
+                String latitude = c.getString(TAG_LAT);
+                
+                Property p = new Property();
+                p.setUsername(username);
+                p.setName(name);
+                p.setDescription(address);
+                
+    			Location loc = new Location(LocationManager.NETWORK_PROVIDER);
+    			loc.setLongitude(Integer.parseInt(longitude));
+    			loc.setLatitude(Integer.parseInt(latitude));
+                p.setLocation(loc);
+                
+                mPropertyList.add(p);
+            }
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
     @Override
     public void onResume()
     {
     	super.onResume();
-    	//Maybe Poll DB Here
     	((propertyAdapter)getListAdapter()).notifyDataSetChanged();
     }
 }

@@ -10,6 +10,7 @@ import android.location.Location;
 public class Property
 {
 	private UUID mId;
+	private String mUsername;
 	private String mName;
 	private String mDescription;
 	private Location mLocation;
@@ -46,6 +47,16 @@ public class Property
 		mId = id;
 	}
 	
+	public String getUsername()
+	{
+		return mUsername;
+	}
+
+	public void setUsername(String username)
+	{
+		mUsername = username;
+	}
+	
 	public String getName()
 	{
 		return mName;
@@ -79,7 +90,12 @@ public class Property
 	public ArrayList<Date> getDatesTaken()
 	{
 		return mDatesTaken;
-	}	
+	}
+	
+	public void setDatesTaken(ArrayList<Date> dates)
+	{
+		mDatesTaken = dates;
+	}
 
 	public void setDateTaken(Date date)
 	{
