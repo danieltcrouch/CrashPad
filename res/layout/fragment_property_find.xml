@@ -8,6 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="?android:listSeparatorTextViewStyle" />
+
+    <TextView android:id="@+id/property_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="None" />
     
     <Button android:id="@+id/property_rent"
         android:layout_width="match_parent"
@@ -15,15 +20,5 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp" 
         android:text="@string/property_rent" />
-
-    <!-- 
-    <Button
-        android:id="@+id/contact_renter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:text="@string/contact_renter" />
-         -->
 
 </LinearLayout>

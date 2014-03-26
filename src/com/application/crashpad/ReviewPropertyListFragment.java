@@ -1,7 +1,10 @@
 package com.application.crashpad;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,11 +32,11 @@ import android.widget.TextView;
 
 public class ReviewPropertyListFragment extends ListFragment
 {
-	private static final String GET_PROPS_URL = "http://taz.harding.edu/~dcrouch1/crashpad/get_props.php";
+	private static final String GET_PROPS_URL = "http://taz.harding.edu/~dcrouch1/crashpad/get_props_review.php";
     private static final String TAG_PROPS = "props";
-    private static final String TAG_USERNAME = "username";
+    private static final String TAG_USER = "username";
     private static final String TAG_NAME = "name";
-    private static final String TAG_ADDRESS = "address";
+    private static final String TAG_ADDR = "address";
     private static final String TAG_LONG = "longitude";
     private static final String TAG_LAT = "latitude";
 
@@ -53,8 +57,6 @@ public class ReviewPropertyListFragment extends ListFragment
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
-		
-		new LoadProperties().execute();
     }
     
     @Override
@@ -83,11 +85,23 @@ public class ReviewPropertyListFragment extends ListFragment
     
     @Override
     public void onListItemClick(ListView l, View v, int position, long id)
-    { 
+    {
         Property p = ((propertyAdapter)getListAdapter()).getItem(position);
         Intent i = new Intent(getActivity(), ReviewPropertyActivity.class);
-        i.putExtra(FindPropertyFragment.EXTRA_PROP_ID, p.getId());
+        //i.putExtra(FindPropertyFragment.EXTRA_PROP_ID, p.getId());
+        i.putExtra(ReviewPropertyFragment.EXTRA_PROP_USER, p.getUsername());
+        i.putExtra(ReviewPropertyFragment.EXTRA_PROP_NAME, p.getName());
+        i.putExtra(ReviewPropertyFragment.EXTRA_PROP_DESC, p.getDescription());
+        i.putExtra(ReviewPropertyFragment.EXTRA_PROP_LONG, p.getLocation().getLongitude());
+        i.putExtra(ReviewPropertyFragment.EXTRA_PROP_LAT, p.getLocation().getLatitude());
         startActivity(i);
+    }
+    
+    @Override
+    public void onResume()
+    {
+    	super.onResume();
+		new LoadProperties().execute();
     }
 
     private class propertyAdapter extends ArrayAdapter<Property>
@@ -128,7 +142,7 @@ public class ReviewPropertyListFragment extends ListFragment
     	
         @Override
         protected Boolean doInBackground(Void... arg0)
-        {            
+        {
             updateJSONdata();           
             return null;
         }
@@ -137,7 +151,7 @@ public class ReviewPropertyListFragment extends ListFragment
         protected void onPostExecute(Boolean result)
         {
             super.onPostExecute(result);
-            
+                        
             propertyAdapter adapter = new propertyAdapter(mPropertyList);
             setListAdapter(adapter);
             setHasOptionsMenu(true);
@@ -149,9 +163,14 @@ public class ReviewPropertyListFragment extends ListFragment
     
     public void updateJSONdata()
     {
+    	String pUsername = PresentAccount.get(getActivity()).getPresentAccount().getName();
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("username", pUsername));
+        
         mPropertyList = new ArrayList<Property>();
         JSONParser jParser = new JSONParser();
-        JSONObject json = jParser.getJSONFromUrl(GET_PROPS_URL);
+        JSONObject json = jParser.makeHttpRequest(GET_PROPS_URL, "POST", params);
+        //JSONObject json = jParser.getJSONFromUrl(GET_PROPS_URL);
 
         try
         {
@@ -160,9 +179,9 @@ public class ReviewPropertyListFragment extends ListFragment
             {
                 JSONObject c = mProperties.getJSONObject(i);
 
-                String username = c.getString(TAG_USERNAME);
+                String username = c.getString(TAG_USER);
                 String name = c.getString(TAG_NAME);
-                String address = c.getString(TAG_ADDRESS);
+                String address = c.getString(TAG_ADDR);
                 String longitude = c.getString(TAG_LONG);
                 String latitude = c.getString(TAG_LAT);
                 
@@ -172,8 +191,8 @@ public class ReviewPropertyListFragment extends ListFragment
                 p.setDescription(address);
                 
     			Location loc = new Location(LocationManager.NETWORK_PROVIDER);
-    			loc.setLongitude(Integer.parseInt(longitude));
-    			loc.setLatitude(Integer.parseInt(latitude));
+    			loc.setLongitude(Double.parseDouble(longitude));
+    			loc.setLatitude(Double.parseDouble(latitude));
                 p.setLocation(loc);
                 
                 mPropertyList.add(p);
@@ -183,12 +202,5 @@ public class ReviewPropertyListFragment extends ListFragment
         {
             e.printStackTrace();
         }
-    }
-    
-    @Override
-    public void onResume()
-    {
-    	super.onResume();
-    	((propertyAdapter)getListAdapter()).notifyDataSetChanged();
     }
 }

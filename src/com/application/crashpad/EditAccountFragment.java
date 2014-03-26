@@ -21,18 +21,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class LoginFragment extends Fragment
+public class EditAccountFragment extends Fragment
 {
-	private static final String LOGIN_URL = "http://taz.harding.edu/~dcrouch1/crashpad/login.php";
+	private static final String EDIT_URL = "http://taz.harding.edu/~dcrouch1/crashpad/edit_account.php";
 	private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
-	
-	private EditText usernameEditText;
+
+	private EditText emailEditText;
 	private EditText passwordEditText;
-	private Button mLoginButton;
-	private Button mCreateNewAccountButton;
+	private TextView usernameTextView;
+	private Button mConfirmChangesButton;
 	private ProgressDialog pDialog;
 	
 	@Override
@@ -46,7 +47,7 @@ public class LoginFragment extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
-		View view = inflater.inflate(R.layout.fragment_login, parent, false);
+		View view = inflater.inflate(R.layout.fragment_edit_account, parent, false);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
@@ -55,34 +56,27 @@ public class LoginFragment extends Fragment
 			}
         }
 		
-		usernameEditText = (EditText)view.findViewById(R.id.username);
-		passwordEditText = (EditText)view.findViewById(R.id.password);
+		passwordEditText = (EditText)view.findViewById(R.id.edit_password);
+		emailEditText = (EditText)view.findViewById(R.id.edit_email);
+
+		String userName = PresentAccount.get(getActivity()).getPresentAccount().getName();
+		usernameTextView = (TextView)view.findViewById(R.id.username_view);
+		usernameTextView.setText(userName);
 		
-		mLoginButton = (Button)view.findViewById(R.id.login_button);
-		mLoginButton.setOnClickListener(new View.OnClickListener()
+		mConfirmChangesButton = (Button)view.findViewById(R.id.confirm_changes_button);
+		mConfirmChangesButton.setOnClickListener(new View.OnClickListener()
 		{			
 			@Override
 			public void onClick(View v)
 			{
-				new AttemptLogin().execute();
+				new EditAccount().execute();
 			}
 		});
 		
-		mCreateNewAccountButton = (Button)view.findViewById(R.id.create_account_button);
-		mCreateNewAccountButton.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				Intent i = new Intent(getActivity(), CreateNewAccountActivity.class);
-				startActivity(i);
-			}
-		});
-		
-		return view;
+		return view;	
 	}
 	
-	class AttemptLogin extends AsyncTask<String, String, String>
+	class EditAccount extends AsyncTask<String, String, String>
 	{
 		boolean failure = false;
 
@@ -91,7 +85,7 @@ public class LoginFragment extends Fragment
         {
             super.onPreExecute();
             pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Attempting Login...");
+            pDialog.setMessage("Editing Account...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
             pDialog.show();
@@ -101,24 +95,25 @@ public class LoginFragment extends Fragment
 		protected String doInBackground(String... args)
 		{			
             int success;
-            String username = usernameEditText.getText().toString();
-            String password = passwordEditText.getText().toString();
+            String username = PresentAccount.get(getActivity()).getPresentAccount().getName();
+            String email = (emailEditText.getText().toString().length() != 0)?
+            		emailEditText.getText().toString() : PresentAccount.get(getActivity()).getPresentAccount().getEmail();
+            String password = (passwordEditText.getText().toString().length() != 0)?
+            		passwordEditText.getText().toString() : PresentAccount.get(getActivity()).getPresentAccount().getPassword();
             
             try
             {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("username", username));
+                params.add(new BasicNameValuePair("email", email));
                 params.add(new BasicNameValuePair("password", password));
 
             	JSONParser jParser = new JSONParser();
-                JSONObject json = jParser.makeHttpRequest(LOGIN_URL, "POST", params);
+                JSONObject json = jParser.makeHttpRequest(EDIT_URL, "POST", params);
                 success = json.getInt(TAG_SUCCESS);
 
                 if (success == 1)
                 {
-                	PresentAccount.get(getActivity()).setPresentAccount(new Account(username, password, ""));
-    				Intent i = new Intent(getActivity(), HomeActivity.class);
-                    startActivity(i);
                 	return json.getString(TAG_MESSAGE);
                 }
                 else

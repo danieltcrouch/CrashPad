@@ -1,8 +1,6 @@
 package com.application.crashpad;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -21,42 +19,39 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class FindPropertyListFragment extends ListFragment
+public class ReviewBookedPropertyListFragment extends ListFragment
 {
-	public static final String EXTRA_PARA_LONG = "com.application.crashpad.parameter_loc";
-	public static final String EXTRA_PARA_LAT = "com.application.crashpad.parameter_lat";
-	public static final String EXTRA_PARA_DIS = "com.application.crashpad.parameter_dis";
-	public static final String EXTRA_PARA_DAY = "com.application.crashpad.parameter_day";
-	public static final String EXTRA_PARA_MON = "com.application.crashpad.parameter_mon";
-	public static final String EXTRA_PARA_YEAR = "com.application.crashpad.parameter_year";
-	
-	private static final String GET_PROPS_URL = "http://taz.harding.edu/~dcrouch1/crashpad/get_props_find.php";
+	private static final String GET_PROPS_B_URL = "http://taz.harding.edu/~dcrouch1/crashpad/get_props_booked.php";
     private static final String TAG_PROPS = "props";
+    private static final String TAG_RENTS = "rentals";
     private static final String TAG_USER = "username";
     private static final String TAG_NAME = "name";
     private static final String TAG_ADDR = "address";
     private static final String TAG_LONG = "longitude";
     private static final String TAG_LAT = "latitude";
+    private static final String TAG_DAT_S = "dateStart";
+    private static final String TAG_DAT_E= "dateEnd";
+    private static final String TAG_CODE = "code";
 
 	private ArrayList<Property> mPropertyList;
+	private ArrayList<Rental> mRentalList;
 	private JSONArray mProperties;
+	private JSONArray mRentals;
 	private ProgressDialog pDialog;
-	private Calendar mDate;
-	private Location mLoc;
-	private int mDist;
 
     @TargetApi(11)
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-		
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
@@ -64,31 +59,31 @@ public class FindPropertyListFragment extends ListFragment
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
-		
-		mDist = Integer.parseInt(getActivity().getIntent().getStringExtra(EXTRA_PARA_DIS));
-		double longitude = Double.parseDouble(getActivity().getIntent().getStringExtra(EXTRA_PARA_LONG));
-		double latitude = Double.parseDouble(getActivity().getIntent().getStringExtra(EXTRA_PARA_LAT));
-		int day = Integer.parseInt(getActivity().getIntent().getStringExtra(EXTRA_PARA_DAY));
-		int month = Integer.parseInt(getActivity().getIntent().getStringExtra(EXTRA_PARA_MON));
-		int year = Integer.parseInt(getActivity().getIntent().getStringExtra(EXTRA_PARA_YEAR));
-		
-		mDate = new GregorianCalendar(year, month, day);
-		mLoc = new Location(LocationManager.NETWORK_PROVIDER);
-		mLoc.setLatitude(latitude);
-		mLoc.setLongitude(longitude);
     }
-
+    
     @Override
     public void onListItemClick(ListView l, View v, int position, long id)
-    {        
+    {
         Property p = ((propertyAdapter)getListAdapter()).getItem(position);
-        Intent i = new Intent(getActivity(), FindPropertyActivity.class);
+        Rental r = mRentalList.get(0);;
+        for (int i = 0; i < mRentalList.size(); i++)
+        {
+        	if (p.getProximityToLocation(mRentalList.get(i).getLocation()) < .00001)
+        	{
+        		r = mRentalList.get(i);
+        	}
+        }
+
+        Intent i = new Intent(getActivity(), ReviewBookedPropertyActivity.class);
         //i.putExtra(FindPropertyFragment.EXTRA_PROP_ID, p.getId());
-        i.putExtra(FindPropertyFragment.EXTRA_PROP_USER, p.getUsername());
-        i.putExtra(FindPropertyFragment.EXTRA_PROP_NAME, p.getName());
-        i.putExtra(FindPropertyFragment.EXTRA_PROP_DESC, p.getDescription());
-        i.putExtra(FindPropertyFragment.EXTRA_PROP_LONG, p.getLocation().getLongitude());
-        i.putExtra(FindPropertyFragment.EXTRA_PROP_LAT, p.getLocation().getLatitude());
+        i.putExtra(ReviewBookedPropertyFragment.EXTRA_PROP_USER, p.getUsername());
+        i.putExtra(ReviewBookedPropertyFragment.EXTRA_PROP_NAME, p.getName());
+        i.putExtra(ReviewBookedPropertyFragment.EXTRA_PROP_DESC, p.getDescription());
+        i.putExtra(ReviewBookedPropertyFragment.EXTRA_PROP_LONG, p.getLocation().getLongitude());
+        i.putExtra(ReviewBookedPropertyFragment.EXTRA_PROP_LAT, p.getLocation().getLatitude());
+        i.putExtra(ReviewBookedPropertyFragment.EXTRA_RENT_DAT_S, r.getDateStart());
+        i.putExtra(ReviewBookedPropertyFragment.EXTRA_RENT_DAT_E, r.getDateEnd());
+        i.putExtra(ReviewBookedPropertyFragment.EXTRA_RENT_CODE, r.getCode());
         startActivity(i);
     }
     
@@ -158,17 +153,42 @@ public class FindPropertyListFragment extends ListFragment
     
     public void updateJSONdata()
     {
-    	/*String pUsername = PresentAccount.get(getActivity()).getPresentAccount().getName();
+    	String pUsername = PresentAccount.get(getActivity()).getPresentAccount().getName();
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("username", pUsername));*/
+        params.add(new BasicNameValuePair("username", pUsername));
         
         mPropertyList = new ArrayList<Property>();
+        mRentalList = new ArrayList<Rental>();
         JSONParser jParser = new JSONParser();
-        //JSONObject json = jParser.makeHttpRequest(GET_PROPS_URL, "POST", params);
-        JSONObject json = jParser.getJSONFromUrl(GET_PROPS_URL);
+        JSONObject json = jParser.makeHttpRequest(GET_PROPS_B_URL, "POST", params);
+        //JSONObject json = jParser.getJSONFromUrl(GET_PROPS_URL);
 
         try
         {
+            mRentals = json.getJSONArray(TAG_RENTS);
+            for (int i = 0; i < mRentals.length(); i++)
+            {
+                JSONObject c = mRentals.getJSONObject(i);
+
+                String dateStart = c.getString(TAG_DAT_S);
+                String dateEnd = c.getString(TAG_DAT_E);
+                String longitude = c.getString(TAG_LONG);
+                String latitude = c.getString(TAG_LAT);
+                String code = c.getString(TAG_CODE);
+                
+                Rental r = new Rental();
+                r.setDateStart(dateStart);
+                r.setDateEnd(dateEnd);
+                r.setCode(code);
+                
+    			Location loc = new Location(LocationManager.NETWORK_PROVIDER);
+    			loc.setLongitude(Double.parseDouble(longitude));
+    			loc.setLatitude(Double.parseDouble(latitude));
+                r.setLocation(loc);
+                
+                mRentalList.add(r);
+            }
+
             mProperties = json.getJSONArray(TAG_PROPS);
             for (int i = 0; i < mProperties.length(); i++)
             {
@@ -190,10 +210,7 @@ public class FindPropertyListFragment extends ListFragment
     			loc.setLatitude(Double.parseDouble(latitude));
                 p.setLocation(loc);
                 
-                if (p.openAtDate(mDate.getTime()) && p.getProximityToLocation(mLoc) <= mDist)
-                {
-                	mPropertyList.add(p);
-                }
+                mPropertyList.add(p);
             }
         }
         catch (JSONException e)
@@ -202,4 +219,3 @@ public class FindPropertyListFragment extends ListFragment
         }
     }
 }
-

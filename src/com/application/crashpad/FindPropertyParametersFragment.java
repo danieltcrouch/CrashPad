@@ -146,12 +146,12 @@ public class FindPropertyParametersFragment extends Fragment
 				calendar.setTime(mDate);
 				
 				Intent i = new Intent(getActivity(), FindPropertyListActivity.class);
-		        i.putExtra(FindPropertyListFragment.EXTRA_PARAMETER_LONG, Double.toString(mCurrentLocation.getLongitude()));
-		        i.putExtra(FindPropertyListFragment.EXTRA_PARAMETER_LAT, Double.toString(mCurrentLocation.getLatitude()));
-		        i.putExtra(FindPropertyListFragment.EXTRA_PARAMETER_DIS, Integer.toString(mDistance));				
-		        i.putExtra(FindPropertyListFragment.EXTRA_PARAMETER_DAY, Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
-		        i.putExtra(FindPropertyListFragment.EXTRA_PARAMETER_MON, Integer.toString(calendar.get(Calendar.MONTH)));
-		        i.putExtra(FindPropertyListFragment.EXTRA_PARAMETER_YEAR, Integer.toString(calendar.get(Calendar.YEAR)));
+		        i.putExtra(FindPropertyListFragment.EXTRA_PARA_LONG, Double.toString(mCurrentLocation.getLongitude()));
+		        i.putExtra(FindPropertyListFragment.EXTRA_PARA_LAT, Double.toString(mCurrentLocation.getLatitude()));
+		        i.putExtra(FindPropertyListFragment.EXTRA_PARA_DIS, Integer.toString(mDistance));				
+		        i.putExtra(FindPropertyListFragment.EXTRA_PARA_DAY, Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
+		        i.putExtra(FindPropertyListFragment.EXTRA_PARA_MON, Integer.toString(calendar.get(Calendar.MONTH)));
+		        i.putExtra(FindPropertyListFragment.EXTRA_PARA_YEAR, Integer.toString(calendar.get(Calendar.YEAR)));
 		        startActivity(i);
 			}
 		});

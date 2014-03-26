@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <TextView android:id="@+id/property_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:listSeparatorTextViewStyle" />
+
+    <TextView android:id="@+id/property_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="None" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/labels_padding_size" >
+
+        <TextView
+            android:id="@+id/date_rented_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date Rented: "
+            android:textSize="@dimen/edit_account_labels_size" />
+
+        <TextView
+            android:id="@+id/date_rented"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="None" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/labels_padding_size" >
+
+        <TextView
+            android:id="@+id/access_code_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Present Access Code: "
+            android:textSize="@dimen/edit_account_labels_size" />
+
+        <TextView
+            android:id="@+id/access_code"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="None" />
+    </LinearLayout>
+    
+</LinearLayout>

@@ -5,7 +5,6 @@ import android.content.Context;
 public class PresentAccount
 {
 	private static PresentAccount sPresentAccount;
-	
 	private Account mUser;
 	
 	private PresentAccount(Context appContext)

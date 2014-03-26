@@ -70,7 +70,8 @@ public class HomeFragment extends Fragment
 			@Override
 			public void onClick(View v)
 			{
-				//
+				Intent i = new Intent(getActivity(), ReviewBookedPropertyListActivity.class);
+				startActivity(i);
 			}
 		});
 		
@@ -80,7 +81,8 @@ public class HomeFragment extends Fragment
 			@Override
 			public void onClick(View v)
 			{
-				//
+				Intent i = new Intent(getActivity(), EditAccountActivity.class);
+				startActivity(i);
 			}
 		});
 		

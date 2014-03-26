@@ -12,7 +12,6 @@
     <string name="gps_disabled">GPS Disabled</string>
     <string name="contact_renter">Contact Proprietor</string>
     <string name="paypal_url">https://www.paypal.com/home</string>
-    <string name="date_picker_title">Pick a Date</string>
     <string name="login_button">Login</string>
     <string name="login_username_suggestion">Username</string>
     <string name="login_password_suggestion">Password</string>
@@ -22,10 +21,21 @@
     <string name="new_account_confirm_password">Confirm Password</string>
     <string name="new_account_email_suggestion">john@email.com</string>
     <string name="new_account_name_suggestion">John Doe</string>
-    <string name="new_account_phone_number_suggestion">(000)000-0000</string>
+    <string name="new_account_phone_number_suggestion">(555)123-4567</string>
     <string name="new_account_creation">Account Creation</string>
     <string name="new_account_information">Account Information</string>
     <string name="new_account_create_button">Create Account</string>
     <string name="account_creation_confirmation_toast">Account Created!</string>
+    <string name="current_account_information">Current Basic Account Information</string>
+    <string name="username_label">Username:</string>
+    <string name="password_label">Password:</string>
+    <string name="name_label">Name:</string>
+    <string name="email_label">Email:</string>
+    <string name="phone_number_label">Phone Number:</string>
+    <string name="edit_password">Change Password</string>
+    <string name="edit_basic_account_information">Edit Basic Account Information</string>
+    <string name="view_basic_information_fragment">View Account info</string>
+    <string name="changes_saved_toast">Changes saved</string>
+    <string name="confirm_account_changes">Confirm Account Changes</string>
     
 </resources>

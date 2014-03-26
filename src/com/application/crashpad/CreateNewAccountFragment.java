@@ -120,8 +120,8 @@ public class CreateNewAccountFragment extends Fragment
 
                 JSONObject json = jsonParser.makeHttpRequest(
                 		REGISTER_URL, "POST", params);
-                
                 success = json.getInt(TAG_SUCCESS);
+                
                 if (success == 1)
                 {
                 	PresentAccount.get(getActivity()).setPresentAccount(new Account(username, password, email));

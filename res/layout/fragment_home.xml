@@ -19,14 +19,14 @@
         android:layout_marginRight="16dp" />
     
     <Button android:id="@+id/goto_bookings_activity"
-        android:text="Check Bookings (Inactive)"
+        android:text="Check Bookings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp" />
     
     <Button android:id="@+id/goto_account_activity"
-        android:text="Edit Account (Inactive)"
+        android:text="Edit Account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
