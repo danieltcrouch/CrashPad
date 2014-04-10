@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,11 +29,12 @@ public class EditAccountFragment extends Fragment
 	private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
 
-	private EditText emailEditText;
-	private EditText passwordEditText;
-	private TextView usernameTextView;
+    private String mUsername;
+	private EditText mEmailEditText;
+	private EditText mPasswordEditText;
+	private TextView mUsernameTextView;
 	private Button mConfirmChangesButton;
-	private ProgressDialog pDialog;
+	private ProgressDialog mProgressDialog;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -56,12 +56,13 @@ public class EditAccountFragment extends Fragment
 			}
         }
 		
-		passwordEditText = (EditText)view.findViewById(R.id.edit_password);
-		emailEditText = (EditText)view.findViewById(R.id.edit_email);
+		mUsername = AccountCurrent.get(getActivity()).getPresentAccount().getName();
+		
+		mPasswordEditText = (EditText)view.findViewById(R.id.edit_password);
+		mEmailEditText = (EditText)view.findViewById(R.id.edit_email);
 
-		String userName = PresentAccount.get(getActivity()).getPresentAccount().getName();
-		usernameTextView = (TextView)view.findViewById(R.id.username_view);
-		usernameTextView.setText(userName);
+		mUsernameTextView = (TextView)view.findViewById(R.id.username_view);
+		mUsernameTextView.setText(mUsername);
 		
 		mConfirmChangesButton = (Button)view.findViewById(R.id.confirm_changes_button);
 		mConfirmChangesButton.setOnClickListener(new View.OnClickListener()
@@ -84,22 +85,24 @@ public class EditAccountFragment extends Fragment
         protected void onPreExecute()
         {
             super.onPreExecute();
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Editing Account...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
+            mProgressDialog = new ProgressDialog(getActivity());
+            mProgressDialog.setMessage("Editing Account...");
+            mProgressDialog.setIndeterminate(false);
+            mProgressDialog.setCancelable(true);
+            mProgressDialog.show();
         }
 
 		@Override
 		protected String doInBackground(String... args)
 		{			
             int success;
-            String username = PresentAccount.get(getActivity()).getPresentAccount().getName();
-            String email = (emailEditText.getText().toString().length() != 0)?
-            		emailEditText.getText().toString() : PresentAccount.get(getActivity()).getPresentAccount().getEmail();
-            String password = (passwordEditText.getText().toString().length() != 0)?
-            		passwordEditText.getText().toString() : PresentAccount.get(getActivity()).getPresentAccount().getPassword();
+            String username = mUsername;
+            //FIX
+            //Is this the best place and way to do this?
+            String email = (mEmailEditText.getText().toString().length() != 0)?
+            		mEmailEditText.getText().toString() : AccountCurrent.get(getActivity()).getPresentAccount().getEmail();
+            String password = (mPasswordEditText.getText().toString().length() != 0)?
+            		mPasswordEditText.getText().toString() : AccountCurrent.get(getActivity()).getPresentAccount().getPassword();
             
             try
             {
@@ -129,12 +132,12 @@ public class EditAccountFragment extends Fragment
             return null;
 		}
 		
-        protected void onPostExecute(String file_url)
+        protected void onPostExecute(String message)
         {
-            pDialog.dismiss();
-            if (file_url != null)
+            mProgressDialog.dismiss();
+            if (message != null)
             {
-            	Toast.makeText(getActivity(), file_url, Toast.LENGTH_LONG).show();
+            	Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }
         }
 	}

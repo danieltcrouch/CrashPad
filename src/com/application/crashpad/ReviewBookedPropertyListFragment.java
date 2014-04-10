@@ -19,7 +19,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -44,13 +43,14 @@ public class ReviewBookedPropertyListFragment extends ListFragment
 	private ArrayList<Rental> mRentalList;
 	private JSONArray mProperties;
 	private JSONArray mRentals;
-	private ProgressDialog pDialog;
+	private ProgressDialog mProgressDialog;
 
     @TargetApi(11)
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+		setRetainInstance(true);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
@@ -65,7 +65,9 @@ public class ReviewBookedPropertyListFragment extends ListFragment
     public void onListItemClick(ListView l, View v, int position, long id)
     {
         Property p = ((propertyAdapter)getListAdapter()).getItem(position);
-        Rental r = mRentalList.get(0);;
+        //FIX
+        //Is this the best place and way to do this?
+        Rental r = mRentalList.get(0);
         for (int i = 0; i < mRentalList.size(); i++)
         {
         	if (p.getProximityToLocation(mRentalList.get(i).getLocation()) < .00001)
@@ -75,6 +77,7 @@ public class ReviewBookedPropertyListFragment extends ListFragment
         }
 
         Intent i = new Intent(getActivity(), ReviewBookedPropertyActivity.class);
+        //FIX
         //i.putExtra(FindPropertyFragment.EXTRA_PROP_ID, p.getId());
         i.putExtra(ReviewBookedPropertyFragment.EXTRA_PROP_USER, p.getUsername());
         i.putExtra(ReviewBookedPropertyFragment.EXTRA_PROP_NAME, p.getName());
@@ -123,16 +126,17 @@ public class ReviewBookedPropertyListFragment extends ListFragment
 		protected void onPreExecute()
     	{
 			super.onPreExecute();
-			pDialog = new ProgressDialog(getActivity());
-			pDialog.setMessage("Loading Properties...");
-			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(true);
-			pDialog.show();
+			mProgressDialog = new ProgressDialog(getActivity());
+			mProgressDialog.setMessage("Loading Properties...");
+			mProgressDialog.setIndeterminate(false);
+			mProgressDialog.setCancelable(true);
+			mProgressDialog.show();
 		}
     	
         @Override
         protected Boolean doInBackground(Void... arg0)
         {
+        	//Is the separation necessary?
             updateJSONdata();           
             return null;
         }
@@ -147,13 +151,13 @@ public class ReviewBookedPropertyListFragment extends ListFragment
             setHasOptionsMenu(true);
             setRetainInstance(true);
             
-            pDialog.dismiss();
+            mProgressDialog.dismiss();
         }
     }
     
     public void updateJSONdata()
     {
-    	String pUsername = PresentAccount.get(getActivity()).getPresentAccount().getName();
+    	String pUsername = AccountCurrent.get(getActivity()).getPresentAccount().getName();
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("username", pUsername));
         
@@ -161,6 +165,8 @@ public class ReviewBookedPropertyListFragment extends ListFragment
         mRentalList = new ArrayList<Rental>();
         JSONParser jParser = new JSONParser();
         JSONObject json = jParser.makeHttpRequest(GET_PROPS_B_URL, "POST", params);
+        //FIX
+        //Delete the function this refers to
         //JSONObject json = jParser.getJSONFromUrl(GET_PROPS_URL);
 
         try

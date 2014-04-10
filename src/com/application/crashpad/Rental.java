@@ -1,12 +1,10 @@
 package com.application.crashpad;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import android.location.Location;
-import android.text.format.DateFormat;
 
 public class Rental
 {
@@ -67,6 +65,7 @@ public class Rental
 		Date dateStart = new Date();
 	    Date dateEnd = new Date();
 		
+	    //FIX
 	    //Won't work for day-of
 		try
 		{
@@ -86,7 +85,7 @@ public class Rental
 		
 		return result;
 		
-
+		//Delete when done
 		/*Calendar calendar1 = Calendar.getInstance();
 		Calendar calendar2 = Calendar.getInstance();
 		calendar1.setTime(date);

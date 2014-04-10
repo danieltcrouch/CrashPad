@@ -33,6 +33,8 @@ public class ReviewPropertyFragment extends Fragment
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+		
 		//UUID propId = (UUID)getArguments().getSerializable(EXTRA_PROP_ID);
     	//Should add ID attribute to table so that we can actually use the above^
 		mProperty = new Property();
@@ -59,7 +61,7 @@ public class ReviewPropertyFragment extends Fragment
 			}
         }
 
-		String userName = PresentAccount.get(getActivity()).getPresentAccount().getName();
+		String userName = AccountCurrent.get(getActivity()).getPresentAccount().getName();
 		propertyName = (TextView)v.findViewById(R.id.property_name);
 		propertyName.setText(userName + "'s " + mProperty.getName());
 		propertyInfo = (TextView)v.findViewById(R.id.property_info);

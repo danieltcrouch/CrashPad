@@ -6,7 +6,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,6 @@ import android.widget.Button;
 
 public class HomeFragment extends Fragment
 {
-	public static final String EXTRA_HOME_ID = "com.application.crashpad.home_id";
-	
 	private Button mFindPropButton;
 	private Button mReviewPropButton;
 	private Button mCheckBookingsButton;
@@ -32,6 +29,8 @@ public class HomeFragment extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
+		//FIX
+		//In this and all others, give back arrow
 		View view = inflater.inflate(R.layout.fragment_home, parent, false);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
@@ -41,7 +40,9 @@ public class HomeFragment extends Fragment
 			}
         }
 		
-		
+		//FIX
+		//String Names
+		//XML file names and views within
 		mFindPropButton = (Button)view.findViewById(R.id.goto_find_property_list_activity);
 		mFindPropButton.setOnClickListener(new View.OnClickListener()
 		{

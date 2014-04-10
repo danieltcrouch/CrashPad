@@ -59,6 +59,8 @@ public class FindPropertyFragment extends Fragment
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+		
 		//UUID propId = (UUID)getArguments().getSerializable(EXTRA_PROP_ID);
     	//Should add ID attribute to table so that we can actually use the above^
 		mProperty = new Property();
@@ -188,7 +190,7 @@ public class FindPropertyFragment extends Fragment
             int success;
             SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
 		    
-            String renter = PresentAccount.get(getActivity()).getPresentAccount().getName();
+            String renter = AccountCurrent.get(getActivity()).getPresentAccount().getName();
             String owner = mProperty.getUsername();
             //FIX
             String dateStart = df.format(new Date());

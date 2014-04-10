@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 
 public class ReviewBookedPropertyFragment extends Fragment
 {
+	//FIX
 	//public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
 	public static final String EXTRA_PROP_USER = "com.application.crashpad.property_user";
 	public static final String EXTRA_PROP_NAME = "com.application.crashpad.property_name";
@@ -29,15 +29,18 @@ public class ReviewBookedPropertyFragment extends Fragment
 
 	private Property mProperty;
 	private Rental mRental;
-	private TextView propertyName;
-	private TextView propertyInfo;
-	private TextView dateRented;
-	private TextView accessCode;
+	private TextView mPropertyName;
+	private TextView mPropertyInfo;
+	private TextView mDateRented;
+	private TextView mAccessCode;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
+		
+		//FIX
 		//UUID propId = (UUID)getArguments().getSerializable(EXTRA_PROP_ID);
     	//Should add ID attribute to table so that we can actually use the above^
 		mProperty = new Property();
@@ -45,19 +48,16 @@ public class ReviewBookedPropertyFragment extends Fragment
 		mProperty.setName((String)getArguments().getSerializable(EXTRA_PROP_NAME));
 		mProperty.setDescription((String)getArguments().getSerializable(EXTRA_PROP_DESC));
 
-		Log.d("TAG", "Pre-Loc");
 		Location loc = new Location(LocationManager.NETWORK_PROVIDER);
 		loc.setLongitude((Double)getArguments().getSerializable(EXTRA_PROP_LONG));
 		loc.setLatitude((Double)getArguments().getSerializable(EXTRA_PROP_LAT));
 		mProperty.setLocation(loc);
 
-		Log.d("TAG", "Pre-Rental");
 		mRental = new Rental();
 		mRental.setDateStart((String)getArguments().getSerializable(EXTRA_RENT_DAT_S));
 		mRental.setDateEnd((String)getArguments().getSerializable(EXTRA_RENT_DAT_E));
 		mRental.setCode((String)getArguments().getSerializable(EXTRA_RENT_CODE));
 		mRental.setLocation(loc);
-		Log.d("TAG", mRental.getDateStart() + " " + mRental.getDateEnd());
 	}
 	
 	@TargetApi(11)
@@ -73,14 +73,17 @@ public class ReviewBookedPropertyFragment extends Fragment
 			}
         }
 
-		propertyName = (TextView)v.findViewById(R.id.property_name);
-		propertyName.setText(mProperty.getUsername() + "'s " + mProperty.getName());
-		propertyInfo = (TextView)v.findViewById(R.id.property_info);
-		propertyInfo.setText(mProperty.getDescription());
-		dateRented = (TextView)v.findViewById(R.id.date_rented);
-		dateRented.setText(mRental.getDateStart() + " - " + mRental.getDateEnd());
-		accessCode = (TextView)v.findViewById(R.id.access_code);
-		accessCode.setText(mRental.presentlyRenting()? mRental.getCode() : "Not Presently Staying");
+		mPropertyName = (TextView)v.findViewById(R.id.property_name);
+		mPropertyName.setText(mProperty.getUsername() + "'s " + mProperty.getName());
+		
+		mPropertyInfo = (TextView)v.findViewById(R.id.property_info);
+		mPropertyInfo.setText(mProperty.getDescription());
+		
+		mDateRented = (TextView)v.findViewById(R.id.date_rented);
+		mDateRented.setText(mRental.getDateStart() + " - " + mRental.getDateEnd());
+		
+		mAccessCode = (TextView)v.findViewById(R.id.access_code);
+		mAccessCode.setText(mRental.presentlyRenting()? mRental.getCode() : "Not Presently Staying");
 		
 		return v;
 	}
@@ -94,8 +97,8 @@ public class ReviewBookedPropertyFragment extends Fragment
 		}
 	}
 	
-	//Consider Removing
-	//Look at FindPropertyListFragmant
+	//FIX
+	//For all situations like this, try saving in a class PropList, and return based on UUID
 	public static ReviewBookedPropertyFragment newInstance(
 			String username, String name, String description, Double longitude, Double latitude,
 			String dateStart, String dateEnd, String code)
@@ -116,6 +119,8 @@ public class ReviewBookedPropertyFragment extends Fragment
 		return fragment;
 	}
 	
+	//FIX
+	//Delete when Done
 	/*public static ReviewPropertyFragment newInstance(UUID propId)
 	{
 		Bundle args = new Bundle();

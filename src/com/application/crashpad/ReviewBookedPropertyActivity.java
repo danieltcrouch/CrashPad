@@ -7,6 +7,7 @@ public class ReviewBookedPropertyActivity extends SingleFragmentActivity
 	@Override
 	protected Fragment createFragment()
 	{
+		//FIX
 		//UUID propId = (UUID)getIntent().getSerializableExtra(ReviewPropertyFragment.EXTRA_PROP_ID);
 		//return ReviewPropertyFragment.newInstance(propId);
 

@@ -1,7 +1,6 @@
 package com.application.crashpad;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +21,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,15 +32,20 @@ import android.widget.Toast;
 
 public class FindPropertyParametersFragment extends Fragment
 {
+	public static final String FORMAT_DATE = "EEE, MMM d, yy";
 	public static final String DIALOG_DATE = "date";
-	private static final int REQUEST_DATE = 0;
+	private static final int REQUEST_DATE_START = 0;
+	private static final int REQUEST_DATE_END = 1;
 	
 	private int mDistance;
 	private boolean mLocChanged;
-	private Date mDate;
+	private Date mDateStart;
+	private Date mDateEnd;
 	private Button mSearchButton;
-	private Button mChangeDateButton;
-	private TextView mDateTextView;
+	private Button mChangeDateStartButton;
+	private Button mChangeDateEndButton;
+	private TextView mDateStartTextView;
+	private TextView mDateEndTextView;
 	private EditText mDistanceEditText;
 	private EditText mLocationEditText;
 	private Location mCurrentLocation;
@@ -68,21 +73,41 @@ public class FindPropertyParametersFragment extends Fragment
 			}
         }
 		
+		//FIX
+		//Only checks for Start Date
+
+		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100000, 10, mLocationListener);
+		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 10, mLocationListener);
 		
-		mDistance = 10;
 		mDistanceEditText = (EditText)view.findViewById(R.id.distance);
-		mDistanceEditText.addTextChangedListener(new TextWatcher()
+		updateDate();
+
+		mDateStart = new Date();
+		mChangeDateStartButton = (Button)view.findViewById(R.id.change_start_date);
+		mChangeDateStartButton.setOnClickListener(new View.OnClickListener()
 		{
-			public void afterTextChanged(Editable s)
+			@Override
+			public void onClick(View v)
 			{
-				if (isNumeric(mDistanceEditText.getText().toString()))
-				{
-					mDistance = Integer.parseInt(mDistanceEditText.getText().toString());
-				}
+				FragmentManager fm = getActivity().getSupportFragmentManager();
+				DatePickerFragment dialog = DatePickerFragment.newInstance(mDateStart);
+				dialog.setTargetFragment(FindPropertyParametersFragment.this, REQUEST_DATE_START);
+				dialog.show(fm, DIALOG_DATE);
 			}
-			
-			public void beforeTextChanged(CharSequence s, int start, int count, int after){}
-	        public void onTextChanged(CharSequence s, int start, int before, int count){}
+		});
+
+		mDateEnd = new Date();
+		mChangeDateEndButton = (Button)view.findViewById(R.id.change_end_date);
+		mChangeDateEndButton.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				FragmentManager fm = getActivity().getSupportFragmentManager();
+				DatePickerFragment dialog = DatePickerFragment.newInstance(mDateEnd);
+				dialog.setTargetFragment(FindPropertyParametersFragment.this, REQUEST_DATE_END);
+				dialog.show(fm, DIALOG_DATE);
+			}
 		});
 		
 		mLocChanged = false;
@@ -91,23 +116,25 @@ public class FindPropertyParametersFragment extends Fragment
 		{
 			public void afterTextChanged(Editable s)
 			{
+				//FIX
+				//After you've begun typing, can you get it to default back to myLocation?
 				mLocChanged = true;
 				Geocoder geocoder = new Geocoder(getActivity());
 				String location = mLocationEditText.getText().toString();
 				
 				try
 				{
-				  List<Address> addresses = geocoder.getFromLocationName(location, 1);
-				  if (addresses != null && !addresses.isEmpty())
-				  {
-				    Address address = addresses.get(0);
-				    mCurrentLocation.setLatitude(address.getLatitude());
-				    mCurrentLocation.setLongitude(address.getLongitude());
-				  }
-				  else
-				  {
-					  Toast.makeText(getActivity(), "Unable to find location.", Toast.LENGTH_LONG).show();
-				  }
+					List<Address> addresses = geocoder.getFromLocationName(location, 1);
+					if (addresses != null && !addresses.isEmpty())
+					{
+						Address address = addresses.get(0);
+						mCurrentLocation.setLatitude(address.getLatitude());
+						mCurrentLocation.setLongitude(address.getLongitude());
+					}
+					else
+					{
+						Toast.makeText(getActivity(), "Unable to find location.", Toast.LENGTH_SHORT).show();
+					}
 				}
 				catch (IOException e)
 				{
@@ -119,31 +146,24 @@ public class FindPropertyParametersFragment extends Fragment
 	        public void onTextChanged(CharSequence s, int start, int before, int count){}
 		});
 		
-		mDateTextView = (TextView)view.findViewById(R.id.prompt_date);
-		mDate = new Date();
-		updateDate();
-		
-		mChangeDateButton = (Button)view.findViewById(R.id.change_date);
-		mChangeDateButton.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				FragmentManager fm = getActivity().getSupportFragmentManager();
-				DatePickerFragment dialog = DatePickerFragment.newInstance(mDate);
-				dialog.setTargetFragment(FindPropertyParametersFragment.this, REQUEST_DATE);
-				dialog.show(fm, DIALOG_DATE);
-			}
-		});
-		
 		mSearchButton = (Button)view.findViewById(R.id.search);
 		mSearchButton.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
+				//FIX
+				//When getting info from EditText on screen, be sure it gets most recent
+				//May be fixed here, but check other fragments
+				
+				mDistance = 10;
+				if (isNumeric(mDistanceEditText.getText().toString()))
+				{
+					mDistance = Integer.parseInt(mDistanceEditText.getText().toString());
+				}
+				
 		        Calendar calendar = Calendar.getInstance();
-				calendar.setTime(mDate);
+				calendar.setTime(mDateStart);
 				
 				Intent i = new Intent(getActivity(), FindPropertyListActivity.class);
 		        i.putExtra(FindPropertyListFragment.EXTRA_PARA_LONG, Double.toString(mCurrentLocation.getLongitude()));
@@ -171,9 +191,6 @@ public class FindPropertyParametersFragment extends Fragment
 		    public void onProviderEnabled(String provider) {}
 		    public void onProviderDisabled(String provider) {}
 		};
-
-		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100000, 10, mLocationListener);
-		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 10, mLocationListener);
 		
 		return view;
 	}
@@ -186,27 +203,31 @@ public class FindPropertyParametersFragment extends Fragment
 			return;
 		}
 		
-		if (requestCode == REQUEST_DATE)
+		if (requestCode == REQUEST_DATE_START)
 		{
-			Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
-			mDate = date;
+			mDateStart = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+			updateDate();
+		}
+		else if (requestCode == REQUEST_DATE_END)
+		{
+			mDateEnd = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
 			updateDate();
 		}
 	}
 	
 	private void updateDate()
 	{
-		SimpleDateFormat dFormat = new SimpleDateFormat("E, MMM. dd, yyyy");
-		mDateTextView.setText("Start Date - " + dFormat.format(mDate));
+		mChangeDateStartButton.setText(DateFormat.format(FORMAT_DATE, mDateStart));
+		mChangeDateEndButton.setText(DateFormat.format(FORMAT_DATE, mDateEnd));
 	}
 	
 	public static boolean isNumeric(String str)  
 	{  
 		try
 		{  
-			double d = Double.parseDouble(str);  
+			Double.parseDouble(str);  
 		}  
-		catch(NumberFormatException nfe)  
+		catch(NumberFormatException e)  
 		{  
 			return false;  
 		}

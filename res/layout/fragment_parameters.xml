@@ -13,7 +13,7 @@
     <EditText android:id="@+id/location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="My Location (inactive)" />
+        android:hint="My Location" />
 
     <TextView
         android:id="@+id/prompt_distance"
@@ -28,24 +28,49 @@
         android:ems="10"
         android:inputType="number"
         android:hint="10" />
-
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/prompt_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start Date - 1/28/1993" />
+        <LinearLayout
+            android:layout_width="164dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/change_date"
+            <TextView
+                android:id="@+id/prompt_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check in:" />
+
+            <Button
+                android:id="@+id/change_end_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:text="Change Date" />
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/prompt_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check out:" />
+
+            <Button
+                android:id="@+id/change_start_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <Button

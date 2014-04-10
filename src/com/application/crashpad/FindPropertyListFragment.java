@@ -3,10 +3,7 @@ package com.application.crashpad;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,6 +53,7 @@ public class FindPropertyListFragment extends ListFragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+		setRetainInstance(true);
 		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
@@ -158,7 +156,7 @@ public class FindPropertyListFragment extends ListFragment
     
     public void updateJSONdata()
     {
-    	/*String pUsername = PresentAccount.get(getActivity()).getPresentAccount().getName();
+    	/*String pUsername = AccountCurrent.get(getActivity()).getPresentAccount().getName();
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("username", pUsername));*/
         

@@ -8,8 +8,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.application.crashpad.LoginFragment.AttemptLogin;
-
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -18,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,15 +29,13 @@ public class CreateNewAccountFragment extends Fragment
 	private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
 
-	private EditText usernameEditText;
-	private EditText nPasswordEditText;
-	private EditText cPasswordEditText;
-	private EditText emailEditText;
+	private EditText mUsernameEditText;
+	private EditText mPasswordNewEditText;
+	private EditText mPasswordConfirmEditText;
+	private EditText mEmailEditText;
 	private Button mConfirmAccountCreate;
-
-	private ProgressDialog pDialog;
-	JSONParser jsonParser = new JSONParser();
-	
+	private ProgressDialog mProgressDialog;
+		
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -52,6 +47,8 @@ public class CreateNewAccountFragment extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
+		//FIX
+		//In this and all others, give back arrow
 		View view = inflater.inflate(R.layout.fragment_create_new_account, parent, false);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
@@ -61,10 +58,10 @@ public class CreateNewAccountFragment extends Fragment
 			}
         }
 
-		usernameEditText = (EditText)view.findViewById(R.id.new_user_username);
-		nPasswordEditText = (EditText)view.findViewById(R.id.new_user_password);
-		cPasswordEditText = (EditText)view.findViewById(R.id.confirm_user_password);
-		emailEditText = (EditText)view.findViewById(R.id.new_user_email);
+		mUsernameEditText = (EditText)view.findViewById(R.id.new_user_username);
+		mPasswordNewEditText = (EditText)view.findViewById(R.id.new_user_password);
+		mPasswordConfirmEditText = (EditText)view.findViewById(R.id.confirm_user_password);
+		mEmailEditText = (EditText)view.findViewById(R.id.new_user_email);
 		
 		mConfirmAccountCreate = (Button)view.findViewById(R.id.confirm_create_account_button);
 		mConfirmAccountCreate.setOnClickListener(new View.OnClickListener()
@@ -72,15 +69,18 @@ public class CreateNewAccountFragment extends Fragment
 			@Override
 			public void onClick(View v)
 			{
-				String pass1 = nPasswordEditText.getText().toString();
-				String pass2 = cPasswordEditText.getText().toString();
+				//FIX
+				//http://stackoverflow.com/questions/7625862/validate-an-email-inside-an-edittext
+				String pass1 = mPasswordNewEditText.getText().toString();
+				String pass2 = mPasswordConfirmEditText.getText().toString();
+				
 				if (pass1.equals(pass2))
 				{
 					new CreateUser().execute();
 				}
 				else
 				{
-					Toast.makeText(getActivity(), "Passwords do not match.", Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity(), "Passwords do not match.", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -96,37 +96,42 @@ public class CreateNewAccountFragment extends Fragment
         protected void onPreExecute()
         {
             super.onPreExecute();
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Creating Account...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
+            mProgressDialog = new ProgressDialog(getActivity());
+            mProgressDialog.setMessage("Creating Account...");
+            mProgressDialog.setIndeterminate(false);
+            mProgressDialog.setCancelable(true);
+            mProgressDialog.show();
         }
 
 		@Override
 		protected String doInBackground(String... args)
 		{
             int success;
-            String username = usernameEditText.getText().toString();
-            String password = nPasswordEditText.getText().toString();
-            String email = emailEditText.getText().toString();
+            String username = mUsernameEditText.getText().toString();
+            String password = mPasswordNewEditText.getText().toString();
+            String email = mEmailEditText.getText().toString();
             
             try
             {
+            	//FIX
+            	//mId = UUID.randomUUID();
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("username", username));
                 params.add(new BasicNameValuePair("password", password));
                 params.add(new BasicNameValuePair("email", email));
 
-                JSONObject json = jsonParser.makeHttpRequest(
-                		REGISTER_URL, "POST", params);
+                JSONParser jsonParser = new JSONParser();
+                JSONObject json = jsonParser.makeHttpRequest(REGISTER_URL, "POST", params);
                 success = json.getInt(TAG_SUCCESS);
                 
                 if (success == 1)
                 {
-                	PresentAccount.get(getActivity()).setPresentAccount(new Account(username, password, email));
+                	AccountCurrent.get(getActivity()).setPresentAccount(new Account(username, password));
+                	//FIX
+                	//Set email and other data
     				Intent i = new Intent(getActivity(), HomeActivity.class);
     				startActivity(i);
+    				
                 	return json.getString(TAG_MESSAGE);
                 }
                 else
@@ -142,12 +147,12 @@ public class CreateNewAccountFragment extends Fragment
             return null;
 		}
 		
-        protected void onPostExecute(String file_url)
+        protected void onPostExecute(String message)
         {
-            pDialog.dismiss();
-            if (file_url != null)
+        	mProgressDialog.dismiss();
+            if (message != null)
             {
-            	Toast.makeText(getActivity(), file_url, Toast.LENGTH_LONG).show();
+            	Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }
         }
 	}

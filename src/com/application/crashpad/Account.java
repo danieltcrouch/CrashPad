@@ -5,21 +5,22 @@ import java.util.UUID;
 public class Account
 {
 	private UUID mId;
+	private String mUsername;
 	private String mName;
 	private String mPassword;
 	private String mEmail;
 	
 	public Account()
 	{
-		mId = UUID.randomUUID();
+		//
 	}
 	
-	public Account(String name, String password, String email)
+	public Account(String username, String password)
 	{
-		mId = UUID.randomUUID();
-		mName = name;
+		mUsername = username;
 		mPassword = password;
-		mEmail = email;
+		//FIX
+		//Retrieves other data
 	}
 
 	public UUID getId()
@@ -30,6 +31,16 @@ public class Account
 	public void setId(UUID id)
 	{
 		mId = id;
+	}
+
+	public String getUsername()
+	{
+		return mUsername;
+	}
+
+	public void setUsername(String username)
+	{
+		mUsername = username;
 	}
 
 	public String getName()
@@ -61,17 +72,4 @@ public class Account
 	{
 		mPassword = password;
 	}
-	
-	//Move this to Account Page
-	/*Button contactLeaserButton = (Button)v.findViewById(R.id.contact_renter);
-	contactLeaserButton.setOnClickListener(new View.OnClickListener()
-	{
-		public void onClick(View v)
-		{
-			Intent send = new Intent(Intent.ACTION_SEND);
-			send.setType("text/plain");
-			final Intent i = Intent.createChooser(send, "Select method of contact");
-			startActivity(i);
-		}
-	});*/
 }

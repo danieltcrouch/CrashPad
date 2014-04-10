@@ -29,8 +29,8 @@ public class LoginFragment extends Fragment
 	private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
 	
-	private EditText usernameEditText;
-	private EditText passwordEditText;
+	private EditText mUsernameEditText;
+	private EditText mPasswordEditText;
 	private Button mLoginButton;
 	private Button mCreateNewAccountButton;
 	private ProgressDialog pDialog;
@@ -55,8 +55,8 @@ public class LoginFragment extends Fragment
 			}
         }
 		
-		usernameEditText = (EditText)view.findViewById(R.id.username);
-		passwordEditText = (EditText)view.findViewById(R.id.password);
+		mUsernameEditText = (EditText)view.findViewById(R.id.username);
+		mPasswordEditText = (EditText)view.findViewById(R.id.password);
 		
 		mLoginButton = (Button)view.findViewById(R.id.login_button);
 		mLoginButton.setOnClickListener(new View.OnClickListener()
@@ -91,6 +91,8 @@ public class LoginFragment extends Fragment
         {
             super.onPreExecute();
             pDialog = new ProgressDialog(getActivity());
+            //FIX
+            //Fix all strings in Program
             pDialog.setMessage("Attempting Login...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
@@ -101,8 +103,8 @@ public class LoginFragment extends Fragment
 		protected String doInBackground(String... args)
 		{			
             int success;
-            String username = usernameEditText.getText().toString();
-            String password = passwordEditText.getText().toString();
+            String username = mUsernameEditText.getText().toString();
+            String password = mPasswordEditText.getText().toString();
             
             try
             {
@@ -116,9 +118,10 @@ public class LoginFragment extends Fragment
 
                 if (success == 1)
                 {
-                	PresentAccount.get(getActivity()).setPresentAccount(new Account(username, password, ""));
+                	AccountCurrent.get(getActivity()).setPresentAccount(new Account(username, password));
     				Intent i = new Intent(getActivity(), HomeActivity.class);
                     startActivity(i);
+                    
                 	return json.getString(TAG_MESSAGE);
                 }
                 else
@@ -134,12 +137,12 @@ public class LoginFragment extends Fragment
             return null;
 		}
 		
-        protected void onPostExecute(String file_url)
+        protected void onPostExecute(String message)
         {
             pDialog.dismiss();
-            if (file_url != null)
+            if (message != null)
             {
-            	Toast.makeText(getActivity(), file_url, Toast.LENGTH_LONG).show();
+            	Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }
         }
 	}

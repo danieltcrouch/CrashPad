@@ -2,24 +2,24 @@ package com.application.crashpad;
 
 import android.content.Context;
 
-public class PresentAccount
+public class AccountCurrent
 {
-	private static PresentAccount sPresentAccount;
+	private static AccountCurrent sAccountCurrent;
 	private Account mUser;
 	
-	private PresentAccount(Context appContext)
+	private AccountCurrent(Context appContext)
 	{
 		mUser = new Account();
 	}
 	
-	public static PresentAccount get(Context c)
+	public static AccountCurrent get(Context c)
 	{
-		if (sPresentAccount == null)
+		if (sAccountCurrent == null)
 		{
-			sPresentAccount = new PresentAccount(c.getApplicationContext());
+			sAccountCurrent = new AccountCurrent(c.getApplicationContext());
 		}
 		
-		return sPresentAccount;
+		return sAccountCurrent;
 	}
 	
 	public void setPresentAccount(Account a)
