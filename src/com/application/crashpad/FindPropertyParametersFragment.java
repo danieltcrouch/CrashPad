@@ -27,7 +27,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class FindPropertyParametersFragment extends Fragment
@@ -44,8 +43,6 @@ public class FindPropertyParametersFragment extends Fragment
 	private Button mSearchButton;
 	private Button mChangeDateStartButton;
 	private Button mChangeDateEndButton;
-	private TextView mDateStartTextView;
-	private TextView mDateEndTextView;
 	private EditText mDistanceEditText;
 	private EditText mLocationEditText;
 	private Location mCurrentLocation;
@@ -83,7 +80,7 @@ public class FindPropertyParametersFragment extends Fragment
 		updateDate();
 
 		mDateStart = new Date();
-		mChangeDateStartButton = (Button)view.findViewById(R.id.change_start_date);
+		mChangeDateStartButton = (Button)view.findViewById(R.id.start_date_button);
 		mChangeDateStartButton.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -97,7 +94,7 @@ public class FindPropertyParametersFragment extends Fragment
 		});
 
 		mDateEnd = new Date();
-		mChangeDateEndButton = (Button)view.findViewById(R.id.change_end_date);
+		mChangeDateEndButton = (Button)view.findViewById(R.id.end_date_button);
 		mChangeDateEndButton.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -146,7 +143,7 @@ public class FindPropertyParametersFragment extends Fragment
 	        public void onTextChanged(CharSequence s, int start, int before, int count){}
 		});
 		
-		mSearchButton = (Button)view.findViewById(R.id.search);
+		mSearchButton = (Button)view.findViewById(R.id.search_button);
 		mSearchButton.setOnClickListener(new View.OnClickListener()
 		{
 			@Override

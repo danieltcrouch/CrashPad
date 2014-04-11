@@ -23,7 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class CreateNewAccountFragment extends Fragment
+public class CreateAccountFragment extends Fragment
 {
 	private static final String REGISTER_URL = "http://taz.harding.edu/~dcrouch1/crashpad/register.php";
 	private static final String TAG_SUCCESS = "success";
@@ -49,7 +49,7 @@ public class CreateNewAccountFragment extends Fragment
 	{
 		//FIX
 		//In this and all others, give back arrow
-		View view = inflater.inflate(R.layout.fragment_create_new_account, parent, false);
+		View view = inflater.inflate(R.layout.fragment_create_account, parent, false);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
@@ -58,12 +58,12 @@ public class CreateNewAccountFragment extends Fragment
 			}
         }
 
-		mUsernameEditText = (EditText)view.findViewById(R.id.new_user_username);
-		mPasswordNewEditText = (EditText)view.findViewById(R.id.new_user_password);
-		mPasswordConfirmEditText = (EditText)view.findViewById(R.id.confirm_user_password);
-		mEmailEditText = (EditText)view.findViewById(R.id.new_user_email);
+		mUsernameEditText = (EditText)view.findViewById(R.id.new_username);
+		mPasswordNewEditText = (EditText)view.findViewById(R.id.new_password);
+		mPasswordConfirmEditText = (EditText)view.findViewById(R.id.confirm_password);
+		mEmailEditText = (EditText)view.findViewById(R.id.new_email);
 		
-		mConfirmAccountCreate = (Button)view.findViewById(R.id.confirm_create_account_button);
+		mConfirmAccountCreate = (Button)view.findViewById(R.id.account_create_button);
 		mConfirmAccountCreate.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -80,7 +80,7 @@ public class CreateNewAccountFragment extends Fragment
 				}
 				else
 				{
-					Toast.makeText(getActivity(), "Passwords do not match.", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), R.string.password_toast, Toast.LENGTH_SHORT).show();
 				}
 			}
 		});

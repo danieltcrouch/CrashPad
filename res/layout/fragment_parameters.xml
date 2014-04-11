@@ -3,23 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/search_properties_parameters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/labels_padding_size"
+        android:text="@string/search_properties"
+        android:textSize="20sp" />
     
     <TextView
         android:id="@+id/prompt_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Location to search:" />
+        android:text="@string/prompt_location" />
     
     <EditText android:id="@+id/location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="My Location" />
+        android:hint="@string/location" />
 
     <TextView
         android:id="@+id/prompt_distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Distance (in miles) to search for property rentals:" />
+        android:text="@string/prompt_distance" />
     
     <EditText
         android:id="@+id/distance"
@@ -27,7 +35,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="number"
-        android:hint="10" />
+        android:hint="@string/distance" />
     
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,13 +47,13 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/prompt_end_date"
+                android:id="@+id/prompt_start_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Check in:" />
+                android:text="@string/prompt_check_in" />
 
             <Button
-                android:id="@+id/change_end_date"
+                android:id="@+id/start_date_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -58,13 +66,13 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/prompt_start_date"
+                android:id="@+id/prompt_end_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Check out:" />
+                android:text="@string/prompt_check_out" />
 
             <Button
-                android:id="@+id/change_start_date"
+                android:id="@+id/end_date_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -74,11 +82,11 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/search"
+        android:id="@+id/search_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:text="Search Properties" />
+        android:text="@string/search_button" />
 
 </LinearLayout>

@@ -5,85 +5,48 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/current_basic_account_information"
+        android:id="@+id/edit_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/labels_padding_size"
-        android:text="@string/edit_basic_account_information"
-        android:textSize="20dp" />
+        android:text="@string/edit_account_info"
+        android:textSize="20sp" />
 
-    <LinearLayout
+	<TextView
+	    android:id="@+id/username_view"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:textSize="@dimen/edit_account_labels_size" />
+
+    <EditText
+        android:id="@+id/edit_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/labels_padding_size" >
+        android:hint="@string/edit_email_hint"
+        android:inputType="textEmailAddress"
+        android:ems="10" />
 
-        <TextView
-            android:id="@+id/username_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/username_label"
-            android:textSize="@dimen/edit_account_labels_size" />
-
-        <TextView
-            android:id="@+id/username_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Fill username here" />
-    </LinearLayout>
-
-    <LinearLayout
+    <EditText
+        android:id="@+id/edit_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/labels_padding_size" >
+        android:hint="@string/edit_password_hint"
+        android:inputType="textPassword"
+        android:ems="10" />
 
-        <TextView
-            android:id="@+id/password_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/password_label"
-            android:textSize="@dimen/edit_account_labels_size" />
-
-        <EditText
-            android:id="@+id/edit_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="Change Password" >
-
-            <requestFocus />
-        </EditText>
-
-    </LinearLayout>
-
-    <LinearLayout
+    <EditText
+        android:id="@+id/confirm_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/labels_padding_size" >
-
-        <TextView
-            android:id="@+id/email_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/email_label"
-            android:textSize="@dimen/edit_account_labels_size" />
-
-        <EditText
-            android:id="@+id/edit_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="Change Email" />
-
-    </LinearLayout>
+        android:hint="@string/confirm_password_hint"
+        android:inputType="textPassword"
+        android:ems="10" />
 
     <Button
-        android:id="@+id/confirm_changes_button"
-        android:layout_width="wrap_content"
+        android:id="@+id/update_info_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="40dp"
-        android:text="@string/confirm_account_changes" />
+        android:text="@string/update_info_button" />
 
 </LinearLayout>

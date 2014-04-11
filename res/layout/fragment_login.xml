@@ -8,10 +8,11 @@
 
     <ImageView
         android:id="@+id/crashpad_plane"
+        android:contentDescription="@string/image_description"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:maxWidth="@dimen/activity_horizontal_margin"
         android:scaleType="centerInside"
+        android:maxWidth="@dimen/activity_horizontal_margin"
         android:src="@drawable/crashpad_plane" />
 
     <EditText
@@ -19,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="@string/login_username_suggestion" >
+        android:hint="@string/login_username_hint" >
         <requestFocus />
     </EditText>
 
@@ -28,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:hint="@string/login_password_suggestion" />
+        android:hint="@string/login_password_hint" />
 
     <Button
         android:id="@+id/login_button"
@@ -40,6 +41,6 @@
         android:id="@+id/create_account_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/create_new_account" />
+        android:text="@string/create_account_button" />
 
 </LinearLayout>

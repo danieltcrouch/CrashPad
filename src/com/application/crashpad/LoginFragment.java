@@ -74,7 +74,7 @@ public class LoginFragment extends Fragment
 			@Override
 			public void onClick(View v)
 			{
-				Intent i = new Intent(getActivity(), CreateNewAccountActivity.class);
+				Intent i = new Intent(getActivity(), CreateAccountActivity.class);
 				startActivity(i);
 			}
 		});

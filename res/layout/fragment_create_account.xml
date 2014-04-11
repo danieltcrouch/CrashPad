@@ -8,47 +8,47 @@
         android:id="@+id/account_creation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/new_account_creation"
+        android:text="@string/account_creation"
         android:textSize="@dimen/account_creation_text_size" />
 
     <EditText
-        android:id="@+id/new_user_username"
+        android:id="@+id/new_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/new_account_username" >
+        android:hint="@string/new_username_hint"
+        android:ems="10" >
         <requestFocus />
     </EditText>
 
     <EditText
-        android:id="@+id/new_user_email"
+        android:id="@+id/new_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/new_account_email_suggestion"
-        android:inputType="textEmailAddress" />
+        android:hint="@string/new_email_hint"
+        android:inputType="textEmailAddress"
+        android:ems="10" />
 
     <EditText
-        android:id="@+id/new_user_password"
+        android:id="@+id/new_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/new_account_password"
-        android:inputType="textPassword" />
+        android:hint="@string/new_password_hint"
+        android:inputType="textPassword"
+        android:ems="10" />
 
     <EditText
-        android:id="@+id/confirm_user_password"
+        android:id="@+id/confirm_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/new_account_confirm_password"
-        android:inputType="textPassword" />
+        android:hint="@string/confirm_password_hint"
+        android:inputType="textPassword"
+        android:ems="10" />
 
     <Button
-        android:id="@+id/confirm_create_account_button"
+        android:id="@+id/account_create_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/new_account_create_button" />
+        android:text="@string/account_create_button" />
 
 </LinearLayout>

@@ -1,41 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    
+	<!-- Generic -->
     <string name="app_name">CrashPad</string>
+    
+    <!-- GPS & Other
+    <string name="gps_enabled">GPS Enabled</string>
+    <string name="gps_disabled">GPS Disabled</string>
+    <string name="contact_renter">Contact Proprietor</string>
+    <string name="paypal_url">https://www.paypal.com/home</string>
+     -->
+     
+    <!-- Login -->
+    <string name="image_description">An airplane</string>
+    <string name="login_button">Login</string>
+    <string name="login_username_hint">Username</string>
+    <string name="login_password_hint">Password</string>
+    <string name="create_account_button">Create New Account</string>
+    
+    <!-- Create Account -->
+    <string name="new_username_hint">Create Username</string>
+    <string name="new_password_hint">Create Password</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="new_email_hint">john@email.com</string>
+    <string name="account_creation">Account Creation</string>
+    <string name="account_create_button">Create Account</string>
+    <string name="password_toast">Passwords do not match.</string>
+    <!-- Extended Version
+    <string name="new_account_name_suggestion">John Doe</string>
+    <string name="new_account_phone_number_suggestion">(555)123&#8211;4567</string>
+    <string name="new_account_information">Account Information</string>
+    <string name="account_creation_confirmation_toast">Account Created!</string>
+    -->
+    
+    <!-- Home -->
+    <string name="find_prop_button">Find Property to Rent</string>
+    <string name="review_prop_button">Review Properties</string>
+    <string name="check_bookings_button">Check Bookings</string>
+    <string name="edit_account_button">Edit Account</string>
+     
+    <!-- Edit Account -->
+    <string name="edit_account_info">Edit Account Info</string>
+    <string name="view_account_info">View Account Info</string>
+    <string name="edit_password_hint">Change Password</string>
+    <string name="edit_email_hint">john@email.com</string>
+    <string name="update_info_button">Update Info</string>
+    
+    <!-- Review Own Property -->
+    <string name="edit_prop_button">Edit Property Online</string>
+
+    <!-- Review Booked Property -->
+    <string name="dates_rented_label">Dates Rented: </string>
+    <string name="access_code_label">Access Code: </string>
+    
+    <!-- Parameters -->
+    <string name="search_properties">Search Properties</string>
+    <string name="prompt_location">Location to search:</string>
+    <string name="location">My Location</string>
+    <string name="prompt_distance">Distance (in miles) to search for property rentals:</string>
+    <string name="distance">10</string>
+    <string name="prompt_check_in">Check in:</string>
+    <string name="prompt_check_out">Check out:</string>
+    <string name="search_button">Search</string>
+         
+    <!-- Find Property -->
+    <string name="rent_prop_button">Rent this Property</string>
+    
+    <!-- Edit Property
     <string name="name_activity_property">PropertyActivity</string>
     <string name="properties">Properties</string>
     <string name="property_name_hint">Enter a name for the property</string>
     <string name="property_name_label">Title</string>
     <string name="property_details_label">Details</string>
-    <string name="property_rent">Rent this Property</string>
-    <string name="gps_enabled">GPS Enabled</string>
-    <string name="gps_disabled">GPS Disabled</string>
-    <string name="contact_renter">Contact Proprietor</string>
-    <string name="paypal_url">https://www.paypal.com/home</string>
-    <string name="login_button">Login</string>
-    <string name="login_username_suggestion">Username</string>
-    <string name="login_password_suggestion">Password</string>
-    <string name="create_new_account">Create New Account</string>
-    <string name="new_account_username">Create Username</string>
-    <string name="new_account_password">Create Password</string>
-    <string name="new_account_confirm_password">Confirm Password</string>
-    <string name="new_account_email_suggestion">john@email.com</string>
-    <string name="new_account_name_suggestion">John Doe</string>
-    <string name="new_account_phone_number_suggestion">(555)123-4567</string>
-    <string name="new_account_creation">Account Creation</string>
-    <string name="new_account_information">Account Information</string>
-    <string name="new_account_create_button">Create Account</string>
-    <string name="account_creation_confirmation_toast">Account Created!</string>
-    <string name="current_account_information">Current Basic Account Information</string>
-    <string name="username_label">Username:</string>
-    <string name="password_label">Password:</string>
-    <string name="name_label">Name:</string>
-    <string name="email_label">Email:</string>
-    <string name="phone_number_label">Phone Number:</string>
-    <string name="edit_password">Change Password</string>
-    <string name="edit_basic_account_information">Edit Basic Account Information</string>
-    <string name="view_basic_information_fragment">View Account info</string>
-    <string name="changes_saved_toast">Changes saved</string>
-    <string name="confirm_account_changes">Confirm Account Changes</string>
+    -->
     
 </resources>

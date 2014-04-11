@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment
 		//FIX
 		//String Names
 		//XML file names and views within
-		mFindPropButton = (Button)view.findViewById(R.id.goto_find_property_list_activity);
+		mFindPropButton = (Button)view.findViewById(R.id.find_properties_button);
 		mFindPropButton.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment
 			}
 		});
 		
-		mReviewPropButton = (Button)view.findViewById(R.id.goto_review_property_list_activity);
+		mReviewPropButton = (Button)view.findViewById(R.id.review_properties_button);
 		mReviewPropButton.setOnClickListener(new View.OnClickListener()
 		{			
 			@Override
@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment
 			}
 		});
 		
-		mCheckBookingsButton = (Button)view.findViewById(R.id.goto_bookings_activity);
+		mCheckBookingsButton = (Button)view.findViewById(R.id.review_bookings_button);
 		mCheckBookingsButton.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment
 			}
 		});
 		
-		mEditAccountButton = (Button)view.findViewById(R.id.goto_account_activity);
+		mEditAccountButton = (Button)view.findViewById(R.id.edit_account_button);
 		mEditAccountButton.setOnClickListener(new View.OnClickListener()
 		{
 			@Override

@@ -13,7 +13,6 @@ import org.json.JSONObject;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
@@ -23,7 +22,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
-import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,9 +46,9 @@ public class FindPropertyFragment extends Fragment
 	private Property mProperty;
 	private TextView propertyName;
 	private TextView propertyInfo;
-	private NotificationCompat.Builder mBuilder;
-	private NotificationManager mNotificationManager;
-	private int mId;
+	//private NotificationCompat.Builder mBuilder;
+	//private NotificationManager mNotificationManager;
+	//private int mId;
 	
 	private ProgressDialog pDialog;
 	JSONParser jsonParser = new JSONParser();
@@ -95,7 +93,7 @@ public class FindPropertyFragment extends Fragment
 		propertyInfo = (TextView)v.findViewById(R.id.property_info);
 		propertyInfo.setText(mProperty.getDescription());
 		
-		Button rentButton = (Button)v.findViewById(R.id.property_rent);
+		Button rentButton = (Button)v.findViewById(R.id.rent_property_button);
 		rentButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

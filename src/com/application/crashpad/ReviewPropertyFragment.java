@@ -67,7 +67,7 @@ public class ReviewPropertyFragment extends Fragment
 		propertyInfo = (TextView)v.findViewById(R.id.property_info);
 		propertyInfo.setText(mProperty.getDescription());
 		
-		Button editButton = (Button)v.findViewById(R.id.property_edit);
+		Button editButton = (Button)v.findViewById(R.id.edit_property_button);
 		editButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)

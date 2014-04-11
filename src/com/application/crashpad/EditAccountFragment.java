@@ -31,7 +31,8 @@ public class EditAccountFragment extends Fragment
 
     private String mUsername;
 	private EditText mEmailEditText;
-	private EditText mPasswordEditText;
+	private EditText mPasswordNewEditText;
+	private EditText mPasswordConfirmEditText;
 	private TextView mUsernameTextView;
 	private Button mConfirmChangesButton;
 	private ProgressDialog mProgressDialog;
@@ -58,19 +59,32 @@ public class EditAccountFragment extends Fragment
 		
 		mUsername = AccountCurrent.get(getActivity()).getPresentAccount().getName();
 		
-		mPasswordEditText = (EditText)view.findViewById(R.id.edit_password);
+		mPasswordNewEditText = (EditText)view.findViewById(R.id.edit_password);
+		mPasswordConfirmEditText = (EditText)view.findViewById(R.id.confirm_password);
 		mEmailEditText = (EditText)view.findViewById(R.id.edit_email);
 
 		mUsernameTextView = (TextView)view.findViewById(R.id.username_view);
 		mUsernameTextView.setText(mUsername);
 		
-		mConfirmChangesButton = (Button)view.findViewById(R.id.confirm_changes_button);
+		mConfirmChangesButton = (Button)view.findViewById(R.id.update_info_button);
 		mConfirmChangesButton.setOnClickListener(new View.OnClickListener()
 		{			
 			@Override
 			public void onClick(View v)
 			{
-				new EditAccount().execute();
+				//FIX
+				//http://stackoverflow.com/questions/7625862/validate-an-email-inside-an-edittext
+				String pass1 = mPasswordNewEditText.getText().toString();
+				String pass2 = mPasswordConfirmEditText.getText().toString();
+				
+				if (pass1.equals(pass2))
+				{
+					new EditAccount().execute();
+				}
+				else
+				{
+					Toast.makeText(getActivity(), R.string.password_toast, Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 		
@@ -101,8 +115,8 @@ public class EditAccountFragment extends Fragment
             //Is this the best place and way to do this?
             String email = (mEmailEditText.getText().toString().length() != 0)?
             		mEmailEditText.getText().toString() : AccountCurrent.get(getActivity()).getPresentAccount().getEmail();
-            String password = (mPasswordEditText.getText().toString().length() != 0)?
-            		mPasswordEditText.getText().toString() : AccountCurrent.get(getActivity()).getPresentAccount().getPassword();
+            String password = (mPasswordNewEditText.getText().toString().length() != 0)?
+            		mPasswordNewEditText.getText().toString() : AccountCurrent.get(getActivity()).getPresentAccount().getPassword();
             
             try
             {

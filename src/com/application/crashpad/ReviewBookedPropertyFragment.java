@@ -79,7 +79,7 @@ public class ReviewBookedPropertyFragment extends Fragment
 		mPropertyInfo = (TextView)v.findViewById(R.id.property_info);
 		mPropertyInfo.setText(mProperty.getDescription());
 		
-		mDateRented = (TextView)v.findViewById(R.id.date_rented);
+		mDateRented = (TextView)v.findViewById(R.id.dates_rented);
 		mDateRented.setText(mRental.getDateStart() + " - " + mRental.getDateEnd());
 		
 		mAccessCode = (TextView)v.findViewById(R.id.access_code);

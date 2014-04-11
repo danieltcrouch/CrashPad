@@ -4,29 +4,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <Button android:id="@+id/goto_find_property_list_activity"
-        android:text="Find Property to Rent"
+    <Button android:id="@+id/find_properties_button"
+        android:text="@string/find_prop_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp" />
     
-    <Button android:id="@+id/goto_review_property_list_activity"
-        android:text="Review Properties"
+    <Button android:id="@+id/review_properties_button"
+        android:text="@string/review_prop_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp" />
     
-    <Button android:id="@+id/goto_bookings_activity"
-        android:text="Check Bookings"
+    <Button android:id="@+id/review_bookings_button"
+        android:text="@string/check_bookings_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp" />
     
-    <Button android:id="@+id/goto_account_activity"
-        android:text="Edit Account"
+    <Button android:id="@+id/edit_account_button"
+        android:text="@string/edit_account_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
