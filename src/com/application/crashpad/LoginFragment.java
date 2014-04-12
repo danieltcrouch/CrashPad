@@ -23,23 +23,29 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+//Uses AsyncTask
 public class LoginFragment extends Fragment
 {
 	private static final String LOGIN_URL = "http://taz.harding.edu/~dcrouch1/crashpad/login.php";
 	private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
+    private static final String TAG_ACCOUNT = "account";
+    private static final String TAG_EMAIL = "a_email";
+    private static final String TAG_NAME= "a_name";
 	
 	private EditText mUsernameEditText;
 	private EditText mPasswordEditText;
 	private Button mLoginButton;
 	private Button mCreateNewAccountButton;
-	private ProgressDialog pDialog;
+	private ProgressDialog mProgressDialog;
+    private boolean mTaskRunning;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
+		mTaskRunning = false;
 	}
 	
 	@TargetApi(11)
@@ -90,13 +96,8 @@ public class LoginFragment extends Fragment
         protected void onPreExecute()
         {
             super.onPreExecute();
-            pDialog = new ProgressDialog(getActivity());
-            //FIX
-            //Fix all strings in Program
-            pDialog.setMessage("Attempting Login...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
+            showProgressDialog();
+            mTaskRunning = true;
         }
 
 		@Override
@@ -118,7 +119,11 @@ public class LoginFragment extends Fragment
 
                 if (success == 1)
                 {
-                	AccountCurrent.get(getActivity()).setPresentAccount(new Account(username, password));
+                	JSONObject o = json.getJSONObject(TAG_ACCOUNT);
+                	Account tempAccount = new Account(username, password,
+                			o.getString(TAG_EMAIL), o.getString(TAG_NAME));
+
+                	AccountCurrent.get(getActivity()).setPresentAccount(tempAccount);
     				Intent i = new Intent(getActivity(), HomeActivity.class);
                     startActivity(i);
                     
@@ -139,11 +144,41 @@ public class LoginFragment extends Fragment
 		
         protected void onPostExecute(String message)
         {
-            pDialog.dismiss();
+        	mTaskRunning = false;
+        	mProgressDialog.dismiss();
             if (message != null)
             {
             	Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }
         }
+	}
+	
+	@Override
+    public void onActivityCreated(Bundle savedInstanceState)
+	{
+        super.onActivityCreated(savedInstanceState);
+        if (mTaskRunning)
+        {
+        	showProgressDialog();
+        }
+    }
+	
+	@Override
+    public void onDetach()
+	{
+        if (mProgressDialog != null && mProgressDialog.isShowing())
+        {
+        	mProgressDialog.dismiss();
+        }
+        super.onDetach();
+    }
+	
+	private void showProgressDialog()
+	{
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setMessage("Attempting Login...");
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
 	}
 }

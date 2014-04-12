@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//Uses AsyncTask
 public class EditAccountFragment extends Fragment
 {
 	private static final String EDIT_URL = "http://taz.harding.edu/~dcrouch1/crashpad/edit_account.php";
@@ -35,7 +36,9 @@ public class EditAccountFragment extends Fragment
 	private EditText mPasswordConfirmEditText;
 	private TextView mUsernameTextView;
 	private Button mConfirmChangesButton;
+	
 	private ProgressDialog mProgressDialog;
+    private boolean mTaskRunning;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -57,7 +60,7 @@ public class EditAccountFragment extends Fragment
 			}
         }
 		
-		mUsername = AccountCurrent.get(getActivity()).getPresentAccount().getName();
+		mUsername = AccountCurrent.get(getActivity()).getPresentAccount().getUsername();
 		
 		mPasswordNewEditText = (EditText)view.findViewById(R.id.edit_password);
 		mPasswordConfirmEditText = (EditText)view.findViewById(R.id.confirm_password);
@@ -77,6 +80,8 @@ public class EditAccountFragment extends Fragment
 				String pass1 = mPasswordNewEditText.getText().toString();
 				String pass2 = mPasswordConfirmEditText.getText().toString();
 				
+				//FIX
+				//Don't do anything if nothing changed
 				if (pass1.equals(pass2))
 				{
 					new EditAccount().execute();
@@ -99,11 +104,8 @@ public class EditAccountFragment extends Fragment
         protected void onPreExecute()
         {
             super.onPreExecute();
-            mProgressDialog = new ProgressDialog(getActivity());
-            mProgressDialog.setMessage("Editing Account...");
-            mProgressDialog.setIndeterminate(false);
-            mProgressDialog.setCancelable(true);
-            mProgressDialog.show();
+            showProgressDialog();
+            mTaskRunning = true;
         }
 
 		@Override
@@ -111,8 +113,7 @@ public class EditAccountFragment extends Fragment
 		{			
             int success;
             String username = mUsername;
-            //FIX
-            //Is this the best place and way to do this?
+            
             String email = (mEmailEditText.getText().toString().length() != 0)?
             		mEmailEditText.getText().toString() : AccountCurrent.get(getActivity()).getPresentAccount().getEmail();
             String password = (mPasswordNewEditText.getText().toString().length() != 0)?
@@ -131,6 +132,11 @@ public class EditAccountFragment extends Fragment
 
                 if (success == 1)
                 {
+                	Account tempAccount = AccountCurrent.get(getActivity()).getPresentAccount();
+                	tempAccount.setEmail(email);
+                	tempAccount.setPassword(password);
+
+                	AccountCurrent.get(getActivity()).setPresentAccount(tempAccount);
                 	return json.getString(TAG_MESSAGE);
                 }
                 else
@@ -148,11 +154,41 @@ public class EditAccountFragment extends Fragment
 		
         protected void onPostExecute(String message)
         {
+        	mTaskRunning = false;
             mProgressDialog.dismiss();
             if (message != null)
             {
             	Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }
         }
+	}
+	
+	@Override
+    public void onActivityCreated(Bundle savedInstanceState)
+	{
+        super.onActivityCreated(savedInstanceState);
+        if (mTaskRunning)
+        {
+        	showProgressDialog();
+        }
+    }
+	
+	@Override
+    public void onDetach()
+	{
+        if (mProgressDialog != null && mProgressDialog.isShowing())
+        {
+        	mProgressDialog.dismiss();
+        }
+        super.onDetach();
+    }
+	
+	private void showProgressDialog()
+	{
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setMessage("Editing Account...");
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
 	}
 }

@@ -61,7 +61,7 @@ public class ReviewPropertyFragment extends Fragment
 			}
         }
 
-		String userName = AccountCurrent.get(getActivity()).getPresentAccount().getName();
+		String userName = AccountCurrent.get(getActivity()).getPresentAccount().getUsername();
 		propertyName = (TextView)v.findViewById(R.id.property_name);
 		propertyName.setText(userName + "'s " + mProperty.getName());
 		propertyInfo = (TextView)v.findViewById(R.id.property_info);

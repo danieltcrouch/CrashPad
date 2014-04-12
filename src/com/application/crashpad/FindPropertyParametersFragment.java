@@ -48,7 +48,6 @@ public class FindPropertyParametersFragment extends Fragment
 	private Location mCurrentLocation;
 	private LocationManager mLocationManager;
 	private LocationListener mLocationListener;
-
     
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -73,12 +72,8 @@ public class FindPropertyParametersFragment extends Fragment
 		//FIX
 		//Only checks for Start Date
 
-		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100000, 10, mLocationListener);
-		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 10, mLocationListener);
-		
 		mDistanceEditText = (EditText)view.findViewById(R.id.distance);
-		updateDate();
-
+		
 		mDateStart = new Date();
 		mChangeDateStartButton = (Button)view.findViewById(R.id.start_date_button);
 		mChangeDateStartButton.setOnClickListener(new View.OnClickListener()
@@ -188,6 +183,11 @@ public class FindPropertyParametersFragment extends Fragment
 		    public void onProviderEnabled(String provider) {}
 		    public void onProviderDisabled(String provider) {}
 		};
+
+		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100000, 10, mLocationListener);
+		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 10, mLocationListener);
+		
+		updateDate();
 		
 		return view;
 	}

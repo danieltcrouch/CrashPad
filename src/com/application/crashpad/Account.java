@@ -15,12 +15,12 @@ public class Account
 		//
 	}
 	
-	public Account(String username, String password)
+	public Account(String username, String password, String email, String name)
 	{
 		mUsername = username;
 		mPassword = password;
-		//FIX
-		//Retrieves other data
+		mEmail = email;
+		mName = name;
 	}
 
 	public UUID getId()

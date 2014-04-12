@@ -29,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+//Uses AsyncTask
 public class ReviewPropertyListFragment extends ListFragment
 {
 	private static final String GET_PROPS_URL = "http://taz.harding.edu/~dcrouch1/crashpad/get_props_review.php";
@@ -41,7 +42,8 @@ public class ReviewPropertyListFragment extends ListFragment
 
 	private ArrayList<Property> mPropertyList;
 	private JSONArray mProperties;
-	private ProgressDialog pDialog;
+	private ProgressDialog mProgressDialog;
+    private boolean mTaskRunning;
 
     @TargetApi(11)
     @Override
@@ -133,11 +135,8 @@ public class ReviewPropertyListFragment extends ListFragment
 		protected void onPreExecute()
     	{
 			super.onPreExecute();
-			pDialog = new ProgressDialog(getActivity());
-			pDialog.setMessage("Loading Properties...");
-			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(true);
-			pDialog.show();
+            showProgressDialog();
+            mTaskRunning = true;
 		}
     	
         @Override
@@ -156,34 +155,34 @@ public class ReviewPropertyListFragment extends ListFragment
             setListAdapter(adapter);
             setHasOptionsMenu(true);
             setRetainInstance(true);
-            
-            pDialog.dismiss();
+
+        	mTaskRunning = false;
+            mProgressDialog.dismiss();
         }
     }
     
     public void updateJSONdata()
     {
-    	String pUsername = AccountCurrent.get(getActivity()).getPresentAccount().getName();
+    	String pUsername = AccountCurrent.get(getActivity()).getPresentAccount().getUsername();
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("username", pUsername));
         
         mPropertyList = new ArrayList<Property>();
         JSONParser jParser = new JSONParser();
         JSONObject json = jParser.makeHttpRequest(GET_PROPS_URL, "POST", params);
-        //JSONObject json = jParser.getJSONFromUrl(GET_PROPS_URL);
 
         try
         {
             mProperties = json.getJSONArray(TAG_PROPS);
             for (int i = 0; i < mProperties.length(); i++)
             {
-                JSONObject c = mProperties.getJSONObject(i);
+                JSONObject o = mProperties.getJSONObject(i);
 
-                String username = c.getString(TAG_USER);
-                String name = c.getString(TAG_NAME);
-                String address = c.getString(TAG_ADDR);
-                String longitude = c.getString(TAG_LONG);
-                String latitude = c.getString(TAG_LAT);
+                String username = o.getString(TAG_USER);
+                String name = o.getString(TAG_NAME);
+                String address = o.getString(TAG_ADDR);
+                String longitude = o.getString(TAG_LONG);
+                String latitude = o.getString(TAG_LAT);
                 
                 Property p = new Property();
                 p.setUsername(username);
@@ -203,4 +202,33 @@ public class ReviewPropertyListFragment extends ListFragment
             e.printStackTrace();
         }
     }
+	
+	@Override
+    public void onActivityCreated(Bundle savedInstanceState)
+	{
+        super.onActivityCreated(savedInstanceState);
+        if (mTaskRunning)
+        {
+        	showProgressDialog();
+        }
+    }
+	
+	@Override
+    public void onDetach()
+	{
+        if (mProgressDialog != null && mProgressDialog.isShowing())
+        {
+        	mProgressDialog.dismiss();
+        }
+        super.onDetach();
+    }
+	
+	private void showProgressDialog()
+	{
+		mProgressDialog = new ProgressDialog(getActivity());
+		mProgressDialog.setMessage("Loading Properties...");
+		mProgressDialog.setIndeterminate(false);
+		mProgressDialog.setCancelable(false);
+		mProgressDialog.show();
+	}
 }

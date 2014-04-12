@@ -23,18 +23,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+//Uses AsyncTask
 public class CreateAccountFragment extends Fragment
 {
 	private static final String REGISTER_URL = "http://taz.harding.edu/~dcrouch1/crashpad/register.php";
 	private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
+    private static final String TAG_ACCOUNT = "account";
+    private static final String TAG_NAME= "name";
 
 	private EditText mUsernameEditText;
 	private EditText mPasswordNewEditText;
 	private EditText mPasswordConfirmEditText;
 	private EditText mEmailEditText;
 	private Button mConfirmAccountCreate;
+	
 	private ProgressDialog mProgressDialog;
+    private boolean mTaskRunning;
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -96,11 +101,8 @@ public class CreateAccountFragment extends Fragment
         protected void onPreExecute()
         {
             super.onPreExecute();
-            mProgressDialog = new ProgressDialog(getActivity());
-            mProgressDialog.setMessage("Creating Account...");
-            mProgressDialog.setIndeterminate(false);
-            mProgressDialog.setCancelable(true);
-            mProgressDialog.show();
+            showProgressDialog();
+            mTaskRunning = true;
         }
 
 		@Override
@@ -126,9 +128,11 @@ public class CreateAccountFragment extends Fragment
                 
                 if (success == 1)
                 {
-                	AccountCurrent.get(getActivity()).setPresentAccount(new Account(username, password));
-                	//FIX
-                	//Set email and other data
+                	JSONObject o = json.getJSONObject(TAG_ACCOUNT);
+                	Account tempAccount = new Account(username, password, email,
+                			o.getString(TAG_NAME));
+
+                	AccountCurrent.get(getActivity()).setPresentAccount(tempAccount);
     				Intent i = new Intent(getActivity(), HomeActivity.class);
     				startActivity(i);
     				
@@ -149,11 +153,41 @@ public class CreateAccountFragment extends Fragment
 		
         protected void onPostExecute(String message)
         {
+        	mTaskRunning = false;
         	mProgressDialog.dismiss();
             if (message != null)
             {
             	Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }
         }
+	}
+	
+	@Override
+    public void onActivityCreated(Bundle savedInstanceState)
+	{
+        super.onActivityCreated(savedInstanceState);
+        if (mTaskRunning)
+        {
+        	showProgressDialog();
+        }
+    }
+	
+	@Override
+    public void onDetach()
+	{
+        if (mProgressDialog != null && mProgressDialog.isShowing())
+        {
+        	mProgressDialog.dismiss();
+        }
+        super.onDetach();
+    }
+	
+	private void showProgressDialog()
+	{
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setMessage("Creating Account...");
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
 	}
 }

@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//Uses AsyncTask
 public class FindPropertyFragment extends Fragment
 {
 	private static final String RENT_URL = "http://taz.harding.edu/~dcrouch1/crashpad/rent.php";
@@ -50,8 +51,8 @@ public class FindPropertyFragment extends Fragment
 	//private NotificationManager mNotificationManager;
 	//private int mId;
 	
-	private ProgressDialog pDialog;
-	JSONParser jsonParser = new JSONParser();
+	private ProgressDialog mProgressDialog;
+    private boolean mTaskRunning;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -175,11 +176,8 @@ public class FindPropertyFragment extends Fragment
         protected void onPreExecute()
         {
             super.onPreExecute();
-            pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Renting Property...");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(true);
-            pDialog.show();
+            showProgressDialog();
+            mTaskRunning = true;
         }
 
 		@Override
@@ -188,7 +186,7 @@ public class FindPropertyFragment extends Fragment
             int success;
             SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
 		    
-            String renter = AccountCurrent.get(getActivity()).getPresentAccount().getName();
+            String renter = AccountCurrent.get(getActivity()).getPresentAccount().getUsername();
             String owner = mProperty.getUsername();
             //FIX
             String dateStart = df.format(new Date());
@@ -208,6 +206,7 @@ public class FindPropertyFragment extends Fragment
                 //FIX
                 params.add(new BasicNameValuePair("code", "475"));
 
+            	JSONParser jsonParser = new JSONParser();
                 JSONObject json = jsonParser.makeHttpRequest(RENT_URL, "POST", params);
                 success = json.getInt(TAG_SUCCESS);
                 
@@ -230,11 +229,41 @@ public class FindPropertyFragment extends Fragment
 		
         protected void onPostExecute(String file_url)
         {
-            pDialog.dismiss();
+        	mTaskRunning = false;
+        	mProgressDialog.dismiss();
             if (file_url != null)
             {
             	Toast.makeText(getActivity(), file_url, Toast.LENGTH_LONG).show();
             }
         }
+	}
+	
+	@Override
+    public void onActivityCreated(Bundle savedInstanceState)
+	{
+        super.onActivityCreated(savedInstanceState);
+        if (mTaskRunning)
+        {
+        	showProgressDialog();
+        }
+    }
+	
+	@Override
+    public void onDetach()
+	{
+        if (mProgressDialog != null && mProgressDialog.isShowing())
+        {
+        	mProgressDialog.dismiss();
+        }
+        super.onDetach();
+    }
+	
+	private void showProgressDialog()
+	{
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setMessage("Renting Property...");
+        mProgressDialog.setIndeterminate(false);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
 	}
 }

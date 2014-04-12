@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+//Uses AsyncTask
 public class ReviewBookedPropertyListFragment extends ListFragment
 {
 	private static final String GET_PROPS_B_URL = "http://taz.harding.edu/~dcrouch1/crashpad/get_props_booked.php";
@@ -44,6 +45,7 @@ public class ReviewBookedPropertyListFragment extends ListFragment
 	private JSONArray mProperties;
 	private JSONArray mRentals;
 	private ProgressDialog mProgressDialog;
+    private boolean mTaskRunning;
 
     @TargetApi(11)
     @Override
@@ -126,16 +128,14 @@ public class ReviewBookedPropertyListFragment extends ListFragment
 		protected void onPreExecute()
     	{
 			super.onPreExecute();
-			mProgressDialog = new ProgressDialog(getActivity());
-			mProgressDialog.setMessage("Loading Properties...");
-			mProgressDialog.setIndeterminate(false);
-			mProgressDialog.setCancelable(true);
-			mProgressDialog.show();
+            showProgressDialog();
+            mTaskRunning = true;
 		}
     	
         @Override
         protected Boolean doInBackground(Void... arg0)
         {
+        	//FIX
         	//Is the separation necessary?
             updateJSONdata();           
             return null;
@@ -150,14 +150,17 @@ public class ReviewBookedPropertyListFragment extends ListFragment
             setListAdapter(adapter);
             setHasOptionsMenu(true);
             setRetainInstance(true);
-            
+
+        	mTaskRunning = false;
             mProgressDialog.dismiss();
         }
     }
     
     public void updateJSONdata()
     {
-    	String pUsername = AccountCurrent.get(getActivity()).getPresentAccount().getName();
+    	//FIX
+    	//In other non-list AsyncTasks, params are inside try/catch
+    	String pUsername = AccountCurrent.get(getActivity()).getPresentAccount().getUsername();
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("username", pUsername));
         
@@ -165,9 +168,6 @@ public class ReviewBookedPropertyListFragment extends ListFragment
         mRentalList = new ArrayList<Rental>();
         JSONParser jParser = new JSONParser();
         JSONObject json = jParser.makeHttpRequest(GET_PROPS_B_URL, "POST", params);
-        //FIX
-        //Delete the function this refers to
-        //JSONObject json = jParser.getJSONFromUrl(GET_PROPS_URL);
 
         try
         {
@@ -198,13 +198,13 @@ public class ReviewBookedPropertyListFragment extends ListFragment
             mProperties = json.getJSONArray(TAG_PROPS);
             for (int i = 0; i < mProperties.length(); i++)
             {
-                JSONObject c = mProperties.getJSONObject(i);
+                JSONObject o = mProperties.getJSONObject(i);
 
-                String username = c.getString(TAG_USER);
-                String name = c.getString(TAG_NAME);
-                String address = c.getString(TAG_ADDR);
-                String longitude = c.getString(TAG_LONG);
-                String latitude = c.getString(TAG_LAT);
+                String username = o.getString(TAG_USER);
+                String name = o.getString(TAG_NAME);
+                String address = o.getString(TAG_ADDR);
+                String longitude = o.getString(TAG_LONG);
+                String latitude = o.getString(TAG_LAT);
                 
                 Property p = new Property();
                 p.setUsername(username);
@@ -224,4 +224,33 @@ public class ReviewBookedPropertyListFragment extends ListFragment
             e.printStackTrace();
         }
     }
+	
+	@Override
+    public void onActivityCreated(Bundle savedInstanceState)
+	{
+        super.onActivityCreated(savedInstanceState);
+        if (mTaskRunning)
+        {
+        	showProgressDialog();
+        }
+    }
+	
+	@Override
+    public void onDetach()
+	{
+        if (mProgressDialog != null && mProgressDialog.isShowing())
+        {
+        	mProgressDialog.dismiss();
+        }
+        super.onDetach();
+    }
+	
+	private void showProgressDialog()
+	{
+		mProgressDialog = new ProgressDialog(getActivity());
+		mProgressDialog.setMessage("Loading Properties...");
+		mProgressDialog.setIndeterminate(false);
+		mProgressDialog.setCancelable(false);
+		mProgressDialog.show();
+	}
 }
