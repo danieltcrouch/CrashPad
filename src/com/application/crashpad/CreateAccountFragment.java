@@ -79,7 +79,7 @@ public class CreateAccountFragment extends Fragment
 				String pass1 = mPasswordNewEditText.getText().toString();
 				String pass2 = mPasswordConfirmEditText.getText().toString();
 				
-				if (pass1.equals(pass2))
+				if (pass1.equals(pass2) && pass1.length() != 0)
 				{
 					new CreateUser().execute();
 				}
@@ -112,20 +112,18 @@ public class CreateAccountFragment extends Fragment
             String username = mUsernameEditText.getText().toString();
             String password = mPasswordNewEditText.getText().toString();
             String email = mEmailEditText.getText().toString();
-            
+
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("username", username));
+            params.add(new BasicNameValuePair("password", password));
+            params.add(new BasicNameValuePair("email", email));
+
             try
             {
-            	//FIX
-            	//mId = UUID.randomUUID();
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("username", username));
-                params.add(new BasicNameValuePair("password", password));
-                params.add(new BasicNameValuePair("email", email));
-
                 JSONParser jsonParser = new JSONParser();
                 JSONObject json = jsonParser.makeHttpRequest(REGISTER_URL, "POST", params);
                 success = json.getInt(TAG_SUCCESS);
-                
+
                 if (success == 1)
                 {
                 	JSONObject o = json.getJSONObject(TAG_ACCOUNT);

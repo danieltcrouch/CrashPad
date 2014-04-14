@@ -3,8 +3,6 @@ package com.application.crashpad;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,12 +16,7 @@ import android.widget.TextView;
 
 public class ReviewPropertyFragment extends Fragment
 {
-	//public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
-	public static final String EXTRA_PROP_USER = "com.application.crashpad.property_user";
-	public static final String EXTRA_PROP_NAME = "com.application.crashpad.property_name";
-	public static final String EXTRA_PROP_DESC = "com.application.crashpad.property_desc";
-	public static final String EXTRA_PROP_LONG = "com.application.crashpad.property_long";
-	public static final String EXTRA_PROP_LAT = "com.application.crashpad.property_lat";
+	public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
 
 	private Property mProperty;
 	private TextView propertyName;
@@ -35,17 +28,9 @@ public class ReviewPropertyFragment extends Fragment
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 		
-		//UUID propId = (UUID)getArguments().getSerializable(EXTRA_PROP_ID);
-    	//Should add ID attribute to table so that we can actually use the above^
-		mProperty = new Property();
-		mProperty.setUsername((String)getArguments().getSerializable(EXTRA_PROP_USER));
-		mProperty.setName((String)getArguments().getSerializable(EXTRA_PROP_NAME));
-		mProperty.setDescription((String)getArguments().getSerializable(EXTRA_PROP_DESC));
-		
-		Location loc = new Location(LocationManager.NETWORK_PROVIDER);
-		loc.setLongitude((Double)getArguments().getSerializable(EXTRA_PROP_LONG));
-		loc.setLatitude((Double)getArguments().getSerializable(EXTRA_PROP_LAT));
-		mProperty.setLocation(loc);
+		PropertyList propertyList;
+        propertyList = PropertyList.get(getActivity());
+		mProperty = propertyList.getProperty(getActivity().getIntent().getIntExtra(EXTRA_PROP_ID, 0));
 	}
 	
 	@TargetApi(11)
@@ -72,7 +57,7 @@ public class ReviewPropertyFragment extends Fragment
 		{
 			public void onClick(View v)
 			{
-				//TEMP
+				//FIX
 				String targetUrl = "https://www.google.com";
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setData(Uri.parse(targetUrl));
@@ -91,33 +76,4 @@ public class ReviewPropertyFragment extends Fragment
 			return;
 		}
 	}
-	
-	//Consider Removing
-	//Look at FindPropertyListFragmant
-	public static ReviewPropertyFragment newInstance(
-			String username, String name, String description, Double longitude, Double latitude)
-	{
-		Bundle args = new Bundle();
-		args.putSerializable(EXTRA_PROP_USER, username);
-		args.putSerializable(EXTRA_PROP_NAME, name);
-		args.putSerializable(EXTRA_PROP_DESC, description);
-		args.putSerializable(EXTRA_PROP_LONG, longitude);
-		args.putSerializable(EXTRA_PROP_LAT, latitude);
-		
-		ReviewPropertyFragment fragment = new ReviewPropertyFragment();
-		fragment.setArguments(args);
-		
-		return fragment;
-	}
-	
-	/*public static ReviewPropertyFragment newInstance(UUID propId)
-	{
-		Bundle args = new Bundle();
-		args.putSerializable(EXTRA_PROP_ID, propId);
-		
-		ReviewPropertyFragment fragment = new ReviewPropertyFragment();
-		fragment.setArguments(args);
-		
-		return fragment;
-	}*/
 }

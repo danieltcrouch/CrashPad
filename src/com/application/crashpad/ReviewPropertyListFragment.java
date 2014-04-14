@@ -36,9 +36,11 @@ public class ReviewPropertyListFragment extends ListFragment
     private static final String TAG_PROPS = "props";
     private static final String TAG_USER = "username";
     private static final String TAG_NAME = "name";
+    private static final String TAG_DESC = "description";
     private static final String TAG_ADDR = "address";
     private static final String TAG_LONG = "longitude";
     private static final String TAG_LAT = "latitude";
+    private static final String TAG_ID = "id";
 
 	private ArrayList<Property> mPropertyList;
 	private JSONArray mProperties;
@@ -74,7 +76,7 @@ public class ReviewPropertyListFragment extends ListFragment
         switch (item.getItemId())
         {
             case R.id.menu_item_new_prop:
-            	//TEMP
+            	//FIX
             	String targetUrl = "https://www.google.com";
 				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setData(Uri.parse(targetUrl));
@@ -90,12 +92,7 @@ public class ReviewPropertyListFragment extends ListFragment
     {
         Property p = ((propertyAdapter)getListAdapter()).getItem(position);
         Intent i = new Intent(getActivity(), ReviewPropertyActivity.class);
-        //i.putExtra(FindPropertyFragment.EXTRA_PROP_ID, p.getId());
-        i.putExtra(ReviewPropertyFragment.EXTRA_PROP_USER, p.getUsername());
-        i.putExtra(ReviewPropertyFragment.EXTRA_PROP_NAME, p.getName());
-        i.putExtra(ReviewPropertyFragment.EXTRA_PROP_DESC, p.getDescription());
-        i.putExtra(ReviewPropertyFragment.EXTRA_PROP_LONG, p.getLocation().getLongitude());
-        i.putExtra(ReviewPropertyFragment.EXTRA_PROP_LAT, p.getLocation().getLatitude());
+        i.putExtra(ReviewPropertyFragment.EXTRA_PROP_ID, p.getId());
         startActivity(i);
     }
     
@@ -168,26 +165,31 @@ public class ReviewPropertyListFragment extends ListFragment
         params.add(new BasicNameValuePair("username", pUsername));
         
         mPropertyList = new ArrayList<Property>();
-        JSONParser jParser = new JSONParser();
-        JSONObject json = jParser.makeHttpRequest(GET_PROPS_URL, "POST", params);
 
         try
         {
+            JSONParser jParser = new JSONParser();
+            JSONObject json = jParser.makeHttpRequest(GET_PROPS_URL, "POST", params);
             mProperties = json.getJSONArray(TAG_PROPS);
+            
             for (int i = 0; i < mProperties.length(); i++)
             {
                 JSONObject o = mProperties.getJSONObject(i);
 
                 String username = o.getString(TAG_USER);
                 String name = o.getString(TAG_NAME);
+                String description = o.getString(TAG_DESC);
                 String address = o.getString(TAG_ADDR);
                 String longitude = o.getString(TAG_LONG);
                 String latitude = o.getString(TAG_LAT);
+                int id = o.getInt(TAG_ID);
                 
                 Property p = new Property();
                 p.setUsername(username);
                 p.setName(name);
-                p.setDescription(address);
+                p.setAddress(address);
+                p.setDescription(description);
+                p.setId(id);
                 
     			Location loc = new Location(LocationManager.NETWORK_PROVIDER);
     			loc.setLongitude(Double.parseDouble(longitude));

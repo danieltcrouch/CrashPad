@@ -64,6 +64,7 @@ public class JSONParser
  
         try
         {
+        	Log.d("TAG", json);
         	jsonObj = new JSONObject(json);
         }
         catch (JSONException e)

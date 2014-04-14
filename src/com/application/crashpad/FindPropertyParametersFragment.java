@@ -1,7 +1,6 @@
 package com.application.crashpad;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +36,6 @@ public class FindPropertyParametersFragment extends Fragment
 	private static final int REQUEST_DATE_END = 1;
 	
 	private int mDistance;
-	private boolean mLocChanged;
 	private Date mDateStart;
 	private Date mDateEnd;
 	private Button mSearchButton;
@@ -46,6 +44,7 @@ public class FindPropertyParametersFragment extends Fragment
 	private EditText mDistanceEditText;
 	private EditText mLocationEditText;
 	private Location mCurrentLocation;
+	private Location mSearchLocation;
 	private LocationManager mLocationManager;
 	private LocationListener mLocationListener;
     
@@ -68,9 +67,6 @@ public class FindPropertyParametersFragment extends Fragment
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
-		
-		//FIX
-		//Only checks for Start Date
 
 		mDistanceEditText = (EditText)view.findViewById(R.id.distance);
 		
@@ -102,15 +98,11 @@ public class FindPropertyParametersFragment extends Fragment
 			}
 		});
 		
-		mLocChanged = false;
 		mLocationEditText = (EditText)view.findViewById(R.id.location);
 		mLocationEditText.addTextChangedListener(new TextWatcher()
 		{
 			public void afterTextChanged(Editable s)
 			{
-				//FIX
-				//After you've begun typing, can you get it to default back to myLocation?
-				mLocChanged = true;
 				Geocoder geocoder = new Geocoder(getActivity());
 				String location = mLocationEditText.getText().toString();
 				
@@ -120,17 +112,17 @@ public class FindPropertyParametersFragment extends Fragment
 					if (addresses != null && !addresses.isEmpty())
 					{
 						Address address = addresses.get(0);
-						mCurrentLocation.setLatitude(address.getLatitude());
-						mCurrentLocation.setLongitude(address.getLongitude());
+						mSearchLocation.setLatitude(address.getLatitude());
+						mSearchLocation.setLongitude(address.getLongitude());
 					}
 					else
 					{
-						Toast.makeText(getActivity(), "Unable to find location.", Toast.LENGTH_SHORT).show();
+						Toast.makeText(getActivity(), "Unable to find location.", Toast.LENGTH_LONG).show();
 					}
 				}
 				catch (IOException e)
 				{
-					Toast.makeText(getActivity(), "Having trouble finding location...", Toast.LENGTH_LONG).show(); 
+					Toast.makeText(getActivity(), "Having trouble finding location...", Toast.LENGTH_SHORT).show(); 
 				}
 			}
 			
@@ -144,9 +136,10 @@ public class FindPropertyParametersFragment extends Fragment
 			@Override
 			public void onClick(View v)
 			{
-				//FIX
-				//When getting info from EditText on screen, be sure it gets most recent
-				//May be fixed here, but check other fragments
+				if (mLocationEditText.getText().toString().length() == 0)
+				{
+					mSearchLocation = mCurrentLocation;
+				}
 				
 				mDistance = 10;
 				if (isNumeric(mDistanceEditText.getText().toString()))
@@ -154,16 +147,11 @@ public class FindPropertyParametersFragment extends Fragment
 					mDistance = Integer.parseInt(mDistanceEditText.getText().toString());
 				}
 				
-		        Calendar calendar = Calendar.getInstance();
-				calendar.setTime(mDateStart);
-				
 				Intent i = new Intent(getActivity(), FindPropertyListActivity.class);
-		        i.putExtra(FindPropertyListFragment.EXTRA_PARA_LONG, Double.toString(mCurrentLocation.getLongitude()));
-		        i.putExtra(FindPropertyListFragment.EXTRA_PARA_LAT, Double.toString(mCurrentLocation.getLatitude()));
-		        i.putExtra(FindPropertyListFragment.EXTRA_PARA_DIS, Integer.toString(mDistance));				
-		        i.putExtra(FindPropertyListFragment.EXTRA_PARA_DAY, Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
-		        i.putExtra(FindPropertyListFragment.EXTRA_PARA_MON, Integer.toString(calendar.get(Calendar.MONTH)));
-		        i.putExtra(FindPropertyListFragment.EXTRA_PARA_YEAR, Integer.toString(calendar.get(Calendar.YEAR)));
+				i.putExtra(FindPropertyListFragment.EXTRA_PARA_LOC, mSearchLocation);
+				i.putExtra(FindPropertyListFragment.EXTRA_PARA_DIST, mDistance);
+				i.putExtra(FindPropertyListFragment.EXTRA_PARA_DATE_S, mDateStart);
+				i.putExtra(FindPropertyListFragment.EXTRA_PARA_DATE_E, mDateEnd);
 		        startActivity(i);
 			}
 		});
@@ -173,10 +161,7 @@ public class FindPropertyParametersFragment extends Fragment
 		{
 		    public void onLocationChanged(Location location)
 		    {
-		    	if (!mLocChanged)
-		    	{
-		    		mCurrentLocation = location;
-		    	}
+		    	mCurrentLocation = location;
 		    }
 
 		    public void onStatusChanged(String provider, int status, Bundle extras) {}

@@ -75,20 +75,27 @@ public class EditAccountFragment extends Fragment
 			@Override
 			public void onClick(View v)
 			{
+				String originalPass = AccountCurrent.get(getActivity()).getPresentAccount().getPassword();
+				String originalEmail = AccountCurrent.get(getActivity()).getPresentAccount().getEmail();
+				
 				//FIX
 				//http://stackoverflow.com/questions/7625862/validate-an-email-inside-an-edittext
 				String pass1 = mPasswordNewEditText.getText().toString();
 				String pass2 = mPasswordConfirmEditText.getText().toString();
-				
-				//FIX
-				//Don't do anything if nothing changed
-				if (pass1.equals(pass2))
+				String email = mEmailEditText.getText().toString();
+
+				//Checks if anything has changed
+				if (!	(originalPass.equals(pass1) || pass1.length() == 0) &&
+						(originalEmail.equals(email) || email.length() == 0) )
 				{
-					new EditAccount().execute();
-				}
-				else
-				{
-					Toast.makeText(getActivity(), R.string.password_toast, Toast.LENGTH_SHORT).show();
+					if (pass1.equals(pass2))
+					{
+						new EditAccount().execute();
+					}
+					else
+					{
+						Toast.makeText(getActivity(), R.string.password_toast, Toast.LENGTH_SHORT).show();
+					}
 				}
 			}
 		});
@@ -114,18 +121,19 @@ public class EditAccountFragment extends Fragment
             int success;
             String username = mUsername;
             
+            //Ignores blank field
             String email = (mEmailEditText.getText().toString().length() != 0)?
             		mEmailEditText.getText().toString() : AccountCurrent.get(getActivity()).getPresentAccount().getEmail();
             String password = (mPasswordNewEditText.getText().toString().length() != 0)?
             		mPasswordNewEditText.getText().toString() : AccountCurrent.get(getActivity()).getPresentAccount().getPassword();
-            
+
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("username", username));
+            params.add(new BasicNameValuePair("email", email));
+            params.add(new BasicNameValuePair("password", password));
+
             try
             {
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("username", username));
-                params.add(new BasicNameValuePair("email", email));
-                params.add(new BasicNameValuePair("password", password));
-
             	JSONParser jParser = new JSONParser();
                 JSONObject json = jParser.makeHttpRequest(EDIT_URL, "POST", params);
                 success = json.getInt(TAG_SUCCESS);

@@ -70,7 +70,11 @@ public class LoginFragment extends Fragment
 			@Override
 			public void onClick(View v)
 			{
-				new AttemptLogin().execute();
+				if (mUsernameEditText.getText().toString().length() != 0 &&
+						mPasswordEditText.getText().toString().length() != 0)
+				{
+					new AttemptLogin().execute();
+				}
 			}
 		});
 		
@@ -106,13 +110,13 @@ public class LoginFragment extends Fragment
             int success;
             String username = mUsernameEditText.getText().toString();
             String password = mPasswordEditText.getText().toString();
-            
+
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("username", username));
+            params.add(new BasicNameValuePair("password", password));
+
             try
             {
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("username", username));
-                params.add(new BasicNameValuePair("password", password));
-
             	JSONParser jParser = new JSONParser();
                 JSONObject json = jParser.makeHttpRequest(LOGIN_URL, "POST", params);
                 success = json.getInt(TAG_SUCCESS);

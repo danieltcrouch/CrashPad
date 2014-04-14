@@ -50,7 +50,7 @@ public final class R {
         public static final int fragmentContainer=0x7f050001;
         public static final int location=0x7f050019;
         public static final int login_button=0x7f050015;
-        public static final int menu_item_new_prop=0x7f05002a;
+        public static final int menu_item_new_prop=0x7f05002b;
         public static final int new_email=0x7f050005;
         public static final int new_password=0x7f050006;
         public static final int new_username=0x7f050004;
@@ -63,6 +63,7 @@ public final class R {
         public static final int property_list_item_name=0x7f050029;
         public static final int property_name=0x7f050021;
         public static final int rent_property_button=0x7f050027;
+        public static final int rental_list_item_name=0x7f05002a;
         public static final int review_bookings_button=0x7f050010;
         public static final int review_properties_button=0x7f05000f;
         public static final int search_button=0x7f050020;
@@ -87,6 +88,7 @@ public final class R {
         public static final int fragment_property_find=0x7f03000a;
         public static final int fragment_property_review=0x7f03000b;
         public static final int list_item_property=0x7f03000c;
+        public static final int list_item_rental=0x7f03000d;
     }
     public static final class menu {
         public static final int find_prop_list=0x7f080000;

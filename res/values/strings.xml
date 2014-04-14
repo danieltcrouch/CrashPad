@@ -50,8 +50,8 @@
     <string name="edit_prop_button">Edit Property Online</string>
 
     <!-- Review Booked Property -->
-    <string name="dates_rented_label">Dates Rented: </string>
-    <string name="access_code_label">Access Code: </string>
+    <string name="dates_rented_label">Dates Rented:</string>
+    <string name="access_code_label">Access Code:</string>
     
     <!-- Parameters -->
     <string name="search_properties">Search Properties</string>

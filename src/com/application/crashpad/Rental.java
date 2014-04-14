@@ -4,14 +4,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import android.location.Location;
-
 public class Rental
 {
 	private String mDateStart;
 	private String mDateEnd;
-	private String mCode;
-	private Location mLocation;
+	private int mPropId;
+	private int mId;
 	
 	public Rental()
 	{
@@ -38,24 +36,24 @@ public class Rental
 		mDateEnd = dateEnd;
 	}
 
-	public String getCode()
+	public int getPropId()
 	{
-		return mCode;
+		return mPropId;
 	}
 
-	public void setCode(String code)
+	public void setPropId(int propId)
 	{
-		mCode = code;
+		mPropId = propId;
 	}
 
-	public Location getLocation()
+	public int getId()
 	{
-		return mLocation;
+		return mId;
 	}
 
-	public void setLocation(Location location)
+	public void setId(int id)
 	{
-		mLocation = location;
+		mId = id;
 	}
 	
 	public boolean presentlyRenting()
@@ -67,6 +65,7 @@ public class Rental
 		
 	    //FIX
 	    //Won't work for day-of
+	    //Actually, I'm not sure that's true. Check it.
 		try
 		{
 		    SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
@@ -78,27 +77,11 @@ public class Rental
 			e.printStackTrace();
 		}
 		
-		if (present.before(dateEnd) && present.after(dateStart))
+		if (present.after(dateStart) && present.before(dateEnd))
 		{
 			result = true;
 		}
 		
 		return result;
-		
-		//Delete when done
-		/*Calendar calendar1 = Calendar.getInstance();
-		Calendar calendar2 = Calendar.getInstance();
-		calendar1.setTime(date);
-		for (Date dateTaken : mDatesTaken)
-		{
-			calendar2.setTime(dateTaken);
-			if (calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH) &&
-				calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH) &&
-				calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR))
-			{
-				result = false;
-				break;
-			}
-		}*/
 	}
 }

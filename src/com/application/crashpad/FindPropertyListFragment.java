@@ -1,8 +1,7 @@
 package com.application.crashpad;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,22 +26,23 @@ import android.widget.TextView;
 //Uses AsyncTask
 public class FindPropertyListFragment extends ListFragment
 {
-	public static final String EXTRA_PARA_LONG = "com.application.crashpad.parameter_loc";
-	public static final String EXTRA_PARA_LAT = "com.application.crashpad.parameter_lat";
-	public static final String EXTRA_PARA_DIS = "com.application.crashpad.parameter_dis";
-	public static final String EXTRA_PARA_DAY = "com.application.crashpad.parameter_day";
-	public static final String EXTRA_PARA_MON = "com.application.crashpad.parameter_mon";
-	public static final String EXTRA_PARA_YEAR = "com.application.crashpad.parameter_year";
+	public static final String EXTRA_PARA_LOC = "com.application.crashpad.parameter_loc";
+	public static final String EXTRA_PARA_DIST = "com.application.crashpad.parameter_dis";
+	public static final String EXTRA_PARA_DATE_S = "com.application.crashpad.parameter_date_start";
+	public static final String EXTRA_PARA_DATE_E = "com.application.crashpad.parameter_date_end";
 	
 	private static final String GET_PROPS_URL = "http://taz.harding.edu/~dcrouch1/crashpad/get_props_find.php";
     private static final String TAG_PROPS = "props";
     private static final String TAG_USER = "username";
     private static final String TAG_NAME = "name";
+    private static final String TAG_DESC = "description";
     private static final String TAG_ADDR = "address";
     private static final String TAG_LONG = "longitude";
     private static final String TAG_LAT = "latitude";
+    private static final String TAG_ID = "id";
     
-	private Calendar mDate;
+	private Date mDateStart;
+	private Date mDateEnd;
 	private Location mLoc;
 	private int mDist;
 
@@ -65,18 +65,11 @@ public class FindPropertyListFragment extends ListFragment
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
-		
-		mDist = Integer.parseInt(getActivity().getIntent().getStringExtra(EXTRA_PARA_DIS));
-		double longitude = Double.parseDouble(getActivity().getIntent().getStringExtra(EXTRA_PARA_LONG));
-		double latitude = Double.parseDouble(getActivity().getIntent().getStringExtra(EXTRA_PARA_LAT));
-		int day = Integer.parseInt(getActivity().getIntent().getStringExtra(EXTRA_PARA_DAY));
-		int month = Integer.parseInt(getActivity().getIntent().getStringExtra(EXTRA_PARA_MON));
-		int year = Integer.parseInt(getActivity().getIntent().getStringExtra(EXTRA_PARA_YEAR));
-		
-		mDate = new GregorianCalendar(year, month, day);
-		mLoc = new Location(LocationManager.NETWORK_PROVIDER);
-		mLoc.setLatitude(latitude);
-		mLoc.setLongitude(longitude);
+
+		mLoc = (Location)getActivity().getIntent().getParcelableExtra(EXTRA_PARA_LOC);
+		mDist = getActivity().getIntent().getIntExtra(EXTRA_PARA_DIST, 0);
+		mDateStart = (Date)getActivity().getIntent().getSerializableExtra(EXTRA_PARA_DATE_S);
+		mDateEnd = (Date)getActivity().getIntent().getSerializableExtra(EXTRA_PARA_DATE_E);
     }
 
     @Override
@@ -84,12 +77,7 @@ public class FindPropertyListFragment extends ListFragment
     {        
         Property p = ((propertyAdapter)getListAdapter()).getItem(position);
         Intent i = new Intent(getActivity(), FindPropertyActivity.class);
-        //i.putExtra(FindPropertyFragment.EXTRA_PROP_ID, p.getId());
-        i.putExtra(FindPropertyFragment.EXTRA_PROP_USER, p.getUsername());
-        i.putExtra(FindPropertyFragment.EXTRA_PROP_NAME, p.getName());
-        i.putExtra(FindPropertyFragment.EXTRA_PROP_DESC, p.getDescription());
-        i.putExtra(FindPropertyFragment.EXTRA_PROP_LONG, p.getLocation().getLongitude());
-        i.putExtra(FindPropertyFragment.EXTRA_PROP_LAT, p.getLocation().getLatitude());
+        i.putExtra(FindPropertyFragment.EXTRA_PROP_ID, p.getId());
         startActivity(i);
     }
     
@@ -102,9 +90,13 @@ public class FindPropertyListFragment extends ListFragment
 
     private class propertyAdapter extends ArrayAdapter<Property>
     {
+    	private PropertyList mPropertyList;
+    	
         public propertyAdapter(ArrayList<Property> properties)
         {
             super(getActivity(), 0, properties);
+            mPropertyList = PropertyList.get(getActivity());
+            mPropertyList.setProperties(properties);
         }
 
         @Override
@@ -144,7 +136,7 @@ public class FindPropertyListFragment extends ListFragment
         protected void onPostExecute(Boolean result)
         {
             super.onPostExecute(result);
-                        
+            
             propertyAdapter adapter = new propertyAdapter(mPropertyList);
             setListAdapter(adapter);
             setHasOptionsMenu(true);
@@ -162,16 +154,20 @@ public class FindPropertyListFragment extends ListFragment
         params.add(new BasicNameValuePair("username", pUsername));*/
         
         mPropertyList = new ArrayList<Property>();
-        JSONParser jParser = new JSONParser();
-        //FIX
-        //if you can make it where this uses parameters, you can delete "getJSONFromUrl"
-        //	param might be a liberal distance to check against longitude only, just to narrow results down a little
-        //JSONObject json = jParser.makeHttpRequest(GET_PROPS_URL, "POST", params);
-        JSONObject json = jParser.getJSONFromUrl(GET_PROPS_URL);
 
         try
         {
+        	//FIX
+        	//Ignore Properties by user
+        	
+            //FIX
+            //if you can make it where this uses parameters, you can delete "getJSONFromUrl"
+            //	param might be a liberal distance to check against longitude only, just to narrow results down a little
+            //JSONObject json = jParser.makeHttpRequest(GET_PROPS_URL, "POST", params);
+            JSONParser jParser = new JSONParser();
+            JSONObject json = jParser.getJSONFromUrl(GET_PROPS_URL);
             mProperties = json.getJSONArray(TAG_PROPS);
+            
             for (int i = 0; i < mProperties.length(); i++)
             {
                 JSONObject o = mProperties.getJSONObject(i);
@@ -181,18 +177,24 @@ public class FindPropertyListFragment extends ListFragment
                 String address = o.getString(TAG_ADDR);
                 String longitude = o.getString(TAG_LONG);
                 String latitude = o.getString(TAG_LAT);
+                String description = o.getString(TAG_DESC);
+                int id = o.getInt(TAG_ID);
                 
                 Property p = new Property();
                 p.setUsername(username);
                 p.setName(name);
-                p.setDescription(address);
+                p.setAddress(address);
+                p.setDescription(description);
+                p.setId(id);
                 
     			Location loc = new Location(LocationManager.NETWORK_PROVIDER);
     			loc.setLongitude(Double.parseDouble(longitude));
     			loc.setLatitude(Double.parseDouble(latitude));
                 p.setLocation(loc);
-                
-                if (p.openAtDate(mDate.getTime()) && p.getProximityToLocation(mLoc) <= mDist)
+
+                //FIX
+                //Properties do not know what dates they're taken without access to "rentals"
+                if (p.openAtDates(mDateStart, mDateEnd) && p.getProximityToLocation(mLoc) <= mDist)
                 {
                 	mPropertyList.add(p);
                 }

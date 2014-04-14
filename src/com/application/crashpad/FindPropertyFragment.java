@@ -15,8 +15,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,19 +35,13 @@ public class FindPropertyFragment extends Fragment
 	private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
     
-	//public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
-	public static final String EXTRA_PROP_USER = "com.application.crashpad.property_user";
-	public static final String EXTRA_PROP_NAME = "com.application.crashpad.property_name";
-	public static final String EXTRA_PROP_DESC = "com.application.crashpad.property_desc";
-	public static final String EXTRA_PROP_LONG = "com.application.crashpad.property_long";
-	public static final String EXTRA_PROP_LAT = "com.application.crashpad.property_lat";
+	public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
 	
 	private Property mProperty;
 	private TextView propertyName;
 	private TextView propertyInfo;
 	//private NotificationCompat.Builder mBuilder;
 	//private NotificationManager mNotificationManager;
-	//private int mId;
 	
 	private ProgressDialog mProgressDialog;
     private boolean mTaskRunning;
@@ -60,17 +52,9 @@ public class FindPropertyFragment extends Fragment
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 		
-		//UUID propId = (UUID)getArguments().getSerializable(EXTRA_PROP_ID);
-    	//Should add ID attribute to table so that we can actually use the above^
-		mProperty = new Property();
-		mProperty.setUsername((String)getArguments().getSerializable(EXTRA_PROP_USER));
-		mProperty.setName((String)getArguments().getSerializable(EXTRA_PROP_NAME));
-		mProperty.setDescription((String)getArguments().getSerializable(EXTRA_PROP_DESC));
-		
-		Location loc = new Location(LocationManager.NETWORK_PROVIDER);
-		loc.setLongitude((Double)getArguments().getSerializable(EXTRA_PROP_LONG));
-		loc.setLatitude((Double)getArguments().getSerializable(EXTRA_PROP_LAT));
-		mProperty.setLocation(loc);
+		PropertyList propertyList;
+        propertyList = PropertyList.get(getActivity());
+		mProperty = propertyList.getProperty(getActivity().getIntent().getIntExtra(EXTRA_PROP_ID, 0));
 		
 		setHasOptionsMenu(true);
 	}
@@ -139,22 +123,6 @@ public class FindPropertyFragment extends Fragment
 		}
 	}
 	
-	public static FindPropertyFragment newInstance(
-			String username, String name, String description, Double longitude, Double latitude)
-	{
-		Bundle args = new Bundle();
-		args.putSerializable(EXTRA_PROP_USER, username);
-		args.putSerializable(EXTRA_PROP_NAME, name);
-		args.putSerializable(EXTRA_PROP_DESC, description);
-		args.putSerializable(EXTRA_PROP_LONG, longitude);
-		args.putSerializable(EXTRA_PROP_LAT, latitude);
-		
-		FindPropertyFragment fragment = new FindPropertyFragment();
-		fragment.setArguments(args);
-		
-		return fragment;
-	}
-	
 	@Override
     public boolean onOptionsItemSelected(MenuItem item)
 	{
@@ -188,24 +156,19 @@ public class FindPropertyFragment extends Fragment
 		    
             String renter = AccountCurrent.get(getActivity()).getPresentAccount().getUsername();
             String owner = mProperty.getUsername();
-            //FIX
             String dateStart = df.format(new Date());
             String dateEnd = df.format(new Date());
-            String longitude = Double.toString(mProperty.getLocation().getLongitude());
-            String latitude = Double.toString(mProperty.getLocation().getLatitude());
-            
+            String propId = Integer.toString(mProperty.getId());
+
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("dateStart", dateStart));
+            params.add(new BasicNameValuePair("dateEnd", dateEnd));
+            params.add(new BasicNameValuePair("owner", owner));
+            params.add(new BasicNameValuePair("renter", renter));
+            params.add(new BasicNameValuePair("propId", propId));
+
             try
             {
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                params.add(new BasicNameValuePair("longitude", longitude));
-                params.add(new BasicNameValuePair("latitude", latitude));
-                params.add(new BasicNameValuePair("dateStart", dateStart));
-                params.add(new BasicNameValuePair("dateEnd", dateEnd));
-                params.add(new BasicNameValuePair("owner", owner));
-                params.add(new BasicNameValuePair("renter", renter));
-                //FIX
-                params.add(new BasicNameValuePair("code", "475"));
-
             	JSONParser jsonParser = new JSONParser();
                 JSONObject json = jsonParser.makeHttpRequest(RENT_URL, "POST", params);
                 success = json.getInt(TAG_SUCCESS);

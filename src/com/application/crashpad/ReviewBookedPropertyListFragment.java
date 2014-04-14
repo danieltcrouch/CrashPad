@@ -33,12 +33,14 @@ public class ReviewBookedPropertyListFragment extends ListFragment
     private static final String TAG_RENTS = "rentals";
     private static final String TAG_USER = "username";
     private static final String TAG_NAME = "name";
+    private static final String TAG_DESC = "description";
     private static final String TAG_ADDR = "address";
     private static final String TAG_LONG = "longitude";
     private static final String TAG_LAT = "latitude";
+    private static final String TAG_ID = "id";
+    private static final String TAG_CODE = "code";
     private static final String TAG_DAT_S = "dateStart";
     private static final String TAG_DAT_E= "dateEnd";
-    private static final String TAG_CODE = "code";
 
 	private ArrayList<Property> mPropertyList;
 	private ArrayList<Rental> mRentalList;
@@ -61,34 +63,28 @@ public class ReviewBookedPropertyListFragment extends ListFragment
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
+		
+		//FIX
+		//Here and other ListFragments, display something when empty
     }
     
     @Override
     public void onListItemClick(ListView l, View v, int position, long id)
     {
-        Property p = ((propertyAdapter)getListAdapter()).getItem(position);
-        //FIX
-        //Is this the best place and way to do this?
-        Rental r = mRentalList.get(0);
-        for (int i = 0; i < mRentalList.size(); i++)
+        Rental r = ((rentalAdapter)getListAdapter()).getItem(position);
+        Property p = mPropertyList.get(0);
+        for (int i = 0; i < mPropertyList.size(); i++)
         {
-        	if (p.getProximityToLocation(mRentalList.get(i).getLocation()) < .00001)
+        	if (mPropertyList.get(i).getId() == r.getPropId())
         	{
-        		r = mRentalList.get(i);
+        		p = mPropertyList.get(i);
         	}
         }
 
         Intent i = new Intent(getActivity(), ReviewBookedPropertyActivity.class);
-        //FIX
-        //i.putExtra(FindPropertyFragment.EXTRA_PROP_ID, p.getId());
-        i.putExtra(ReviewBookedPropertyFragment.EXTRA_PROP_USER, p.getUsername());
-        i.putExtra(ReviewBookedPropertyFragment.EXTRA_PROP_NAME, p.getName());
-        i.putExtra(ReviewBookedPropertyFragment.EXTRA_PROP_DESC, p.getDescription());
-        i.putExtra(ReviewBookedPropertyFragment.EXTRA_PROP_LONG, p.getLocation().getLongitude());
-        i.putExtra(ReviewBookedPropertyFragment.EXTRA_PROP_LAT, p.getLocation().getLatitude());
+        i.putExtra(ReviewBookedPropertyFragment.EXTRA_PROP_ID, p.getId());
         i.putExtra(ReviewBookedPropertyFragment.EXTRA_RENT_DAT_S, r.getDateStart());
         i.putExtra(ReviewBookedPropertyFragment.EXTRA_RENT_DAT_E, r.getDateEnd());
-        i.putExtra(ReviewBookedPropertyFragment.EXTRA_RENT_CODE, r.getCode());
         startActivity(i);
     }
     
@@ -99,11 +95,15 @@ public class ReviewBookedPropertyListFragment extends ListFragment
 		new LoadProperties().execute();
     }
 
-    private class propertyAdapter extends ArrayAdapter<Property>
+    private class rentalAdapter extends ArrayAdapter<Rental>
     {
-        public propertyAdapter(ArrayList<Property> properties)
+    	private PropertyList mPropertyList;
+    	
+        public rentalAdapter(ArrayList<Rental> rentals, ArrayList<Property> properties)
         {
-            super(getActivity(), 0, properties);
+            super(getActivity(), 0, rentals);
+            mPropertyList = PropertyList.get(getActivity());
+            mPropertyList.setProperties(properties);
         }
 
         @Override
@@ -111,12 +111,14 @@ public class ReviewBookedPropertyListFragment extends ListFragment
         {
             if (convertView == null)
             {
-                convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_property, null);
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_rental, null);
             }
 
-            Property p = getItem(position);
-            TextView propertyName = (TextView)convertView.findViewById(R.id.property_list_item_name);
-            propertyName.setText(p.getName());
+            Rental r = getItem(position);
+            Property p = mPropertyList.getProperty(r.getPropId());
+            
+            TextView rentalName = (TextView)convertView.findViewById(R.id.rental_list_item_name);
+            rentalName.setText(p.getName() + ", " + r.getDateStart());
 
             return convertView;
         }
@@ -135,8 +137,6 @@ public class ReviewBookedPropertyListFragment extends ListFragment
         @Override
         protected Boolean doInBackground(Void... arg0)
         {
-        	//FIX
-        	//Is the separation necessary?
             updateJSONdata();           
             return null;
         }
@@ -146,7 +146,7 @@ public class ReviewBookedPropertyListFragment extends ListFragment
         {
             super.onPostExecute(result);
                         
-            propertyAdapter adapter = new propertyAdapter(mPropertyList);
+            rentalAdapter adapter = new rentalAdapter(mRentalList, mPropertyList);
             setListAdapter(adapter);
             setHasOptionsMenu(true);
             setRetainInstance(true);
@@ -158,39 +158,31 @@ public class ReviewBookedPropertyListFragment extends ListFragment
     
     public void updateJSONdata()
     {
-    	//FIX
-    	//In other non-list AsyncTasks, params are inside try/catch
     	String pUsername = AccountCurrent.get(getActivity()).getPresentAccount().getUsername();
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("username", pUsername));
         
         mPropertyList = new ArrayList<Property>();
         mRentalList = new ArrayList<Rental>();
-        JSONParser jParser = new JSONParser();
-        JSONObject json = jParser.makeHttpRequest(GET_PROPS_B_URL, "POST", params);
 
         try
         {
+            JSONParser jParser = new JSONParser();
+            JSONObject json = jParser.makeHttpRequest(GET_PROPS_B_URL, "POST", params);
             mRentals = json.getJSONArray(TAG_RENTS);
+            
             for (int i = 0; i < mRentals.length(); i++)
             {
                 JSONObject c = mRentals.getJSONObject(i);
 
                 String dateStart = c.getString(TAG_DAT_S);
                 String dateEnd = c.getString(TAG_DAT_E);
-                String longitude = c.getString(TAG_LONG);
-                String latitude = c.getString(TAG_LAT);
-                String code = c.getString(TAG_CODE);
+                int propId = c.getInt(TAG_ID);
                 
                 Rental r = new Rental();
                 r.setDateStart(dateStart);
                 r.setDateEnd(dateEnd);
-                r.setCode(code);
-                
-    			Location loc = new Location(LocationManager.NETWORK_PROVIDER);
-    			loc.setLongitude(Double.parseDouble(longitude));
-    			loc.setLatitude(Double.parseDouble(latitude));
-                r.setLocation(loc);
+                r.setPropId(propId);
                 
                 mRentalList.add(r);
             }
@@ -202,14 +194,20 @@ public class ReviewBookedPropertyListFragment extends ListFragment
 
                 String username = o.getString(TAG_USER);
                 String name = o.getString(TAG_NAME);
+                String description = o.getString(TAG_DESC);
                 String address = o.getString(TAG_ADDR);
                 String longitude = o.getString(TAG_LONG);
                 String latitude = o.getString(TAG_LAT);
+                String code = o.getString(TAG_CODE);
+                int id = o.getInt(TAG_ID);
                 
                 Property p = new Property();
                 p.setUsername(username);
                 p.setName(name);
-                p.setDescription(address);
+                p.setDescription(description);
+                p.setAddress(address);
+                p.setCode(code);
+                p.setId(id);
                 
     			Location loc = new Location(LocationManager.NETWORK_PROVIDER);
     			loc.setLongitude(Double.parseDouble(longitude));

@@ -3,31 +3,23 @@ package com.application.crashpad;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
 
 import android.location.Location;
 
 public class Property
 {
-	private UUID mId;
+	private int mId;
 	private String mUsername;
 	private String mName;
 	private String mDescription;
+	private String mAddress;
+	private String mCode;
+	
 	private Location mLocation;
 	private ArrayList<Date> mDatesTaken;
 	
 	public Property()
 	{
-		mId = UUID.randomUUID();
-		mDatesTaken = new ArrayList<Date>();
-	}
-	
-	public Property(String name, String des, Location loc)
-	{
-		mId = UUID.randomUUID();
-		mName = name;
-		mDescription = des;
-		mLocation = loc;
 		mDatesTaken = new ArrayList<Date>();
 	}
 	
@@ -37,12 +29,12 @@ public class Property
 		return mName;
 	}
 
-	public UUID getId()
+	public int getId()
 	{
 		return mId;
 	}	
 
-	public void setId(UUID id)
+	public void setId(int id)
 	{
 		mId = id;
 	}
@@ -77,6 +69,26 @@ public class Property
 		mDescription = des;
 	}
 
+	public String getAddress()
+	{
+		return mAddress;
+	}	
+
+	public void setAddress(String addr)
+	{
+		mAddress = addr;
+	}
+
+	public String getCode()
+	{
+		return mCode;
+	}
+
+	public void setCode(String code)
+	{
+		mCode = code;
+	}
+
 	public Location getLocation()
 	{
 		return mLocation;
@@ -101,6 +113,67 @@ public class Property
 	{
 		mDatesTaken.add(date);
 	}
+
+	public void setDateRangeTaken(Date dateStart, Date dateEnd)
+	{
+		Calendar calCheck = Calendar.getInstance();
+		calCheck.setTime(dateStart);
+		
+		do
+		{
+			setDateTaken(calCheck.getTime());
+			calCheck.add(Calendar.DAY_OF_YEAR, 1);
+		} while (calCheck.before(dateEnd));
+		setDateTaken(dateEnd);
+	}
+	
+	public boolean openAtDate(Date date)
+	{
+		boolean result = true;
+
+		Calendar calDate = Calendar.getInstance();
+		Calendar calCheck = Calendar.getInstance();
+		calDate.setTime(date);
+		
+		for (Date dateTaken : mDatesTaken)
+		{
+			calCheck.setTime(dateTaken);
+			if (calDate.get(Calendar.DAY_OF_MONTH) == calCheck.get(Calendar.DAY_OF_MONTH) &&
+				calDate.get(Calendar.MONTH) == calCheck.get(Calendar.MONTH) &&
+				calDate.get(Calendar.YEAR) == calCheck.get(Calendar.YEAR))
+			{
+				result = false;
+				break;
+			}
+		}
+		
+		return result;
+	}
+	
+	public boolean openAtDates(Date dateStart, Date dateEnd)
+	{
+		boolean result = true;
+		
+		Calendar calCheck = Calendar.getInstance();
+		calCheck.setTime(dateStart);
+		
+		do
+		{
+			if (!openAtDate(calCheck.getTime()))
+			{
+				result = false;
+				break;
+			}
+			calCheck.add(Calendar.DAY_OF_YEAR, 1);
+		} while (calCheck.before(dateEnd));
+		
+		if (!openAtDate(calCheck.getTime()))
+		{
+			result = false;
+		}
+		
+		return result;
+	}
 	
 	public double getProximityToLocation(Location otherLoc)
 	{
@@ -122,28 +195,6 @@ public class Property
 		result  = 2 * Math.atan2(Math.sqrt(temp),Math.sqrt(1-temp));
 		result *= EARTH_RADIUS;
 
-		return result;
-	}
-	
-	public boolean openAtDate(Date date)
-	{
-		boolean result = true;
-
-		Calendar calendar1 = Calendar.getInstance();
-		Calendar calendar2 = Calendar.getInstance();
-		calendar1.setTime(date);
-		for (Date dateTaken : mDatesTaken)
-		{
-			calendar2.setTime(dateTaken);
-			if (calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH) &&
-				calendar1.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH) &&
-				calendar1.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR))
-			{
-				result = false;
-				break;
-			}
-		}
-		
 		return result;
 	}
 }

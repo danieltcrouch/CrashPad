@@ -40,9 +40,6 @@ public class HomeFragment extends Fragment
 			}
         }
 		
-		//FIX
-		//String Names
-		//XML file names and views within
 		mFindPropButton = (Button)view.findViewById(R.id.find_properties_button);
 		mFindPropButton.setOnClickListener(new View.OnClickListener()
 		{
