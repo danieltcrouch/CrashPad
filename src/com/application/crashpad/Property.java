@@ -20,6 +20,12 @@ public class Property
 	
 	public Property()
 	{
+		mId = 0;
+		mUsername = "";
+		mName = "";
+		mDescription = "";
+		mAddress = "";
+		mCode = "";
 		mDatesTaken = new ArrayList<Date>();
 	}
 	
@@ -123,7 +129,7 @@ public class Property
 		{
 			setDateTaken(calCheck.getTime());
 			calCheck.add(Calendar.DAY_OF_YEAR, 1);
-		} while (calCheck.before(dateEnd));
+		} while (calCheck.getTime().before(dateEnd));
 		setDateTaken(dateEnd);
 	}
 	

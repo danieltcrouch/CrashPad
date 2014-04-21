@@ -76,16 +76,21 @@ public class CreateAccountFragment extends Fragment
 			{
 				//FIX
 				//http://stackoverflow.com/questions/7625862/validate-an-email-inside-an-edittext
+				String user = mUsernameEditText.getText().toString();
 				String pass1 = mPasswordNewEditText.getText().toString();
 				String pass2 = mPasswordConfirmEditText.getText().toString();
 				
-				if (pass1.equals(pass2) && pass1.length() != 0)
+				if (user.length() != 0 && (pass1.length() != 0 && pass1.equals(pass2)))
 				{
 					new CreateUser().execute();
 				}
-				else
+				else if (!pass1.equals(pass2))
 				{
 					Toast.makeText(getActivity(), R.string.password_toast, Toast.LENGTH_SHORT).show();
+				}
+				else
+				{
+					Toast.makeText(getActivity(), R.string.username_toast, Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -144,6 +149,11 @@ public class CreateAccountFragment extends Fragment
             catch (JSONException e)
             {
                 e.printStackTrace();
+            }
+            catch (Exception e)
+            {
+            	e.printStackTrace();
+            	return "Network Problems\nCheck WiFi Connection";
             }
 
             return null;

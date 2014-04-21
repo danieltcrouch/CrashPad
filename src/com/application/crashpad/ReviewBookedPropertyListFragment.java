@@ -145,6 +145,19 @@ public class ReviewBookedPropertyListFragment extends ListFragment
         protected void onPostExecute(Boolean result)
         {
             super.onPostExecute(result);
+
+    		//FIX
+    		//Order List
+			/*Collections.sort(mRentalList, new Comparator<Rental>()
+			{
+				@Override
+				public int compare(Rental  rent1, Rental  rent2)
+				{
+					boolean greater = rent1.getProximityToLocation(mLoc) > rent2.getProximityToLocation(mLoc);
+					boolean equal = rent1.getProximityToLocation(mLoc) == rent2.getProximityToLocation(mLoc);
+					return  greater? 1 : equal? 0 : -1;
+				}
+			});*/
                         
             rentalAdapter adapter = new rentalAdapter(mRentalList, mPropertyList);
             setListAdapter(adapter);
@@ -220,6 +233,13 @@ public class ReviewBookedPropertyListFragment extends ListFragment
         catch (JSONException e)
         {
             e.printStackTrace();
+        }
+        catch (Exception e)
+        {
+        	e.printStackTrace();
+        	//FIX
+        	//No Toast
+        	//return "Network Problems\nCheck WiFi Connection";
         }
     }
 	

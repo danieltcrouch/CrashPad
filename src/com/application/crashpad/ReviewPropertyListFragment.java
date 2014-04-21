@@ -105,9 +105,13 @@ public class ReviewPropertyListFragment extends ListFragment
 
     private class propertyAdapter extends ArrayAdapter<Property>
     {
+    	private PropertyList mPropertyList;
+    	
         public propertyAdapter(ArrayList<Property> properties)
         {
             super(getActivity(), 0, properties);
+            mPropertyList = PropertyList.get(getActivity());
+            mPropertyList.setProperties(properties);
         }
 
         @Override
@@ -147,6 +151,19 @@ public class ReviewPropertyListFragment extends ListFragment
         protected void onPostExecute(Boolean result)
         {
             super.onPostExecute(result);
+
+    		//FIX
+    		//Order List
+			/*Collections.sort(mPropertyList, new Comparator<Property>()
+			{
+				@Override
+				public int compare(Property  prop1, Property  prop2)
+				{
+					boolean greater = prop1.getProximityToLocation(mLoc) > prop2.getProximityToLocation(mLoc);
+					boolean equal = prop1.getProximityToLocation(mLoc) == prop2.getProximityToLocation(mLoc);
+					return  greater? 1 : equal? 0 : -1;
+				}
+			});*/
                         
             propertyAdapter adapter = new propertyAdapter(mPropertyList);
             setListAdapter(adapter);
@@ -202,6 +219,13 @@ public class ReviewPropertyListFragment extends ListFragment
         catch (JSONException e)
         {
             e.printStackTrace();
+        }
+        catch (Exception e)
+        {
+        	e.printStackTrace();
+        	//FIX
+        	//No Toast
+        	//return "Network Problems\nCheck WiFi Connection";
         }
     }
 	

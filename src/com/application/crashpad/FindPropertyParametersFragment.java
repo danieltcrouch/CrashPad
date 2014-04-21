@@ -1,6 +1,5 @@
 package com.application.crashpad;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +29,7 @@ import android.widget.Toast;
 
 public class FindPropertyParametersFragment extends Fragment
 {
-	public static final String FORMAT_DATE = "EEE, MMM d, yy";
+	public static final String FORMAT_DATE = "EEE, MMM d, yyyy";
 	public static final String DIALOG_DATE = "date";
 	private static final int REQUEST_DATE_START = 0;
 	private static final int REQUEST_DATE_END = 1;
@@ -120,9 +119,9 @@ public class FindPropertyParametersFragment extends Fragment
 						Toast.makeText(getActivity(), "Unable to find location.", Toast.LENGTH_LONG).show();
 					}
 				}
-				catch (IOException e)
+				catch (Exception e)
 				{
-					Toast.makeText(getActivity(), "Having trouble finding location...", Toast.LENGTH_SHORT).show(); 
+					Toast.makeText(getActivity(), "Having trouble finding location.\nCheck WiFi & GPS.", Toast.LENGTH_LONG).show(); 
 				}
 			}
 			

@@ -32,6 +32,7 @@ public class EditAccountFragment extends Fragment
 
     private String mUsername;
 	private EditText mEmailEditText;
+	private EditText mNameEditText;
 	private EditText mPasswordNewEditText;
 	private EditText mPasswordConfirmEditText;
 	private TextView mUsernameTextView;
@@ -62,9 +63,13 @@ public class EditAccountFragment extends Fragment
 		
 		mUsername = AccountCurrent.get(getActivity()).getPresentAccount().getUsername();
 		
+		mEmailEditText = (EditText)view.findViewById(R.id.edit_email);
+		mNameEditText = (EditText)view.findViewById(R.id.edit_name);
+		mEmailEditText.setHint(AccountCurrent.get(getActivity()).getPresentAccount().getEmail());
+		mNameEditText.setHint(AccountCurrent.get(getActivity()).getPresentAccount().getName());
+		
 		mPasswordNewEditText = (EditText)view.findViewById(R.id.edit_password);
 		mPasswordConfirmEditText = (EditText)view.findViewById(R.id.confirm_password);
-		mEmailEditText = (EditText)view.findViewById(R.id.edit_email);
 
 		mUsernameTextView = (TextView)view.findViewById(R.id.username_view);
 		mUsernameTextView.setText(mUsername);
@@ -75,18 +80,21 @@ public class EditAccountFragment extends Fragment
 			@Override
 			public void onClick(View v)
 			{
-				String originalPass = AccountCurrent.get(getActivity()).getPresentAccount().getPassword();
 				String originalEmail = AccountCurrent.get(getActivity()).getPresentAccount().getEmail();
+				String originalName = AccountCurrent.get(getActivity()).getPresentAccount().getName();
+				String originalPass = AccountCurrent.get(getActivity()).getPresentAccount().getPassword();
 				
 				//FIX
 				//http://stackoverflow.com/questions/7625862/validate-an-email-inside-an-edittext
+				String email = mEmailEditText.getText().toString();
+				String name = mNameEditText.getText().toString();
 				String pass1 = mPasswordNewEditText.getText().toString();
 				String pass2 = mPasswordConfirmEditText.getText().toString();
-				String email = mEmailEditText.getText().toString();
 
 				//Checks if anything has changed
-				if (!	(originalPass.equals(pass1) || pass1.length() == 0) &&
-						(originalEmail.equals(email) || email.length() == 0) )
+				if (!(	(originalPass.equals(pass1) || pass1.length() == 0) &&
+						(originalEmail.equals(email) || email.length() == 0) &&
+						(originalName.equals(name) || name.length() == 0) ))
 				{
 					if (pass1.equals(pass2))
 					{
@@ -124,12 +132,15 @@ public class EditAccountFragment extends Fragment
             //Ignores blank field
             String email = (mEmailEditText.getText().toString().length() != 0)?
             		mEmailEditText.getText().toString() : AccountCurrent.get(getActivity()).getPresentAccount().getEmail();
+            String name = (mNameEditText.getText().toString().length() != 0)?
+            		mNameEditText.getText().toString() : AccountCurrent.get(getActivity()).getPresentAccount().getName();
             String password = (mPasswordNewEditText.getText().toString().length() != 0)?
             		mPasswordNewEditText.getText().toString() : AccountCurrent.get(getActivity()).getPresentAccount().getPassword();
 
             List<NameValuePair> params = new ArrayList<NameValuePair>();
             params.add(new BasicNameValuePair("username", username));
             params.add(new BasicNameValuePair("email", email));
+            params.add(new BasicNameValuePair("name", name));
             params.add(new BasicNameValuePair("password", password));
 
             try
@@ -142,6 +153,7 @@ public class EditAccountFragment extends Fragment
                 {
                 	Account tempAccount = AccountCurrent.get(getActivity()).getPresentAccount();
                 	tempAccount.setEmail(email);
+                	tempAccount.setName(name);
                 	tempAccount.setPassword(password);
 
                 	AccountCurrent.get(getActivity()).setPresentAccount(tempAccount);
@@ -155,6 +167,11 @@ public class EditAccountFragment extends Fragment
             catch (JSONException e)
             {
                 e.printStackTrace();
+            }
+            catch (Exception e)
+            {
+            	e.printStackTrace();
+            	return "Network Problems\nCheck WiFi Connection";
             }
 
             return null;

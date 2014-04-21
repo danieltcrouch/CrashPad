@@ -1,8 +1,13 @@
 package com.application.crashpad;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +35,7 @@ public class FindPropertyListFragment extends ListFragment
 	public static final String EXTRA_PARA_DIST = "com.application.crashpad.parameter_dis";
 	public static final String EXTRA_PARA_DATE_S = "com.application.crashpad.parameter_date_start";
 	public static final String EXTRA_PARA_DATE_E = "com.application.crashpad.parameter_date_end";
+	public static final String FORMAT_DATE = "MM/dd/yyyy";
 	
 	private static final String GET_PROPS_URL = "http://taz.harding.edu/~dcrouch1/crashpad/get_props_find.php";
     private static final String TAG_PROPS = "props";
@@ -39,6 +45,8 @@ public class FindPropertyListFragment extends ListFragment
     private static final String TAG_ADDR = "address";
     private static final String TAG_LONG = "longitude";
     private static final String TAG_LAT = "latitude";
+    private static final String TAG_DAT_S = "dateStart";
+    private static final String TAG_DAT_E = "dateEnd";
     private static final String TAG_ID = "id";
     
 	private Date mDateStart;
@@ -78,6 +86,8 @@ public class FindPropertyListFragment extends ListFragment
         Property p = ((propertyAdapter)getListAdapter()).getItem(position);
         Intent i = new Intent(getActivity(), FindPropertyActivity.class);
         i.putExtra(FindPropertyFragment.EXTRA_PROP_ID, p.getId());
+		i.putExtra(FindPropertyFragment.EXTRA_PROP_DATE_S, mDateStart);
+		i.putExtra(FindPropertyFragment.EXTRA_PROP_DATE_E, mDateEnd);
         startActivity(i);
     }
     
@@ -136,6 +146,19 @@ public class FindPropertyListFragment extends ListFragment
         protected void onPostExecute(Boolean result)
         {
             super.onPostExecute(result);
+
+    		//FIX
+    		//Order List
+			/*Collections.sort(mPropertyList, new Comparator<Property>()
+			{
+				@Override
+				public int compare(Property  prop1, Property  prop2)
+				{
+					boolean greater = prop1.getProximityToLocation(mLoc) > prop2.getProximityToLocation(mLoc);
+					boolean equal = prop1.getProximityToLocation(mLoc) == prop2.getProximityToLocation(mLoc);
+					return  greater? 1 : equal? 0 : -1;
+				}
+			});*/
             
             propertyAdapter adapter = new propertyAdapter(mPropertyList);
             setListAdapter(adapter);
@@ -149,51 +172,65 @@ public class FindPropertyListFragment extends ListFragment
     
     public void updateJSONdata()
     {
-    	/*String pUsername = AccountCurrent.get(getActivity()).getPresentAccount().getName();
+    	String pUsername = AccountCurrent.get(getActivity()).getPresentAccount().getUsername();
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("username", pUsername));*/
+        params.add(new BasicNameValuePair("username", pUsername));
+        //Used to produce liberal search distance
+        //params.add(new BasicNameValuePair("upperLong", Double.toString(mLoc.getLongitude() + mDist / 2)));
+        //params.add(new BasicNameValuePair("lowerLong", Double.toString(mLoc.getLongitude() - mDist / 2)));
+        //params.add(new BasicNameValuePair("upperLat", Double.toString(mLoc.getLatitude() + mDist / 2)));
+        //params.add(new BasicNameValuePair("lowerLat", Double.toString(mLoc.getLatitude() - mDist / 2)));
         
         mPropertyList = new ArrayList<Property>();
 
         try
         {
-        	//FIX
-        	//Ignore Properties by user
-        	
-            //FIX
-            //if you can make it where this uses parameters, you can delete "getJSONFromUrl"
-            //	param might be a liberal distance to check against longitude only, just to narrow results down a little
-            //JSONObject json = jParser.makeHttpRequest(GET_PROPS_URL, "POST", params);
-            JSONParser jParser = new JSONParser();
-            JSONObject json = jParser.getJSONFromUrl(GET_PROPS_URL);
+        	JSONParser jParser = new JSONParser();
+            JSONObject json = jParser.makeHttpRequest(GET_PROPS_URL, "POST", params);
             mProperties = json.getJSONArray(TAG_PROPS);
-            
-            for (int i = 0; i < mProperties.length(); i++)
+
+            for (int i = 0; i < mProperties.length(); i+=0)
             {
-                JSONObject o = mProperties.getJSONObject(i);
+            	Property p = new Property();
+            	
+            	do
+                {
+            		JSONObject o = mProperties.getJSONObject(i);
+            		int id = o.getInt(TAG_ID);
+            		
+            		if (id != p.getId())
+            		{
+	                    String username = o.getString(TAG_USER);
+	                    String name = o.getString(TAG_NAME);
+	                    String description = o.getString(TAG_DESC);
+	                    String address = o.getString(TAG_ADDR);
+	                    String longitude = o.getString(TAG_LONG);
+	                    String latitude = o.getString(TAG_LAT);
+	                    
+	                    p.setUsername(username);
+	                    p.setName(name);
+	                    p.setAddress(address);
+	                    p.setDescription(description);
+	                    p.setId(id);
+	                    
+	        			Location loc = new Location(LocationManager.NETWORK_PROVIDER);
+	        			loc.setLongitude(Double.parseDouble(longitude));
+	        			loc.setLatitude(Double.parseDouble(latitude));
+	                    p.setLocation(loc);
+            		}
 
-                String username = o.getString(TAG_USER);
-                String name = o.getString(TAG_NAME);
-                String address = o.getString(TAG_ADDR);
-                String longitude = o.getString(TAG_LONG);
-                String latitude = o.getString(TAG_LAT);
-                String description = o.getString(TAG_DESC);
-                int id = o.getInt(TAG_ID);
-                
-                Property p = new Property();
-                p.setUsername(username);
-                p.setName(name);
-                p.setAddress(address);
-                p.setDescription(description);
-                p.setId(id);
-                
-    			Location loc = new Location(LocationManager.NETWORK_PROVIDER);
-    			loc.setLongitude(Double.parseDouble(longitude));
-    			loc.setLatitude(Double.parseDouble(latitude));
-                p.setLocation(loc);
-
-                //FIX
-                //Properties do not know what dates they're taken without access to "rentals"
+                    String dateStart = o.getString(TAG_DAT_S);
+                    String dateEnd = o.getString(TAG_DAT_E);
+                    if (dateStart.length() != 0)
+                    {
+                        SimpleDateFormat df = new SimpleDateFormat(FORMAT_DATE, Locale.ENGLISH);
+            		    p.setDateRangeTaken(df.parse(dateStart), df.parse(dateEnd));
+                    }
+                    
+                    i++;
+                } while (i < mProperties.length() &&
+                		p.getId() == mProperties.getJSONObject(i).getInt(TAG_ID));
+            	
                 if (p.openAtDates(mDateStart, mDateEnd) && p.getProximityToLocation(mLoc) <= mDist)
                 {
                 	mPropertyList.add(p);
@@ -203,6 +240,13 @@ public class FindPropertyListFragment extends ListFragment
         catch (JSONException e)
         {
             e.printStackTrace();
+        }
+        catch (Exception e)
+        {
+        	e.printStackTrace();
+        	//FIX
+        	//No Toast
+        	//return "Network Problems\nCheck WiFi Connection";
         }
     }
 	

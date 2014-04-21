@@ -7,6 +7,6 @@ public class HomeActivity extends SingleFragmentActivity
 	@Override
 	protected Fragment createFragment()
 	{
-		return new HomeFragment();
+		//return new HomeFragment();
 	}
 }

@@ -26,6 +26,7 @@
     <string name="account_creation">Account Creation</string>
     <string name="account_create_button">Create Account</string>
     <string name="password_toast">Passwords do not match.</string>
+    <string name="username_toast">Username cannot be empty.</string>
     <!-- Extended Version
     <string name="new_account_name_suggestion">John Doe</string>
     <string name="new_account_phone_number_suggestion">(555)123&#8211;4567</string>
@@ -43,8 +44,8 @@
     <string name="edit_account_info">Edit Account Info</string>
     <string name="view_account_info">View Account Info</string>
     <string name="edit_password_hint">Change Password</string>
-    <string name="edit_email_hint">john@email.com</string>
     <string name="update_info_button">Update Info</string>
+    <!-- <string name="edit_email_hint">john@email.com</string> -->
     
     <!-- Review Own Property -->
     <string name="edit_prop_button">Edit Property Online</string>

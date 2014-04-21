@@ -36,8 +36,12 @@ public class FindPropertyFragment extends Fragment
     private static final String TAG_MESSAGE = "message";
     
 	public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
+	public static final String EXTRA_PROP_DATE_S = "com.application.crashpad.property_date_start";
+	public static final String EXTRA_PROP_DATE_E = "com.application.crashpad.property_date_end";
 	
 	private Property mProperty;
+	private Date mDateStart;
+	private Date mDateEnd;
 	private TextView propertyName;
 	private TextView propertyInfo;
 	//private NotificationCompat.Builder mBuilder;
@@ -55,6 +59,8 @@ public class FindPropertyFragment extends Fragment
 		PropertyList propertyList;
         propertyList = PropertyList.get(getActivity());
 		mProperty = propertyList.getProperty(getActivity().getIntent().getIntExtra(EXTRA_PROP_ID, 0));
+		mDateStart = (Date)getActivity().getIntent().getSerializableExtra(EXTRA_PROP_DATE_S);
+		mDateEnd = (Date)getActivity().getIntent().getSerializableExtra(EXTRA_PROP_DATE_E);
 		
 		setHasOptionsMenu(true);
 	}
@@ -72,9 +78,12 @@ public class FindPropertyFragment extends Fragment
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
-		
+
+		//FIX
+		//It would be better to have the owner's name
 		propertyName = (TextView)v.findViewById(R.id.property_name);
 		propertyName.setText(mProperty.getUsername() + "'s " + mProperty.getName());
+		
 		propertyInfo = (TextView)v.findViewById(R.id.property_info);
 		propertyInfo.setText(mProperty.getDescription());
 		
@@ -156,8 +165,8 @@ public class FindPropertyFragment extends Fragment
 		    
             String renter = AccountCurrent.get(getActivity()).getPresentAccount().getUsername();
             String owner = mProperty.getUsername();
-            String dateStart = df.format(new Date());
-            String dateEnd = df.format(new Date());
+            String dateStart = df.format(mDateStart);
+            String dateEnd = df.format(mDateEnd);
             String propId = Integer.toString(mProperty.getId());
 
             List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -185,6 +194,11 @@ public class FindPropertyFragment extends Fragment
             catch (JSONException e)
             {
                 e.printStackTrace();
+            }
+            catch (Exception e)
+            {
+            	e.printStackTrace();
+            	return "Network Problems\nCheck WiFi Connection";
             }
 
             return null;

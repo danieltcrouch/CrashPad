@@ -45,10 +45,13 @@ public class ReviewPropertyFragment extends Fragment
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
+		
+		//FIX
+		//Needs to display Rental info for this property (this will come from the ListFragment)
 
-		String userName = AccountCurrent.get(getActivity()).getPresentAccount().getUsername();
 		propertyName = (TextView)v.findViewById(R.id.property_name);
-		propertyName.setText(userName + "'s " + mProperty.getName());
+		propertyName.setText(mProperty.getName());
+		
 		propertyInfo = (TextView)v.findViewById(R.id.property_info);
 		propertyInfo.setText(mProperty.getDescription());
 		

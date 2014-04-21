@@ -54,6 +54,8 @@ public class ReviewBookedPropertyFragment extends Fragment
 			}
         }
 
+		//FIX
+		//It would be better to have the owner's name
 		mPropertyName = (TextView)v.findViewById(R.id.property_name);
 		mPropertyName.setText(mProperty.getUsername() + "'s " + mProperty.getName());
 		

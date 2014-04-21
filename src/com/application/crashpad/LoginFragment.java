@@ -142,6 +142,11 @@ public class LoginFragment extends Fragment
             {
                 e.printStackTrace();
             }
+            catch (Exception e)
+            {
+            	e.printStackTrace();
+            	return "Network Problems\nCheck WiFi Connection";
+            }
 
             return null;
 		}
