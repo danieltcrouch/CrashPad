@@ -19,8 +19,9 @@ public class ReviewPropertyFragment extends Fragment
 	public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
 
 	private Property mProperty;
-	private TextView propertyName;
-	private TextView propertyInfo;
+	private TextView mPropertyName;
+	private TextView mPropertyAddress;
+	private TextView mPropertyDescription;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -49,11 +50,14 @@ public class ReviewPropertyFragment extends Fragment
 		//FIX
 		//Needs to display Rental info for this property (this will come from the ListFragment)
 
-		propertyName = (TextView)v.findViewById(R.id.property_name);
-		propertyName.setText(mProperty.getName());
+		mPropertyName = (TextView)v.findViewById(R.id.property_name);
+		mPropertyName.setText(mProperty.getName());
 		
-		propertyInfo = (TextView)v.findViewById(R.id.property_info);
-		propertyInfo.setText(mProperty.getDescription());
+		mPropertyAddress = (TextView)v.findViewById(R.id.property_address);
+		mPropertyAddress.setText(mProperty.getAddress());
+
+		mPropertyDescription = (TextView)v.findViewById(R.id.property_description);
+		mPropertyDescription.setText(mProperty.getDescription());
 		
 		Button editButton = (Button)v.findViewById(R.id.edit_property_button);
 		editButton.setOnClickListener(new View.OnClickListener()

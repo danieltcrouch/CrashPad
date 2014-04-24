@@ -1,6 +1,5 @@
 package com.application.crashpad;
 
-import java.util.Date;
 import java.util.List;
 
 import android.annotation.TargetApi;
@@ -15,11 +14,9 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,18 +25,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class FindPropertyParametersFragment extends Fragment
-{
-	public static final String FORMAT_DATE = "EEE, MMM d, yyyy";
-	public static final String DIALOG_DATE = "date";
-	private static final int REQUEST_DATE_START = 0;
-	private static final int REQUEST_DATE_END = 1;
-	
+{	
 	private int mDistance;
-	private Date mDateStart;
-	private Date mDateEnd;
 	private Button mSearchButton;
-	private Button mChangeDateStartButton;
-	private Button mChangeDateEndButton;
 	private EditText mDistanceEditText;
 	private EditText mLocationEditText;
 	private Location mCurrentLocation;
@@ -69,34 +57,9 @@ public class FindPropertyParametersFragment extends Fragment
 
 		mDistanceEditText = (EditText)view.findViewById(R.id.distance);
 		
-		mDateStart = new Date();
-		mChangeDateStartButton = (Button)view.findViewById(R.id.start_date_button);
-		mChangeDateStartButton.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				FragmentManager fm = getActivity().getSupportFragmentManager();
-				DatePickerFragment dialog = DatePickerFragment.newInstance(mDateStart);
-				dialog.setTargetFragment(FindPropertyParametersFragment.this, REQUEST_DATE_START);
-				dialog.show(fm, DIALOG_DATE);
-			}
-		});
-
-		mDateEnd = new Date();
-		mChangeDateEndButton = (Button)view.findViewById(R.id.end_date_button);
-		mChangeDateEndButton.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				FragmentManager fm = getActivity().getSupportFragmentManager();
-				DatePickerFragment dialog = DatePickerFragment.newInstance(mDateEnd);
-				dialog.setTargetFragment(FindPropertyParametersFragment.this, REQUEST_DATE_END);
-				dialog.show(fm, DIALOG_DATE);
-			}
-		});
-		
+		//FIX
+		//Is this the best way if GPS not working?
+		//http://android-er.blogspot.com/2010/10/check-and-prompt-user-to-enable-gps.html
 		mLocationEditText = (EditText)view.findViewById(R.id.location);
 		mLocationEditText.addTextChangedListener(new TextWatcher()
 		{
@@ -149,8 +112,6 @@ public class FindPropertyParametersFragment extends Fragment
 				Intent i = new Intent(getActivity(), FindPropertyListActivity.class);
 				i.putExtra(FindPropertyListFragment.EXTRA_PARA_LOC, mSearchLocation);
 				i.putExtra(FindPropertyListFragment.EXTRA_PARA_DIST, mDistance);
-				i.putExtra(FindPropertyListFragment.EXTRA_PARA_DATE_S, mDateStart);
-				i.putExtra(FindPropertyListFragment.EXTRA_PARA_DATE_E, mDateEnd);
 		        startActivity(i);
 			}
 		});
@@ -170,9 +131,7 @@ public class FindPropertyParametersFragment extends Fragment
 
 		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100000, 10, mLocationListener);
 		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 10, mLocationListener);
-		
-		updateDate();
-		
+				
 		return view;
 	}
 	
@@ -183,23 +142,6 @@ public class FindPropertyParametersFragment extends Fragment
 		{
 			return;
 		}
-		
-		if (requestCode == REQUEST_DATE_START)
-		{
-			mDateStart = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
-			updateDate();
-		}
-		else if (requestCode == REQUEST_DATE_END)
-		{
-			mDateEnd = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
-			updateDate();
-		}
-	}
-	
-	private void updateDate()
-	{
-		mChangeDateStartButton.setText(DateFormat.format(FORMAT_DATE, mDateStart));
-		mChangeDateEndButton.setText(DateFormat.format(FORMAT_DATE, mDateEnd));
 	}
 	
 	public static boolean isNumeric(String str)  

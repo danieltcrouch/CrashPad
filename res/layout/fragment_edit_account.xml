@@ -8,16 +8,15 @@
         android:id="@+id/edit_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/labels_padding_size"
         android:text="@string/edit_account_info"
-        android:textSize="20sp" />
+        android:textSize="@dimen/title_text_size" />
 
     <TextView
         android:id="@+id/username_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="@dimen/edit_account_labels_size" />
+        android:textSize="@dimen/label_size" />
 
     <EditText
         android:id="@+id/edit_email"
@@ -51,9 +50,9 @@
 
     <Button
         android:id="@+id/update_info_button"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_gravity="center_horizontal"
         android:text="@string/update_info_button" />
 
 </LinearLayout>

@@ -2,12 +2,10 @@ package com.application.crashpad;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,8 +47,6 @@ public class FindPropertyListFragment extends ListFragment
     private static final String TAG_DAT_E = "dateEnd";
     private static final String TAG_ID = "id";
     
-	private Date mDateStart;
-	private Date mDateEnd;
 	private Location mLoc;
 	private int mDist;
 
@@ -76,18 +72,25 @@ public class FindPropertyListFragment extends ListFragment
 
 		mLoc = (Location)getActivity().getIntent().getParcelableExtra(EXTRA_PARA_LOC);
 		mDist = getActivity().getIntent().getIntExtra(EXTRA_PARA_DIST, 0);
-		mDateStart = (Date)getActivity().getIntent().getSerializableExtra(EXTRA_PARA_DATE_S);
-		mDateEnd = (Date)getActivity().getIntent().getSerializableExtra(EXTRA_PARA_DATE_E);
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id)
-    {        
+    {    	
         Property p = ((propertyAdapter)getListAdapter()).getItem(position);
-        Intent i = new Intent(getActivity(), FindPropertyActivity.class);
-        i.putExtra(FindPropertyFragment.EXTRA_PROP_ID, p.getId());
-		i.putExtra(FindPropertyFragment.EXTRA_PROP_DATE_S, mDateStart);
-		i.putExtra(FindPropertyFragment.EXTRA_PROP_DATE_E, mDateEnd);
+        Intent i;
+        
+        if (p.getUsername().equals(AccountCurrent.get(getActivity()).getPresentAccount().getUsername()))
+        {
+        	i = new Intent(getActivity(), ReviewPropertyActivity.class);
+	        i.putExtra(ReviewPropertyFragment.EXTRA_PROP_ID, p.getId());
+        }
+        else
+        {
+	        i = new Intent(getActivity(), FindPropertyActivity.class);
+	        i.putExtra(FindPropertyFragment.EXTRA_PROP_ID, p.getId());
+        }
+        
         startActivity(i);
     }
     
@@ -172,14 +175,15 @@ public class FindPropertyListFragment extends ListFragment
     
     public void updateJSONdata()
     {
-    	String pUsername = AccountCurrent.get(getActivity()).getPresentAccount().getUsername();
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("username", pUsername));
         //Used to produce liberal search distance
-        //params.add(new BasicNameValuePair("upperLong", Double.toString(mLoc.getLongitude() + mDist / 2)));
-        //params.add(new BasicNameValuePair("lowerLong", Double.toString(mLoc.getLongitude() - mDist / 2)));
-        //params.add(new BasicNameValuePair("upperLat", Double.toString(mLoc.getLatitude() + mDist / 2)));
-        //params.add(new BasicNameValuePair("lowerLat", Double.toString(mLoc.getLatitude() - mDist / 2)));
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        //FIX
+        /*
+        params.add(new BasicNameValuePair("upperLong", Double.toString(mLoc.getLongitude() + mDist / 2)));
+        params.add(new BasicNameValuePair("lowerLong", Double.toString(mLoc.getLongitude() - mDist / 2)));
+        params.add(new BasicNameValuePair("upperLat", Double.toString(mLoc.getLatitude() + mDist / 2)));
+        params.add(new BasicNameValuePair("lowerLat", Double.toString(mLoc.getLatitude() - mDist / 2)));
+        */
         
         mPropertyList = new ArrayList<Property>();
 
@@ -189,6 +193,7 @@ public class FindPropertyListFragment extends ListFragment
             JSONObject json = jParser.makeHttpRequest(GET_PROPS_URL, "POST", params);
             mProperties = json.getJSONArray(TAG_PROPS);
 
+            //Add properties to list while including their dates rented
             for (int i = 0; i < mProperties.length(); i+=0)
             {
             	Property p = new Property();
@@ -231,7 +236,7 @@ public class FindPropertyListFragment extends ListFragment
                 } while (i < mProperties.length() &&
                 		p.getId() == mProperties.getJSONObject(i).getInt(TAG_ID));
             	
-                if (p.openAtDates(mDateStart, mDateEnd) && p.getProximityToLocation(mLoc) <= mDist)
+                if (p.getProximityToLocation(mLoc) <= mDist)
                 {
                 	mPropertyList.add(p);
                 }

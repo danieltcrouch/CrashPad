@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class ReviewBookedPropertyFragment extends Fragment
+public class ReviewBookingsFragment extends Fragment
 {
 	public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
 	public static final String EXTRA_RENT_DAT_S = "com.application.crashpad.rental_date_start";
@@ -21,7 +21,8 @@ public class ReviewBookedPropertyFragment extends Fragment
 	private Property mProperty;
 	private Rental mRental;
 	private TextView mPropertyName;
-	private TextView mPropertyInfo;
+	private TextView mPropertyAddress;
+	private TextView mPropertyDescription;
 	private TextView mDateRented;
 	private TextView mAccessCode;
 	
@@ -59,8 +60,11 @@ public class ReviewBookedPropertyFragment extends Fragment
 		mPropertyName = (TextView)v.findViewById(R.id.property_name);
 		mPropertyName.setText(mProperty.getUsername() + "'s " + mProperty.getName());
 		
-		mPropertyInfo = (TextView)v.findViewById(R.id.property_info);
-		mPropertyInfo.setText(mProperty.getDescription());
+		mPropertyAddress = (TextView)v.findViewById(R.id.property_address);
+		mPropertyAddress.setText(mProperty.getAddress());
+
+		mPropertyDescription = (TextView)v.findViewById(R.id.property_description);
+		mPropertyDescription.setText(mProperty.getDescription());
 		
 		mDateRented = (TextView)v.findViewById(R.id.dates_rented);
 		mDateRented.setText(" " + mRental.getDateStart() + " - " + mRental.getDateEnd());

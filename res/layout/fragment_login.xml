@@ -19,8 +19,9 @@
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="@string/login_username_hint" >
+        android:hint="@string/login_username_hint"
+        android:inputType="text" >
+
         <requestFocus />
     </EditText>
 
@@ -42,5 +43,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_account_button" />
+
+    <CheckBox
+        android:id="@+id/remember_checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/remember_checkBox" />
 
 </LinearLayout>

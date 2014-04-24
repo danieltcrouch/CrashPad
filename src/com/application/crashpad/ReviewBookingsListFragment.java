@@ -26,7 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 //Uses AsyncTask
-public class ReviewBookedPropertyListFragment extends ListFragment
+public class ReviewBookingsListFragment extends ListFragment
 {
 	private static final String GET_PROPS_B_URL = "http://taz.harding.edu/~dcrouch1/crashpad/get_props_booked.php";
     private static final String TAG_PROPS = "props";
@@ -81,10 +81,10 @@ public class ReviewBookedPropertyListFragment extends ListFragment
         	}
         }
 
-        Intent i = new Intent(getActivity(), ReviewBookedPropertyActivity.class);
-        i.putExtra(ReviewBookedPropertyFragment.EXTRA_PROP_ID, p.getId());
-        i.putExtra(ReviewBookedPropertyFragment.EXTRA_RENT_DAT_S, r.getDateStart());
-        i.putExtra(ReviewBookedPropertyFragment.EXTRA_RENT_DAT_E, r.getDateEnd());
+        Intent i = new Intent(getActivity(), ReviewBookingsActivity.class);
+        i.putExtra(ReviewBookingsFragment.EXTRA_PROP_ID, p.getId());
+        i.putExtra(ReviewBookingsFragment.EXTRA_RENT_DAT_S, r.getDateStart());
+        i.putExtra(ReviewBookingsFragment.EXTRA_RENT_DAT_E, r.getDateEnd());
         startActivity(i);
     }
     

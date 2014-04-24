@@ -11,7 +11,6 @@ public final class R {
     public static final class attr {
     }
     public static final class dimen {
-        public static final int account_creation_text_size=0x7f040003;
         public static final int account_information_text_size=0x7f040002;
         /**  Default screen margins, per the Android Design guidelines. 
 
@@ -21,8 +20,10 @@ public final class R {
          */
         public static final int activity_horizontal_margin=0x7f040000;
         public static final int activity_vertical_margin=0x7f040001;
-        public static final int edit_account_labels_size=0x7f040004;
+        public static final int home_bottom_padding_size=0x7f040006;
+        public static final int label_size=0x7f040004;
         public static final int labels_padding_size=0x7f040005;
+        public static final int title_text_size=0x7f040003;
     }
     public static final class drawable {
         public static final int crashpad_plane=0x7f020000;
@@ -34,44 +35,48 @@ public final class R {
         public static final int account_create_button=0x7f050008;
         public static final int account_creation=0x7f050003;
         public static final int confirm_password=0x7f050007;
-        public static final int crashpad_plane=0x7f050013;
-        public static final int create_account_button=0x7f050017;
+        public static final int crashpad_plane=0x7f050015;
+        public static final int create_account_button=0x7f050019;
         public static final int dates_rented=0x7f050025;
         public static final int dates_rented_label=0x7f050024;
         public static final int dialog_date_picker=0x7f050002;
-        public static final int distance=0x7f05001c;
+        public static final int distance=0x7f05001f;
         public static final int edit_account=0x7f050009;
-        public static final int edit_account_button=0x7f050012;
+        public static final int edit_account_button=0x7f050014;
         public static final int edit_email=0x7f05000b;
         public static final int edit_name=0x7f05000c;
         public static final int edit_password=0x7f05000d;
-        public static final int edit_property_button=0x7f050029;
-        public static final int end_date_button=0x7f050020;
-        public static final int find_properties_button=0x7f05000f;
+        public static final int edit_property_button=0x7f05002d;
+        public static final int end_date_button=0x7f05002b;
+        public static final int find_properties_button=0x7f050010;
         public static final int fragmentContainer=0x7f050001;
-        public static final int location=0x7f05001a;
-        public static final int login_button=0x7f050016;
-        public static final int menu_item_new_prop=0x7f05002c;
+        public static final int leasing_label=0x7f050012;
+        public static final int location=0x7f05001d;
+        public static final int login_button=0x7f050018;
+        public static final int menu_item_new_prop=0x7f050030;
         public static final int new_email=0x7f050005;
         public static final int new_password=0x7f050006;
         public static final int new_username=0x7f050004;
-        public static final int password=0x7f050015;
-        public static final int prompt_distance=0x7f05001b;
-        public static final int prompt_end_date=0x7f05001f;
-        public static final int prompt_location=0x7f050019;
-        public static final int prompt_start_date=0x7f05001d;
-        public static final int property_info=0x7f050023;
-        public static final int property_list_item_name=0x7f05002a;
-        public static final int property_name=0x7f050022;
-        public static final int rent_property_button=0x7f050028;
-        public static final int rental_list_item_name=0x7f05002b;
+        public static final int password=0x7f050017;
+        public static final int prompt_distance=0x7f05001e;
+        public static final int prompt_end_date=0x7f05002a;
+        public static final int prompt_location=0x7f05001c;
+        public static final int prompt_start_date=0x7f050028;
+        public static final int property_address=0x7f050022;
+        public static final int property_description=0x7f050023;
+        public static final int property_list_item_name=0x7f05002e;
+        public static final int property_name=0x7f050021;
+        public static final int remember_checkBox=0x7f05001a;
+        public static final int rent_property_button=0x7f05002c;
+        public static final int rental_list_item_name=0x7f05002f;
+        public static final int renting_label=0x7f05000f;
         public static final int review_bookings_button=0x7f050011;
-        public static final int review_properties_button=0x7f050010;
-        public static final int search_button=0x7f050021;
-        public static final int search_properties_parameters=0x7f050018;
-        public static final int start_date_button=0x7f05001e;
+        public static final int review_properties_button=0x7f050013;
+        public static final int search_button=0x7f050020;
+        public static final int search_properties_parameters=0x7f05001b;
+        public static final int start_date_button=0x7f050029;
         public static final int update_info_button=0x7f05000e;
-        public static final int username=0x7f050014;
+        public static final int username=0x7f050016;
         public static final int username_view=0x7f05000a;
         public static final int viewPager=0x7f050000;
     }
@@ -96,37 +101,29 @@ public final class R {
         public static final int home=0x7f080001;
     }
     public static final class string {
-        public static final int access_code_label=0x7f060018;
-        public static final int account_create_button=0x7f06000b;
-        public static final int account_creation=0x7f06000a;
+        public static final int access_code_label=0x7f06001b;
+        public static final int account_create_button=0x7f06000c;
+        public static final int account_creation=0x7f06000b;
         /**  Generic 
          */
         public static final int app_name=0x7f060000;
-        public static final int check_bookings_button=0x7f060010;
-        public static final int confirm_password_hint=0x7f060008;
+        public static final int check_bookings_button=0x7f060013;
+        public static final int confirm_password_hint=0x7f060009;
         public static final int create_account_button=0x7f060005;
         /**  Review Booked Property 
          */
-        public static final int dates_rented_label=0x7f060017;
-        public static final int distance=0x7f06001d;
-        public static final int edit_account_button=0x7f060011;
+        public static final int dates_rented_label=0x7f06001a;
+        public static final int distance=0x7f060020;
+        public static final int edit_account_button=0x7f060014;
         /**  Edit Account 
          */
-        public static final int edit_account_info=0x7f060012;
-        public static final int edit_password_hint=0x7f060014;
+        public static final int edit_account_info=0x7f060015;
+        public static final int edit_password_hint=0x7f060017;
         /**  <string name="edit_email_hint">john@email.com</string> 
  Review Own Property 
          */
-        public static final int edit_prop_button=0x7f060016;
-        /**  Extended Version
-    <string name="new_account_name_suggestion">John Doe</string>
-    <string name="new_account_phone_number_suggestion">(555)123&#8211;4567</string>
-    <string name="new_account_information">Account Information</string>
-    <string name="account_creation_confirmation_toast">Account Created!</string>
-    
- Home 
-         */
-        public static final int find_prop_button=0x7f06000e;
+        public static final int edit_prop_button=0x7f060019;
+        public static final int find_prop_button=0x7f060011;
         /**  GPS & Other
     <string name="gps_enabled">GPS Enabled</string>
     <string name="gps_disabled">GPS Disabled</string>
@@ -136,31 +133,42 @@ public final class R {
  Login 
          */
         public static final int image_description=0x7f060001;
-        public static final int location=0x7f06001b;
+        public static final int leasing_label=0x7f060010;
+        public static final int location=0x7f06001e;
         public static final int login_button=0x7f060002;
         public static final int login_password_hint=0x7f060004;
         public static final int login_username_hint=0x7f060003;
-        public static final int new_email_hint=0x7f060009;
-        public static final int new_password_hint=0x7f060007;
+        public static final int new_email_hint=0x7f06000a;
+        public static final int new_password_hint=0x7f060008;
         /**  Create Account 
          */
-        public static final int new_username_hint=0x7f060006;
-        public static final int password_toast=0x7f06000c;
-        public static final int prompt_check_in=0x7f06001e;
-        public static final int prompt_check_out=0x7f06001f;
-        public static final int prompt_distance=0x7f06001c;
-        public static final int prompt_location=0x7f06001a;
+        public static final int new_username_hint=0x7f060007;
+        public static final int password_toast=0x7f06000d;
+        public static final int prompt_check_in=0x7f060023;
+        public static final int prompt_check_out=0x7f060024;
+        public static final int prompt_distance=0x7f06001f;
+        public static final int prompt_location=0x7f06001d;
+        public static final int remember_checkBox=0x7f060006;
         /**  Find Property 
          */
-        public static final int rent_prop_button=0x7f060021;
-        public static final int review_prop_button=0x7f06000f;
-        public static final int search_button=0x7f060020;
+        public static final int rent_prop_button=0x7f060022;
+        /**  Extended Version
+    <string name="new_account_name_suggestion">John Doe</string>
+    <string name="new_account_phone_number_suggestion">(555)123&#8211;4567</string>
+    <string name="new_account_information">Account Information</string>
+    <string name="account_creation_confirmation_toast">Account Created!</string>
+    
+ Home 
+         */
+        public static final int renting_label=0x7f06000f;
+        public static final int review_prop_button=0x7f060012;
+        public static final int search_button=0x7f060021;
         /**  Parameters 
          */
-        public static final int search_properties=0x7f060019;
-        public static final int update_info_button=0x7f060015;
-        public static final int username_toast=0x7f06000d;
-        public static final int view_account_info=0x7f060013;
+        public static final int search_properties=0x7f06001c;
+        public static final int update_info_button=0x7f060018;
+        public static final int username_toast=0x7f06000e;
+        public static final int view_account_info=0x7f060016;
     }
     public static final class style {
         /** 

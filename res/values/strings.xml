@@ -17,6 +17,7 @@
     <string name="login_username_hint">Username</string>
     <string name="login_password_hint">Password</string>
     <string name="create_account_button">Create New Account</string>
+    <string name="remember_checkBox">Remember Password</string>
     
     <!-- Create Account -->
     <string name="new_username_hint">Create Username</string>
@@ -35,9 +36,11 @@
     -->
     
     <!-- Home -->
-    <string name="find_prop_button">Find Property to Rent</string>
-    <string name="review_prop_button">Review Properties</string>
+    <string name="renting_label">Renting</string>
+    <string name="leasing_label">Leasing</string>
+    <string name="find_prop_button">Find Properties</string>
     <string name="check_bookings_button">Check Bookings</string>
+    <string name="review_prop_button">Review Properties</string>
     <string name="edit_account_button">Edit Account</string>
      
     <!-- Edit Account -->
@@ -60,12 +63,12 @@
     <string name="location">My Location</string>
     <string name="prompt_distance">Distance (in miles) to search for property rentals:</string>
     <string name="distance">10</string>
-    <string name="prompt_check_in">Check in:</string>
-    <string name="prompt_check_out">Check out:</string>
     <string name="search_button">Search</string>
          
     <!-- Find Property -->
     <string name="rent_prop_button">Rent this Property</string>
+    <string name="prompt_check_in">Check in:</string>
+    <string name="prompt_check_out">Check out:</string>
     
     <!-- Edit Property
     <string name="name_activity_property">PropertyActivity</string>

@@ -30,6 +30,9 @@ public class HomeFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
 		//FIX
+		//Divide screen to show renting and leasing privileges
+		
+		//FIX
 		//In this and all others, give back arrow
 		View view = inflater.inflate(R.layout.fragment_home, parent, false);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
@@ -68,7 +71,7 @@ public class HomeFragment extends Fragment
 			@Override
 			public void onClick(View v)
 			{
-				Intent i = new Intent(getActivity(), ReviewBookedPropertyListActivity.class);
+				Intent i = new Intent(getActivity(), ReviewBookingsListActivity.class);
 				startActivity(i);
 			}
 		});

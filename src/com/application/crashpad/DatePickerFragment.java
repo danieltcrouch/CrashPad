@@ -20,6 +20,9 @@ public class DatePickerFragment extends DialogFragment
 	public static final String EXTRA_DATE = "com.application.crashpad.date";
 	
 	private Date mDate;
+	private int mYear;
+	private int mMonth;
+	private int mDay;
 	
 	public static DatePickerFragment newInstance(Date date)
 	{
@@ -52,19 +55,36 @@ public class DatePickerFragment extends DialogFragment
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(mDate);
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		mYear = calendar.get(Calendar.YEAR);
+		mMonth = calendar.get(Calendar.MONTH);
+		mDay = calendar.get(Calendar.DAY_OF_MONTH);
 		
 		View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_date, null);
 		
 		DatePicker datePicker = (DatePicker)v.findViewById(R.id.dialog_date_picker);
-		datePicker.init(year, month, day, new OnDateChangedListener()
+		//datePicker.setMinDate(new Date().getTime());
+		datePicker.init(mYear, mMonth, mDay, new OnDateChangedListener()
 		{
 			public void onDateChanged(DatePicker view, int year, int month, int day)
-			{
-				mDate = new GregorianCalendar(year, month, day).getTime();
-				getArguments().putSerializable(EXTRA_DATE, mDate);
+			{				
+				GregorianCalendar now = new GregorianCalendar();
+				Date chosen = new GregorianCalendar(year, month, day).getTime();
+				Date today = new GregorianCalendar(
+						now.get(Calendar.YEAR), 
+						now.get(Calendar.MONTH), 
+						now.get(Calendar.DAY_OF_MONTH)
+						).getTime();
+				
+				//Checks if date is old
+				if (!chosen.before(today))
+				{
+					mDate = chosen;
+					getArguments().putSerializable(EXTRA_DATE, mDate);
+				}
+				else
+				{
+					view.updateDate(mYear, mMonth, mDay);
+				}
 			}
 		});
 		

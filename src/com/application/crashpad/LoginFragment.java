@@ -11,15 +11,18 @@ import org.json.JSONObject;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -32,11 +35,17 @@ public class LoginFragment extends Fragment
     private static final String TAG_ACCOUNT = "account";
     private static final String TAG_EMAIL = "a_email";
     private static final String TAG_NAME= "a_name";
+    
+    private static final String PREF_FILE = "CrashPadLoginPrefsFile";
+    private static final String PREF_REMEM = "remember";
+    private static final String PREF_USER = "user";
+    private static final String PREF_PASS = "password";
 	
 	private EditText mUsernameEditText;
 	private EditText mPasswordEditText;
 	private Button mLoginButton;
 	private Button mCreateNewAccountButton;
+	private CheckBox mRememberCheckBox;
 	private ProgressDialog mProgressDialog;
     private boolean mTaskRunning;
 	
@@ -63,6 +72,7 @@ public class LoginFragment extends Fragment
 		
 		mUsernameEditText = (EditText)view.findViewById(R.id.username);
 		mPasswordEditText = (EditText)view.findViewById(R.id.password);
+		mRememberCheckBox = (CheckBox)view.findViewById(R.id.remember_checkBox);
 		
 		mLoginButton = (Button)view.findViewById(R.id.login_button);
 		mLoginButton.setOnClickListener(new View.OnClickListener()
@@ -88,6 +98,14 @@ public class LoginFragment extends Fragment
 				startActivity(i);
 			}
 		});
+		
+		SharedPreferences userInfo = getActivity().getSharedPreferences(PREF_FILE, 0);
+		if (userInfo.getBoolean(PREF_REMEM, false))
+		{
+    		Log.d("TAG", "Loaded");
+			mUsernameEditText.setText(userInfo.getString(PREF_USER, ""));
+			mPasswordEditText.setText(userInfo.getString(PREF_PASS, ""));
+		}
 		
 		return view;
 	}
@@ -123,6 +141,24 @@ public class LoginFragment extends Fragment
 
                 if (success == 1)
                 {
+                	//Save Login Info
+            		SharedPreferences userInfo = getActivity().getSharedPreferences(PREF_FILE, 0);
+            		SharedPreferences.Editor editor = userInfo.edit();
+                	if (mRememberCheckBox.isChecked())
+                	{
+                		Log.d("TAG", "Saved");
+	            		editor.putString(PREF_USER, username);
+	            		editor.putString(PREF_PASS, password);
+	            		editor.putBoolean(PREF_REMEM, true);
+	            		editor.commit();
+                	}
+                	else
+                	{
+                		Log.d("TAG", "Not Saved");
+                		editor.putBoolean(PREF_REMEM, false);
+	            		editor.commit();
+                	}
+                	
                 	JSONObject o = json.getJSONObject(TAG_ACCOUNT);
                 	Account tempAccount = new Account(username, password,
                 			o.getString(TAG_EMAIL), o.getString(TAG_NAME));

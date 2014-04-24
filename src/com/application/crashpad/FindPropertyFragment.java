@@ -19,7 +19,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,16 +36,22 @@ public class FindPropertyFragment extends Fragment
 	private static final String RENT_URL = "http://taz.harding.edu/~dcrouch1/crashpad/rent.php";
 	private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
+	private static final int REQUEST_DATE_START = 0;
+	private static final int REQUEST_DATE_END = 1;
     
 	public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
-	public static final String EXTRA_PROP_DATE_S = "com.application.crashpad.property_date_start";
-	public static final String EXTRA_PROP_DATE_E = "com.application.crashpad.property_date_end";
+	public static final String FORMAT_DATE = "EEE, MMM d, yyyy";
+	public static final String DIALOG_DATE = "date";
 	
 	private Property mProperty;
 	private Date mDateStart;
 	private Date mDateEnd;
-	private TextView propertyName;
-	private TextView propertyInfo;
+	private Button mChangeDateStartButton;
+	private Button mChangeDateEndButton;
+	private Button mRentButton;
+	private TextView mPropertyName;
+	private TextView mPropertyAddress;
+	private TextView mPropertyDescription;
 	//private NotificationCompat.Builder mBuilder;
 	//private NotificationManager mNotificationManager;
 	
@@ -59,8 +67,6 @@ public class FindPropertyFragment extends Fragment
 		PropertyList propertyList;
         propertyList = PropertyList.get(getActivity());
 		mProperty = propertyList.getProperty(getActivity().getIntent().getIntExtra(EXTRA_PROP_ID, 0));
-		mDateStart = (Date)getActivity().getIntent().getSerializableExtra(EXTRA_PROP_DATE_S);
-		mDateEnd = (Date)getActivity().getIntent().getSerializableExtra(EXTRA_PROP_DATE_E);
 		
 		setHasOptionsMenu(true);
 	}
@@ -69,7 +75,7 @@ public class FindPropertyFragment extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
-		View v = inflater.inflate(R.layout.fragment_property_find, parent, false);
+		View view = inflater.inflate(R.layout.fragment_property_find, parent, false);
 		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
@@ -81,18 +87,57 @@ public class FindPropertyFragment extends Fragment
 
 		//FIX
 		//It would be better to have the owner's name
-		propertyName = (TextView)v.findViewById(R.id.property_name);
-		propertyName.setText(mProperty.getUsername() + "'s " + mProperty.getName());
+		mPropertyName = (TextView)view.findViewById(R.id.property_name);
+		mPropertyName.setText(mProperty.getUsername() + "'s " + mProperty.getName());
 		
-		propertyInfo = (TextView)v.findViewById(R.id.property_info);
-		propertyInfo.setText(mProperty.getDescription());
+		mPropertyAddress = (TextView)view.findViewById(R.id.property_address);
+		mPropertyAddress.setText(mProperty.getAddress());
+
+		mPropertyDescription = (TextView)view.findViewById(R.id.property_description);
+		mPropertyDescription.setText(mProperty.getDescription());
 		
-		Button rentButton = (Button)v.findViewById(R.id.rent_property_button);
-		rentButton.setOnClickListener(new View.OnClickListener()
+		mDateStart = new Date();
+		mChangeDateStartButton = (Button)view.findViewById(R.id.start_date_button);
+		mChangeDateStartButton.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				FragmentManager fm = getActivity().getSupportFragmentManager();
+				DatePickerFragment dialog = DatePickerFragment.newInstance(mDateStart);
+				dialog.setTargetFragment(FindPropertyFragment.this, REQUEST_DATE_START);
+				dialog.show(fm, DIALOG_DATE);
+			}
+		});
+
+		mDateEnd = new Date();
+		mChangeDateEndButton = (Button)view.findViewById(R.id.end_date_button);
+		mChangeDateEndButton.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				FragmentManager fm = getActivity().getSupportFragmentManager();
+				DatePickerFragment dialog = DatePickerFragment.newInstance(mDateEnd);
+				dialog.setTargetFragment(FindPropertyFragment.this, REQUEST_DATE_END);
+				dialog.show(fm, DIALOG_DATE);
+			}
+		});
+		
+		mRentButton = (Button)view.findViewById(R.id.rent_property_button);
+		mRentButton.setOnClickListener(new View.OnClickListener()
 		{
 			public void onClick(View v)
 			{
-				new RentProperty().execute();
+				if (mProperty.openAtDates(mDateStart, mDateEnd))
+				{
+					new RentProperty().execute();
+				}
+				else
+				{
+					Toast.makeText(getActivity(), "Sorry, " + mProperty.getName() + " is already booked during these dates.",
+							Toast.LENGTH_SHORT).show();
+				}
 				
 				/*Load our own webpage with special data
 					which sends OK or CANCEL back
@@ -120,7 +165,9 @@ public class FindPropertyFragment extends Fragment
 			}
 		});
 		
-		return v;
+		updateDate();
+		
+		return view;
 	}
 	
 	@Override
@@ -130,6 +177,23 @@ public class FindPropertyFragment extends Fragment
 		{
 			return;
 		}
+		
+		if (requestCode == REQUEST_DATE_START)
+		{
+			mDateStart = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+			updateDate();
+		}
+		else if (requestCode == REQUEST_DATE_END)
+		{
+			mDateEnd = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+			updateDate();
+		}
+	}
+
+	private void updateDate()
+	{
+		mChangeDateStartButton.setText(DateFormat.format(FORMAT_DATE, mDateStart));
+		mChangeDateEndButton.setText(DateFormat.format(FORMAT_DATE, mDateEnd));
 	}
 	
 	@Override
@@ -160,6 +224,9 @@ public class FindPropertyFragment extends Fragment
 		@Override
 		protected String doInBackground(String... args)
 		{
+			//FIX
+			//Doesn't check if you can rent at this date
+			
             int success;
             SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
 		    

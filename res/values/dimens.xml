@@ -4,8 +4,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="account_information_text_size">25dp</dimen>
-    <dimen name="account_creation_text_size">25dp</dimen>
-    <dimen name="edit_account_labels_size">16dp</dimen>
+    <dimen name="title_text_size">25dp</dimen>
+    <dimen name="label_size">16dp</dimen>
     <dimen name="labels_padding_size">5dp</dimen>
+    <dimen name="home_bottom_padding_size">60dp</dimen>
 
 </resources>
