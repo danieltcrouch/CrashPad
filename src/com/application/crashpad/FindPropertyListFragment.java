@@ -31,8 +31,6 @@ public class FindPropertyListFragment extends ListFragment
 {
 	public static final String EXTRA_PARA_LOC = "com.application.crashpad.parameter_loc";
 	public static final String EXTRA_PARA_DIST = "com.application.crashpad.parameter_dis";
-	public static final String EXTRA_PARA_DATE_S = "com.application.crashpad.parameter_date_start";
-	public static final String EXTRA_PARA_DATE_E = "com.application.crashpad.parameter_date_end";
 	public static final String FORMAT_DATE = "MM/dd/yyyy";
 	
 	private static final String GET_PROPS_URL = "http://taz.harding.edu/~dcrouch1/crashpad/get_props_find.php";
@@ -177,8 +175,8 @@ public class FindPropertyListFragment extends ListFragment
     {
         //Used to produce liberal search distance
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-        //FIX
-        /*
+        
+        /* //FIX
         params.add(new BasicNameValuePair("upperLong", Double.toString(mLoc.getLongitude() + mDist / 2)));
         params.add(new BasicNameValuePair("lowerLong", Double.toString(mLoc.getLongitude() - mDist / 2)));
         params.add(new BasicNameValuePair("upperLat", Double.toString(mLoc.getLatitude() + mDist / 2)));

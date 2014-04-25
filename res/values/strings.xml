@@ -12,7 +12,7 @@
      -->
      
     <!-- Login -->
-    <string name="image_description">An airplane</string>
+    <string name="image_description">the logo</string>
     <string name="login_button">Login</string>
     <string name="login_username_hint">Username</string>
     <string name="login_password_hint">Password</string>

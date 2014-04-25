@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="#CCDDFF" >
     
     <TextView android:id="@+id/property_name"
         android:layout_width="match_parent"
@@ -39,7 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp" />
+                android:layout_marginRight="16dp"
+                style="@style/livid_brown_btn" />
         </LinearLayout>
 
         <LinearLayout
@@ -59,7 +61,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp" />
+                android:layout_marginRight="16dp"
+                style="@style/livid_brown_btn" />
         </LinearLayout>
 
     </LinearLayout>
@@ -69,6 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp" 
-        android:text="@string/rent_prop_button" />
+        android:text="@string/rent_prop_button"
+        style="@style/livid_brown_btn" />
 
 </LinearLayout>

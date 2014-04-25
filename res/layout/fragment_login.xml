@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_gravity="center_vertical|center_horizontal"
     android:gravity="center_vertical|center_horizontal|center"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#CCDDFF" >
 
     <ImageView
         android:id="@+id/crashpad_plane"
+        android:layout_width="282dp"
+        android:layout_height="188dp"
         android:contentDescription="@string/image_description"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:scaleType="centerInside"
-        android:maxWidth="@dimen/activity_horizontal_margin"
-        android:src="@drawable/crashpad_plane" />
+        android:src="@drawable/logo" />
 
     <EditText
         android:id="@+id/username"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/btn_size"
         android:layout_height="wrap_content"
         android:hint="@string/login_username_hint"
         android:inputType="text" >
@@ -27,20 +27,22 @@
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/btn_size"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:hint="@string/login_password_hint" />
+        android:hint="@string/login_password_hint"
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/login_button"
-        android:layout_width="match_parent"
+        style="@style/livid_brown_btn"
+        android:layout_width="@dimen/btn_size"
         android:layout_height="wrap_content"
         android:text="@string/login_button" />
 
     <Button
         android:id="@+id/create_account_button"
-        android:layout_width="wrap_content"
+        style="@style/livid_brown_btn"
+        android:layout_width="@dimen/btn_size"
         android:layout_height="wrap_content"
         android:text="@string/create_account_button" />
 

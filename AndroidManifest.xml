@@ -46,49 +46,57 @@
         </activity>
         <activity
             android:name="com.application.crashpad.FindPropertyParametersActivity"
+            android:parentActivityName="com.application.crashpad.HomeActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.application.crashpad.FindPropertyListActivity"
+            android:parentActivityName="com.application.crashpad.FindPropertyParametersActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.application.crashpad.FindPropertyActivity"
+            android:parentActivityName="com.application.crashpad.FindPropertyListActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.application.crashpad.ReviewPropertyListActivity"
+            android:parentActivityName="com.application.crashpad.HomeActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.application.crashpad.ReviewPropertyActivity"
+            android:parentActivityName="com.application.crashpad.ReviewPropertyListActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.application.crashpad.ReviewBookingsListActivity"
+            android:parentActivityName="com.application.crashpad.HomeActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.application.crashpad.ReviewBookingsActivity"
+            android:parentActivityName="com.application.crashpad.ReviewBookingsListActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.application.crashpad.EditAccountActivity"
+            android:parentActivityName="com.application.crashpad.HomeActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
-        <activity
+        <!-- <activity
             android:name="com.application.crashpad.ViewAccountActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
-        </activity>
+        </activity> -->
     </application>
     
     <!-- Debug: AIzaSyD2rZZS68wqm9MgbJJKaeE1zcp5YwIbe00 -->

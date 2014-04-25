@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
@@ -54,11 +55,14 @@ public class ReviewPropertyListFragment extends ListFragment
         super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 
+		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
 			{
-				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+				actionBar.setDisplayHomeAsUpEnabled(true);
 			}
         }
     }

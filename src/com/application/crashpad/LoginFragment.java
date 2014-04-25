@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -62,11 +63,15 @@ public class LoginFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
 		View view = inflater.inflate(R.layout.fragment_login, parent, false);
+
+		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
 			{
-				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+				actionBar.setDisplayHomeAsUpEnabled(true);
 			}
         }
 		

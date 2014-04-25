@@ -1,6 +1,7 @@
 package com.application.crashpad;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -39,11 +40,14 @@ public class ReviewPropertyFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
 		View v = inflater.inflate(R.layout.fragment_property_review, parent, false);
+		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
 			{
-				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+				actionBar.setDisplayHomeAsUpEnabled(true);
 			}
         }
 		

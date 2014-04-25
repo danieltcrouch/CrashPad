@@ -3,6 +3,7 @@ package com.application.crashpad;
 import java.util.List;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -47,11 +48,15 @@ public class FindPropertyParametersFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
 		View view = inflater.inflate(R.layout.fragment_parameters, parent, false);
+
+		ActionBar actionBar = getActivity().getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
 			{
-				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+				actionBar.setDisplayHomeAsUpEnabled(true);
 			}
         }
 

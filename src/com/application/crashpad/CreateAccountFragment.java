@@ -11,11 +11,13 @@ import org.json.JSONObject;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,9 @@ public class CreateAccountFragment extends Fragment
     private static final String TAG_MESSAGE = "message";
     private static final String TAG_ACCOUNT = "account";
     private static final String TAG_NAME= "name";
+    
+    private static final String PREF_FILE = "CrashPadLoginPrefsFile";
+    private static final String PREF_REMEM = "remember";
 
 	private EditText mUsernameEditText;
 	private EditText mPasswordNewEditText;
@@ -131,6 +136,13 @@ public class CreateAccountFragment extends Fragment
 
                 if (success == 1)
                 {
+                	//Save Login Info
+            		SharedPreferences userInfo = getActivity().getSharedPreferences(PREF_FILE, 0);
+            		SharedPreferences.Editor editor = userInfo.edit();
+            		Log.d("TAG", "Not Saved");
+            		editor.putBoolean(PREF_REMEM, false);
+            		editor.commit();
+                	
                 	JSONObject o = json.getJSONObject(TAG_ACCOUNT);
                 	Account tempAccount = new Account(username, password, email,
                 			o.getString(TAG_NAME));
