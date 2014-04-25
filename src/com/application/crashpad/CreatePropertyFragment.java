@@ -10,15 +10,17 @@ import org.json.JSONObject;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,23 +29,19 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 //Uses AsyncTask
-public class CreateAccountFragment extends Fragment
+public class CreatePropertyFragment extends Fragment
 {
-	private static final String REGISTER_URL = "http://taz.harding.edu/~dcrouch1/crashpad/register.php";
+	private static final String ADD_URL = "http://taz.harding.edu/~dcrouch1/crashpad/add_prop.php";
 	private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
-    private static final String TAG_ACCOUNT = "account";
-    private static final String TAG_NAME= "name";
-    
-    private static final String PREF_FILE = "CrashPadLoginPrefsFile";
-    private static final String PREF_REMEM = "remember";
 
-	private EditText mUsernameEditText;
-	private EditText mPasswordNewEditText;
-	private EditText mPasswordConfirmEditText;
-	private EditText mEmailEditText;
+	private EditText mNameEditText;
+	private EditText mAddressEditText;
+	private EditText mDescriptionEditText;
 	private Button mConfirmAccountCreate;
-	
+
+    private Location mLocation;
+    private LocationManager mLocationManager;
 	private ProgressDialog mProgressDialog;
     private boolean mTaskRunning;
 		
@@ -58,7 +56,7 @@ public class CreateAccountFragment extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
-		View view = inflater.inflate(R.layout.fragment_create_account, parent, false);
+		View view = inflater.inflate(R.layout.fragment_create_property, parent, false);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
@@ -67,34 +65,44 @@ public class CreateAccountFragment extends Fragment
 			}
         }
 
-		mUsernameEditText = (EditText)view.findViewById(R.id.new_username);
-		mPasswordNewEditText = (EditText)view.findViewById(R.id.new_password);
-		mPasswordConfirmEditText = (EditText)view.findViewById(R.id.confirm_password);
-		mEmailEditText = (EditText)view.findViewById(R.id.new_email);
+		mNameEditText = (EditText)view.findViewById(R.id.new_name);
+		mAddressEditText = (EditText)view.findViewById(R.id.new_address);
+		mDescriptionEditText = (EditText)view.findViewById(R.id.new_description);
 		
-		mConfirmAccountCreate = (Button)view.findViewById(R.id.account_create_button);
+		mConfirmAccountCreate = (Button)view.findViewById(R.id.prop_create_button);
 		mConfirmAccountCreate.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				String user = mUsernameEditText.getText().toString();
-				String pass1 = mPasswordNewEditText.getText().toString();
-				String pass2 = mPasswordConfirmEditText.getText().toString();
-				String email = mEmailEditText.getText().toString();
-				
-				if (user.length() != 0 && email.length() != 0 &&
-						pass1.length() != 0 && pass1.equals(pass2))
+				String name = mNameEditText.getText().toString();
+				String addr = mAddressEditText.getText().toString();
+				String desc = mDescriptionEditText.getText().toString();
+
+				if (desc.length() != 0 && addr.length() != 0 && name.length() != 0)
 				{
-					new CreateUser().execute();
-				}
-				else if (!pass1.equals(pass2))
-				{
-					Toast.makeText(getActivity(), R.string.password_toast, Toast.LENGTH_SHORT).show();
-				}
-				else if (!isValidEmail(email))
-				{
-					Toast.makeText(getActivity(), R.string.email_toast, Toast.LENGTH_SHORT).show();
+					Geocoder geocoder = new Geocoder(getActivity());
+					String location = mAddressEditText.getText().toString();
+					
+					try
+					{
+						List<Address> addresses = geocoder.getFromLocationName(location, 1);
+						if (addresses != null && !addresses.isEmpty())
+						{
+							Address address = addresses.get(0);
+							mLocation.setLatitude(address.getLatitude());
+							mLocation.setLongitude(address.getLongitude());
+							new CreateProp().execute();
+						}
+						else
+						{
+							Toast.makeText(getActivity(), "Unable to find location.", Toast.LENGTH_LONG).show();
+						}
+					}
+					catch (Exception e)
+					{
+						Toast.makeText(getActivity(), "Having trouble finding location.\nCheck GPS.", Toast.LENGTH_SHORT).show(); 
+					}
 				}
 				else
 				{
@@ -102,23 +110,14 @@ public class CreateAccountFragment extends Fragment
 				}
 			}
 		});
+
+		mLocationManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+		mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		
 		return view;
 	}
 	
-	protected boolean isValidEmail(CharSequence target)
-	{
-		if (TextUtils.isEmpty(target))
-		{
-			return false;
-		}
-		else
-		{
-			return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-		}
-	}
-	
-	class CreateUser extends AsyncTask<String, String, String>
+	class CreateProp extends AsyncTask<String, String, String>
 	{
 		boolean failure = false;
 
@@ -134,36 +133,27 @@ public class CreateAccountFragment extends Fragment
 		protected String doInBackground(String... args)
 		{
             int success;
-            String username = mUsernameEditText.getText().toString();
-            String password = mPasswordNewEditText.getText().toString();
-            String email = mEmailEditText.getText().toString();
+            String name = mNameEditText.getText().toString();
+			String addr = mAddressEditText.getText().toString();
+			String desc = mDescriptionEditText.getText().toString();
 
             List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("username", username));
-            params.add(new BasicNameValuePair("password", password));
-            params.add(new BasicNameValuePair("email", email));
+            params.add(new BasicNameValuePair("username", AccountCurrent.get(getActivity()).getPresentAccount().getUsername()));
+            params.add(new BasicNameValuePair("name", name));
+            params.add(new BasicNameValuePair("address", addr));
+            params.add(new BasicNameValuePair("description", desc));
+            params.add(new BasicNameValuePair("longitude", Double.toString(mLocation.getLongitude())));
+            params.add(new BasicNameValuePair("latitude", Double.toString(mLocation.getLatitude())));
 
             try
             {
                 JSONParser jsonParser = new JSONParser();
-                JSONObject json = jsonParser.makeHttpRequest(REGISTER_URL, "POST", params);
+                JSONObject json = jsonParser.makeHttpRequest(ADD_URL, "POST", params);
                 success = json.getInt(TAG_SUCCESS);
 
                 if (success == 1)
                 {
-                	//Save Login Info
-            		SharedPreferences userInfo = getActivity().getSharedPreferences(PREF_FILE, 0);
-            		SharedPreferences.Editor editor = userInfo.edit();
-            		Log.d("TAG", "Not Saved");
-            		editor.putBoolean(PREF_REMEM, false);
-            		editor.commit();
-                	
-                	JSONObject o = json.getJSONObject(TAG_ACCOUNT);
-                	Account tempAccount = new Account(username, password, email,
-                			o.getString(TAG_NAME));
-
-                	AccountCurrent.get(getActivity()).setPresentAccount(tempAccount);
-    				Intent i = new Intent(getActivity(), HomeActivity.class);
+    				Intent i = new Intent(getActivity(), ReviewPropertyListActivity.class);
     				startActivity(i);
     				
                 	return json.getString(TAG_MESSAGE);
@@ -220,7 +210,7 @@ public class CreateAccountFragment extends Fragment
 	private void showProgressDialog()
 	{
         mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setMessage("Creating Account...");
+        mProgressDialog.setMessage("Adding Property...");
         mProgressDialog.setIndeterminate(false);
         mProgressDialog.setCancelable(false);
         mProgressDialog.show();

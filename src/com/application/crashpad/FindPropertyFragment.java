@@ -40,10 +40,12 @@ public class FindPropertyFragment extends Fragment
 	private static final int REQUEST_DATE_END = 1;
     
 	public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
+	public static final String EXTRA_OWNER = "com.application.crashpad.property_owner";
 	public static final String FORMAT_DATE = "EEE, MMM d, yyyy";
 	public static final String DIALOG_DATE = "date";
 	
 	private Property mProperty;
+	private String mName;
 	private Date mDateStart;
 	private Date mDateEnd;
 	private Button mChangeDateStartButton;
@@ -67,6 +69,7 @@ public class FindPropertyFragment extends Fragment
 		PropertyList propertyList;
         propertyList = PropertyList.get(getActivity());
 		mProperty = propertyList.getProperty(getActivity().getIntent().getIntExtra(EXTRA_PROP_ID, 0));
+		mName = getActivity().getIntent().getStringExtra(EXTRA_OWNER);
 		
 		setHasOptionsMenu(true);
 	}
@@ -76,7 +79,6 @@ public class FindPropertyFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
 		View view = inflater.inflate(R.layout.fragment_property_find, parent, false);
-		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
@@ -85,10 +87,8 @@ public class FindPropertyFragment extends Fragment
 			}
         }
 
-		//FIX
-		//It would be better to have the owner's name
 		mPropertyName = (TextView)view.findViewById(R.id.property_name);
-		mPropertyName.setText(mProperty.getUsername() + "'s " + mProperty.getName());
+		mPropertyName.setText(mName + "'s " + mProperty.getName());
 		
 		mPropertyAddress = (TextView)view.findViewById(R.id.property_address);
 		mPropertyAddress.setText(mProperty.getAddress());
@@ -223,10 +223,7 @@ public class FindPropertyFragment extends Fragment
 
 		@Override
 		protected String doInBackground(String... args)
-		{
-			//FIX
-			//Doesn't check if you can rent at this date
-			
+		{			
             int success;
             SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
 		    

@@ -1,7 +1,6 @@
 package com.application.crashpad;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
@@ -18,9 +17,11 @@ public class ReviewBookingsFragment extends Fragment
 	public static final String EXTRA_PROP_ID = "com.application.crashpad.property_id";
 	public static final String EXTRA_RENT_DAT_S = "com.application.crashpad.rental_date_start";
 	public static final String EXTRA_RENT_DAT_E = "com.application.crashpad.rental_date_end";
+	public static final String EXTRA_OWNER = "com.application.crashpad.property_owner";
 
 	private Property mProperty;
 	private Rental mRental;
+	private String mName;
 	private TextView mPropertyName;
 	private TextView mPropertyAddress;
 	private TextView mPropertyDescription;
@@ -36,6 +37,7 @@ public class ReviewBookingsFragment extends Fragment
 		PropertyList propertyList;
         propertyList = PropertyList.get(getActivity());
 		mProperty = propertyList.getProperty(getActivity().getIntent().getIntExtra(EXTRA_PROP_ID, 0));
+		mName = getActivity().getIntent().getStringExtra(EXTRA_OWNER);
 
 		mRental = new Rental();
 		mRental.setDateStart((String)getActivity().getIntent().getSerializableExtra(EXTRA_RENT_DAT_S));
@@ -48,22 +50,16 @@ public class ReviewBookingsFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
 		View v = inflater.inflate(R.layout.fragment_property_booked, parent, false);
-
-		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
 			{
-				actionBar.setDisplayHomeAsUpEnabled(true);
+				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
 
-		//FIX
-		//It would be better to have the owner's name
 		mPropertyName = (TextView)v.findViewById(R.id.property_name);
-		mPropertyName.setText(mProperty.getUsername() + "'s " + mProperty.getName());
+		mPropertyName.setText(mName + "'s " + mProperty.getName());
 		
 		mPropertyAddress = (TextView)v.findViewById(R.id.property_address);
 		mPropertyAddress.setText(mProperty.getAddress());

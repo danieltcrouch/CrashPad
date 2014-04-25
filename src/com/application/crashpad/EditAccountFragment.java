@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,8 +85,6 @@ public class EditAccountFragment extends Fragment
 				String originalName = AccountCurrent.get(getActivity()).getPresentAccount().getName();
 				String originalPass = AccountCurrent.get(getActivity()).getPresentAccount().getPassword();
 				
-				//FIX
-				//http://stackoverflow.com/questions/7625862/validate-an-email-inside-an-edittext
 				String email = mEmailEditText.getText().toString();
 				String name = mNameEditText.getText().toString();
 				String pass1 = mPasswordNewEditText.getText().toString();
@@ -96,19 +95,35 @@ public class EditAccountFragment extends Fragment
 						(originalEmail.equals(email) || email.length() == 0) &&
 						(originalName.equals(name) || name.length() == 0) ))
 				{
-					if (pass1.equals(pass2))
+					if (pass1.equals(pass2) && isValidEmail(email))
 					{
 						new EditAccount().execute();
 					}
-					else
+					else if (!pass1.equals(pass2))
 					{
 						Toast.makeText(getActivity(), R.string.password_toast, Toast.LENGTH_SHORT).show();
+					}
+					else
+					{
+						Toast.makeText(getActivity(), R.string.email_toast, Toast.LENGTH_SHORT).show();
 					}
 				}
 			}
 		});
 		
 		return view;	
+	}
+	
+	protected boolean isValidEmail(CharSequence target)
+	{
+		if (TextUtils.isEmpty(target))
+		{
+			return false;
+		}
+		else
+		{
+			return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+		}
 	}
 	
 	class EditAccount extends AsyncTask<String, String, String>

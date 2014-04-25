@@ -1,11 +1,13 @@
 package com.application.crashpad;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 public class Rental
 {
+	private SimpleDateFormat mFormat;
 	private String mDateStart;
 	private String mDateEnd;
 	private int mPropId;
@@ -13,7 +15,7 @@ public class Rental
 	
 	public Rental()
 	{
-		//
+		mFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
 	}
 		
 	public String getDateStart()
@@ -24,6 +26,19 @@ public class Rental
 	public void setDateStart(String dateStart)
 	{
 		mDateStart = dateStart;
+	}
+	
+	public Date getDateStartTime()
+	{
+		try
+		{
+		    return mFormat.parse(mDateStart);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public String getDateEnd()
@@ -36,6 +51,19 @@ public class Rental
 		mDateEnd = dateEnd;
 	}
 
+	public Date getDateEndTime()
+	{
+		try
+		{
+		    return mFormat.parse(mDateEnd);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public int getPropId()
 	{
 		return mPropId;
@@ -63,14 +91,16 @@ public class Rental
 		Date dateStart = new Date();
 	    Date dateEnd = new Date();
 		
-	    //FIX
-	    //Won't work for day-of
-	    //Actually, I'm not sure that's true. Check it.
 		try
 		{
-		    SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
-		    dateStart =  df.parse(mDateStart);
-		    dateEnd =  df.parse(mDateEnd);
+		    dateStart =  mFormat.parse(mDateStart);
+		    dateEnd =  mFormat.parse(mDateEnd);
+		    
+		    //So present date will be "before" the end date
+		    Calendar c = Calendar.getInstance();
+		    c.setTime(dateEnd);
+		    c.add(Calendar.DATE, 1);
+		    dateEnd = c.getTime();
 		}
 		catch (Exception e)
 		{
@@ -78,6 +108,29 @@ public class Rental
 		}
 		
 		if (present.after(dateStart) && present.before(dateEnd))
+		{
+			result = true;
+		}
+		
+		return result;
+	}
+	
+	public boolean isOver()
+	{
+		boolean result = false;
+		Date present = new Date();
+	    Date dateEnd = new Date();
+		
+		try
+		{
+		    dateEnd =  mFormat.parse(mDateEnd);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		if (present.after(dateEnd))
 		{
 			result = true;
 		}

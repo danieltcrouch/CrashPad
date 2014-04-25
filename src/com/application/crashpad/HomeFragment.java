@@ -28,12 +28,7 @@ public class HomeFragment extends Fragment
 	@TargetApi(11)
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
-	{
-		//FIX
-		//Divide screen to show renting and leasing privileges
-		
-		//FIX
-		//In this and all others, give back arrow
+	{		
 		View view = inflater.inflate(R.layout.fragment_home, parent, false);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{

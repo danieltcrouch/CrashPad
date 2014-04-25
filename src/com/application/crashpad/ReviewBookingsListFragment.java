@@ -1,7 +1,11 @@
 package com.application.crashpad;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -10,7 +14,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
@@ -33,16 +36,18 @@ public class ReviewBookingsListFragment extends ListFragment
     private static final String TAG_PROPS = "props";
     private static final String TAG_RENTS = "rentals";
     private static final String TAG_USER = "username";
-    private static final String TAG_NAME = "name";
+    private static final String TAG_P_NAME = "prop_name";
     private static final String TAG_DESC = "description";
     private static final String TAG_ADDR = "address";
     private static final String TAG_LONG = "longitude";
     private static final String TAG_LAT = "latitude";
-    private static final String TAG_ID = "id";
     private static final String TAG_CODE = "code";
     private static final String TAG_DAT_S = "dateStart";
     private static final String TAG_DAT_E= "dateEnd";
+    private static final String TAG_NAME = "name";
+    private static final String TAG_ID = "id";
 
+	private Map<String, String> mNames;
 	private ArrayList<Property> mPropertyList;
 	private ArrayList<Rental> mRentalList;
 	private JSONArray mProperties;
@@ -57,19 +62,13 @@ public class ReviewBookingsListFragment extends ListFragment
         super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 		
-		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
 			{
-				actionBar.setDisplayHomeAsUpEnabled(true);
+				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
-		
-		//FIX
-		//Here and other ListFragments, display something when empty
     }
     
     @Override
@@ -77,11 +76,13 @@ public class ReviewBookingsListFragment extends ListFragment
     {
         Rental r = ((rentalAdapter)getListAdapter()).getItem(position);
         Property p = mPropertyList.get(0);
+        String n = p.getUsername();
         for (int i = 0; i < mPropertyList.size(); i++)
         {
         	if (mPropertyList.get(i).getId() == r.getPropId())
         	{
         		p = mPropertyList.get(i);
+        		n = mNames.get(p.getUsername());
         	}
         }
 
@@ -89,6 +90,7 @@ public class ReviewBookingsListFragment extends ListFragment
         i.putExtra(ReviewBookingsFragment.EXTRA_PROP_ID, p.getId());
         i.putExtra(ReviewBookingsFragment.EXTRA_RENT_DAT_S, r.getDateStart());
         i.putExtra(ReviewBookingsFragment.EXTRA_RENT_DAT_E, r.getDateEnd());
+        i.putExtra(ReviewBookingsFragment.EXTRA_OWNER, n);
         startActivity(i);
     }
     
@@ -150,18 +152,17 @@ public class ReviewBookingsListFragment extends ListFragment
         {
             super.onPostExecute(result);
 
-    		//FIX
     		//Order List
-			/*Collections.sort(mRentalList, new Comparator<Rental>()
+			Collections.sort(mRentalList, new Comparator<Rental>()
 			{
 				@Override
-				public int compare(Rental  rent1, Rental  rent2)
+				public int compare(Rental rent1, Rental rent2)
 				{
-					boolean greater = rent1.getProximityToLocation(mLoc) > rent2.getProximityToLocation(mLoc);
-					boolean equal = rent1.getProximityToLocation(mLoc) == rent2.getProximityToLocation(mLoc);
+					boolean greater = rent1.getDateStartTime().before(rent2.getDateStartTime());
+					boolean equal = rent1.getDateStartTime().equals(rent2.getDateStartTime());
 					return  greater? 1 : equal? 0 : -1;
 				}
-			});*/
+			});
                         
             rentalAdapter adapter = new rentalAdapter(mRentalList, mPropertyList);
             setListAdapter(adapter);
@@ -181,6 +182,7 @@ public class ReviewBookingsListFragment extends ListFragment
         
         mPropertyList = new ArrayList<Property>();
         mRentalList = new ArrayList<Rental>();
+        mNames = new HashMap<String, String>();
 
         try
         {
@@ -201,7 +203,10 @@ public class ReviewBookingsListFragment extends ListFragment
                 r.setDateEnd(dateEnd);
                 r.setPropId(propId);
                 
-                mRentalList.add(r);
+                if (!r.isOver())
+                {
+                	mRentalList.add(r);
+                }
             }
 
             mProperties = json.getJSONArray(TAG_PROPS);
@@ -210,17 +215,21 @@ public class ReviewBookingsListFragment extends ListFragment
                 JSONObject o = mProperties.getJSONObject(i);
 
                 String username = o.getString(TAG_USER);
-                String name = o.getString(TAG_NAME);
+                String propName = o.getString(TAG_P_NAME);
                 String description = o.getString(TAG_DESC);
                 String address = o.getString(TAG_ADDR);
                 String longitude = o.getString(TAG_LONG);
                 String latitude = o.getString(TAG_LAT);
                 String code = o.getString(TAG_CODE);
+                String name = o.getString(TAG_NAME);
                 int id = o.getInt(TAG_ID);
+
+                //For keeping the name for the property page
+                mNames.put(username, name);
                 
                 Property p = new Property();
                 p.setUsername(username);
-                p.setName(name);
+                p.setName(propName);
                 p.setDescription(description);
                 p.setAddress(address);
                 p.setCode(code);
@@ -241,7 +250,6 @@ public class ReviewBookingsListFragment extends ListFragment
         catch (Exception e)
         {
         	e.printStackTrace();
-        	//FIX
         	//No Toast
         	//return "Network Problems\nCheck WiFi Connection";
         }

@@ -2,8 +2,12 @@ package com.application.crashpad;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.http.NameValuePair;
 import org.json.JSONArray;
@@ -36,18 +40,20 @@ public class FindPropertyListFragment extends ListFragment
 	private static final String GET_PROPS_URL = "http://taz.harding.edu/~dcrouch1/crashpad/get_props_find.php";
     private static final String TAG_PROPS = "props";
     private static final String TAG_USER = "username";
-    private static final String TAG_NAME = "name";
+    private static final String TAG_P_NAME = "prop_name";
     private static final String TAG_DESC = "description";
     private static final String TAG_ADDR = "address";
     private static final String TAG_LONG = "longitude";
     private static final String TAG_LAT = "latitude";
     private static final String TAG_DAT_S = "dateStart";
     private static final String TAG_DAT_E = "dateEnd";
+    private static final String TAG_NAME = "name";
     private static final String TAG_ID = "id";
     
 	private Location mLoc;
 	private int mDist;
 
+	private Map<String, String> mNames;
 	private ArrayList<Property> mPropertyList;
 	private JSONArray mProperties;
 	private ProgressDialog mProgressDialog;
@@ -76,6 +82,7 @@ public class FindPropertyListFragment extends ListFragment
     public void onListItemClick(ListView l, View v, int position, long id)
     {    	
         Property p = ((propertyAdapter)getListAdapter()).getItem(position);
+        String n = mNames.get(p.getUsername());
         Intent i;
         
         if (p.getUsername().equals(AccountCurrent.get(getActivity()).getPresentAccount().getUsername()))
@@ -87,6 +94,7 @@ public class FindPropertyListFragment extends ListFragment
         {
 	        i = new Intent(getActivity(), FindPropertyActivity.class);
 	        i.putExtra(FindPropertyFragment.EXTRA_PROP_ID, p.getId());
+	        i.putExtra(FindPropertyFragment.EXTRA_OWNER, n);
         }
         
         startActivity(i);
@@ -148,18 +156,17 @@ public class FindPropertyListFragment extends ListFragment
         {
             super.onPostExecute(result);
 
-    		//FIX
     		//Order List
-			/*Collections.sort(mPropertyList, new Comparator<Property>()
+			Collections.sort(mPropertyList, new Comparator<Property>()
 			{
 				@Override
-				public int compare(Property  prop1, Property  prop2)
+				public int compare(Property prop1, Property prop2)
 				{
 					boolean greater = prop1.getProximityToLocation(mLoc) > prop2.getProximityToLocation(mLoc);
 					boolean equal = prop1.getProximityToLocation(mLoc) == prop2.getProximityToLocation(mLoc);
 					return  greater? 1 : equal? 0 : -1;
 				}
-			});*/
+			});
             
             propertyAdapter adapter = new propertyAdapter(mPropertyList);
             setListAdapter(adapter);
@@ -184,6 +191,7 @@ public class FindPropertyListFragment extends ListFragment
         */
         
         mPropertyList = new ArrayList<Property>();
+        mNames = new HashMap<String, String>();
 
         try
         {
@@ -204,14 +212,18 @@ public class FindPropertyListFragment extends ListFragment
             		if (id != p.getId())
             		{
 	                    String username = o.getString(TAG_USER);
-	                    String name = o.getString(TAG_NAME);
+	                    String propName = o.getString(TAG_P_NAME);
 	                    String description = o.getString(TAG_DESC);
 	                    String address = o.getString(TAG_ADDR);
 	                    String longitude = o.getString(TAG_LONG);
 	                    String latitude = o.getString(TAG_LAT);
+	                    String name = o.getString(TAG_NAME);
+	                    
+	                    //For keeping the name for the property page
+	                    mNames.put(username, name);
 	                    
 	                    p.setUsername(username);
-	                    p.setName(name);
+	                    p.setName(propName);
 	                    p.setAddress(address);
 	                    p.setDescription(description);
 	                    p.setId(id);
@@ -247,7 +259,6 @@ public class FindPropertyListFragment extends ListFragment
         catch (Exception e)
         {
         	e.printStackTrace();
-        	//FIX
         	//No Toast
         	//return "Network Problems\nCheck WiFi Connection";
         }

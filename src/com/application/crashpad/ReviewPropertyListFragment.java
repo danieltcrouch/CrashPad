@@ -1,6 +1,8 @@
 package com.application.crashpad;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -10,12 +12,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,6 +41,7 @@ public class ReviewPropertyListFragment extends ListFragment
     private static final String TAG_ADDR = "address";
     private static final String TAG_LONG = "longitude";
     private static final String TAG_LAT = "latitude";
+    private static final String TAG_CODE = "code";
     private static final String TAG_ID = "id";
 
 	private ArrayList<Property> mPropertyList;
@@ -55,14 +56,11 @@ public class ReviewPropertyListFragment extends ListFragment
         super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 
-		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
 			{
-				actionBar.setDisplayHomeAsUpEnabled(true);
+				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
     }
@@ -80,11 +78,8 @@ public class ReviewPropertyListFragment extends ListFragment
         switch (item.getItemId())
         {
             case R.id.menu_item_new_prop:
-            	//FIX
-            	String targetUrl = "https://www.google.com";
-				Intent i = new Intent(Intent.ACTION_VIEW);
-				i.setData(Uri.parse(targetUrl));
-				startActivity(i);
+            	Intent i = new Intent(getActivity(), CreatePropertyActivity.class);
+                startActivity(i);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -156,18 +151,15 @@ public class ReviewPropertyListFragment extends ListFragment
         {
             super.onPostExecute(result);
 
-    		//FIX
     		//Order List
-			/*Collections.sort(mPropertyList, new Comparator<Property>()
+			Collections.sort(mPropertyList, new Comparator<Property>()
 			{
 				@Override
-				public int compare(Property  prop1, Property  prop2)
+				public int compare(Property prop1, Property prop2)
 				{
-					boolean greater = prop1.getProximityToLocation(mLoc) > prop2.getProximityToLocation(mLoc);
-					boolean equal = prop1.getProximityToLocation(mLoc) == prop2.getProximityToLocation(mLoc);
-					return  greater? 1 : equal? 0 : -1;
+					return  prop1.getName().compareTo(prop2.getName());
 				}
-			});*/
+			});
                         
             propertyAdapter adapter = new propertyAdapter(mPropertyList);
             setListAdapter(adapter);
@@ -203,6 +195,7 @@ public class ReviewPropertyListFragment extends ListFragment
                 String address = o.getString(TAG_ADDR);
                 String longitude = o.getString(TAG_LONG);
                 String latitude = o.getString(TAG_LAT);
+                String code = o.getString(TAG_CODE);
                 int id = o.getInt(TAG_ID);
                 
                 Property p = new Property();
@@ -210,6 +203,7 @@ public class ReviewPropertyListFragment extends ListFragment
                 p.setName(name);
                 p.setAddress(address);
                 p.setDescription(description);
+                p.setCode(code);
                 p.setId(id);
                 
     			Location loc = new Location(LocationManager.NETWORK_PROVIDER);
@@ -227,7 +221,6 @@ public class ReviewPropertyListFragment extends ListFragment
         catch (Exception e)
         {
         	e.printStackTrace();
-        	//FIX
         	//No Toast
         	//return "Network Problems\nCheck WiFi Connection";
         }

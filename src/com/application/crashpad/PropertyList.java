@@ -43,6 +43,17 @@ public class PropertyList
 		return null;
 	}
 	
+	public void removeProperty(int id)
+	{
+		for (int i = 0; i < mProperties.size(); i++)
+		{
+			if (mProperties.get(i).getId() == id)
+			{
+				mProperties.remove(i);
+			}
+		}
+	}
+	
 	public void setProperties(ArrayList<Property> props)
 	{
 		mProperties = props;

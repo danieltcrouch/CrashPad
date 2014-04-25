@@ -3,7 +3,6 @@ package com.application.crashpad;
 import java.util.List;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -48,23 +47,16 @@ public class FindPropertyParametersFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
 	{
 		View view = inflater.inflate(R.layout.fragment_parameters, parent, false);
-
-		ActionBar actionBar = getActivity().getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			if (NavUtils.getParentActivityName(getActivity()) != null)
 			{
-				actionBar.setDisplayHomeAsUpEnabled(true);
+				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 			}
         }
 
 		mDistanceEditText = (EditText)view.findViewById(R.id.distance);
 		
-		//FIX
-		//Is this the best way if GPS not working?
-		//http://android-er.blogspot.com/2010/10/check-and-prompt-user-to-enable-gps.html
 		mLocationEditText = (EditText)view.findViewById(R.id.location);
 		mLocationEditText.addTextChangedListener(new TextWatcher()
 		{
@@ -89,7 +81,8 @@ public class FindPropertyParametersFragment extends Fragment
 				}
 				catch (Exception e)
 				{
-					Toast.makeText(getActivity(), "Having trouble finding location.\nCheck WiFi & GPS.", Toast.LENGTH_LONG).show(); 
+					e.printStackTrace();
+					Toast.makeText(getActivity(), "Having trouble finding location.\nCheck GPS.", Toast.LENGTH_SHORT).show();
 				}
 			}
 			
@@ -136,6 +129,7 @@ public class FindPropertyParametersFragment extends Fragment
 
 		mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100000, 10, mLocationListener);
 		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100000, 10, mLocationListener);
+		mSearchLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 				
 		return view;
 	}
