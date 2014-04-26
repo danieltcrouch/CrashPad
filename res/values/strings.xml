@@ -27,7 +27,8 @@
     <string name="account_creation">Account Creation</string>
     <string name="account_create_button">Create Account</string>
     <string name="password_toast">Passwords do not match.</string>
-    <string name="username_toast">Username cannot be empty.</string>
+    <string name="email_toast">Not a valid email address.</string>
+    <string name="creation_error_toast">Fields cannot be empty.</string>
     <!-- Extended Version
     <string name="new_account_name_suggestion">John Doe</string>
     <string name="new_account_phone_number_suggestion">(555)123&#8211;4567</string>
@@ -51,8 +52,22 @@
     <!-- <string name="edit_email_hint">john@email.com</string> -->
     
     <!-- Review Own Property -->
-    <string name="edit_prop_button">Edit Property Online</string>
+    <string name="edit_prop_button">Edit Property</string>
 
+    <!-- Edit Property -->
+    <string name="edit_prop_info">Edit Property Info</string>
+    <string name="view_prop_info">View Property Info</string>
+    <string name="edit_address_hint">Edit Address</string>
+    <string name="edit_description_hint">Edit Description</string>
+    <string name="edit_code_hint">Edit Access Code</string>
+    
+    <!-- Create Property -->
+    <string name="new_name_hint">Enter Property Name</string>
+    <string name="new_address_hint">Enter Address</string>
+    <string name="new_description_hint">Enter Description</string>
+    <string name="prop_create">Add Property</string>
+    <string name="prop_create_button">Add Property</string>
+    
     <!-- Review Booked Property -->
     <string name="dates_rented_label">Dates Rented:</string>
     <string name="access_code_label">Access Code:</string>
@@ -77,5 +92,16 @@
     <string name="property_name_label">Title</string>
     <string name="property_details_label">Details</string>
     -->
+    
+    <!-- Help -->
+    <string name="help_box_text">Help.</string>
+    <!-- 
+    The above string should explain its purpose as "Help"
+    It should divide into sections for each of the four parts of the App
+    It should explain what to do if WiFi problems
+    It should explain that Android's GPS has bugs with the latest version
+    	and may require rebooting to fix.
+    etc.
+     -->
     
 </resources>
